@@ -1,0 +1,5 @@
+import{NextRequest,NextResponse}from'next/server'
+import{defaultStages,getPersistenceStore}from'../../../lib/persistence/store'
+const learner=(r:NextRequest)=>r.headers.get('x-learner-id')||'demo-learner'
+export async function GET(req:NextRequest){try{return NextResponse.json(await getPersistenceStore().listProjects(learner(req)),{headers:{'cache-control':'no-store'}})}catch(e){return NextResponse.json({error:{code:'PROJECT_LIST_FAILED',message:e instanceof Error?e.message:'Unable to list projects.'}},{status:500})}}
+export async function POST(req:NextRequest){try{const body=await req.json();const p=await getPersistenceStore().createProject({learnerId:learner(req),caseId:String(body.caseId||'001'),title:String(body.title||'Case Study 001 Analysis'),code:String(body.code||''),activeDataset:body.activeDataset?String(body.activeDataset):undefined,stages:defaultStages()});return NextResponse.json(p,{status:201})}catch(e){return NextResponse.json({error:{code:'PROJECT_CREATE_FAILED',message:e instanceof Error?e.message:'Unable to create project.'}},{status:500})}}
