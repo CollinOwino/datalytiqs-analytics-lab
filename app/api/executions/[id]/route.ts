@@ -1,0 +1,4 @@
+import{NextRequest,NextResponse}from'next/server'
+import{getExecutionProvider}from'../../../../lib/execution/provider'
+export async function GET(_:NextRequest,{params}:{params:Promise<{id:string}>}){try{const{id}=await params;return NextResponse.json(await getExecutionProvider().getResult(id),{headers:{'cache-control':'no-store'}})}catch(e){return NextResponse.json({error:{code:'EXECUTION_READ_FAILED',message:e instanceof Error?e.message:'Unable to read execution.',retryable:true}},{status:500})}}
+export async function DELETE(_:NextRequest,{params}:{params:Promise<{id:string}>}){try{const{id}=await params;await getExecutionProvider().cancel(id);return new NextResponse(null,{status:204})}catch(e){return NextResponse.json({error:{code:'EXECUTION_CANCEL_FAILED',message:e instanceof Error?e.message:'Unable to cancel execution.',retryable:true}},{status:500})}}
