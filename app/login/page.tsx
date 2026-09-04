@@ -1,4 +1,4 @@
-import { login, signup } from '../auth/actions'
+import { login, resendConfirmation, signup } from '../auth/actions'
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
   const q = await searchParams
@@ -23,5 +23,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <button className="button primary" type="submit">Create account</button>
       </form>
     </div>
+    <form action={resendConfirmation} style={{marginTop:32,paddingTop:24,borderTop:'1px solid #E4E9F0',display:'flex',gap:12,alignItems:'end',flexWrap:'wrap'}}>
+      <label style={{display:'grid',gap:6,flex:'1 1 260px'}}>Confirmation email not received?
+        <input name="email" type="email" required />
+      </label>
+      <button className="button secondary" style={{color:'#0B2C4D',borderColor:'#CBD5E1',background:'#fff'}} type="submit">Resend confirmation</button>
+    </form>
   </main>
 }
