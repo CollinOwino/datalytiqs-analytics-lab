@@ -36,3 +36,28 @@ export async function beginStage01() {
   }
   redirect(`/cases/001/stage-01?project=${projectId}`)
 }
+
+export async function saveStage01(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+  const projectId = String(formData.get('project_id') || '')
+  const stakeholders = String(formData.get('stakeholders') || '').trim()
+  const problemStatement = String(formData.get('problem_statement') || '').trim()
+  const analyticalQuestions = String(formData.get('analytical_questions') || '').trim()
+  const completedTasks = formData.getAll('completed_tasks').map(String)
+  if (!projectId || !stakeholders || !problemStatement || !analyticalQuestions) {
+    redirect(`/cases/001/stage-01?project=${encodeURIComponent(projectId)}&error=${encodeURIComponent('Complete all three written responses before saving.')}`)
+  }
+  const { data: project } = await supabase.from('learner_projects').select('id').eq('id', projectId).eq('user_id', user.id).single()
+  if (!project) redirect('/cases/001')
+  const { error } = await supabase.from('case_progress').update({
+    answers: { stakeholders, problem_statement: problemStatement, analytical_questions: analyticalQuestions },
+    completed_tasks: completedTasks,
+    status: completedTasks.length === 4 ? 'completed' : 'in_progress',
+    completed_at: completedTasks.length === 4 ? new Date().toISOString() : null,
+    updated_at: new Date().toISOString(),
+  }).eq('project_id', projectId).eq('stage_number', 1)
+  if (error) redirect(`/cases/001/stage-01?project=${encodeURIComponent(projectId)}&error=${encodeURIComponent(error.message)}`)
+  redirect(`/cases/001/stage-01?project=${encodeURIComponent(projectId)}&saved=1`)
+}
