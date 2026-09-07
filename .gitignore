@@ -37,3 +37,6 @@ outputs/
 *.before-structured-output
 *.bak
 runner-section.txt
+
+# Local recovery tooling
+vercel-recovery.ps1
