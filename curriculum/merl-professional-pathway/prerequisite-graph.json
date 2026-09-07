@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "programme_id": "MERL-PRO",
+  "unlock_policy": "all prerequisites must be completed unless explicitly marked optional",
+  "level_edges": [
+    {"from":"ENTRY","to":"MERL-L1","rule":"open"},
+    {"from":"MERL-L1","to":"MERL-L2","rule":"credential_gate"},
+    {"from":"MERL-L2","to":"MERL-L3","rule":"credential_gate"},
+    {"from":"MERL-L3","to":"MERL-L4","rule":"credential_gate"},
+    {"from":"MERL-L4","to":"MERL-L5","rule":"credential_gate"},
+    {"from":"MERL-L5","to":"MERL-ASMT-599","rule":"all_level_5_modules_and_project_passed"}
+  ],
+  "module_edges": [
+    ["MERL-L1-M01","MERL-L1-M02"],["MERL-L1-M02","MERL-L1-M03"],["MERL-L1-M03","MERL-L1-M04"],["MERL-L1-M04","MERL-L1-M05"],
+    ["MERL-L2-M01","MERL-L2-M02"],["MERL-L2-M02","MERL-L2-M03"],["MERL-L2-M03","MERL-L2-M04"],["MERL-L2-M04","MERL-L2-M05"],["MERL-L2-M05","MERL-L2-M06"],["MERL-L2-M06","MERL-L2-M07"],
+    ["MERL-L3-M01","MERL-L3-M02"],["MERL-L3-M02","MERL-L3-M03"],["MERL-L3-M03","MERL-L3-M04"],["MERL-L3-M04","MERL-L3-M05"],["MERL-L3-M05","MERL-L3-M06"],
+    ["MERL-L4-M01","MERL-L4-M02"],["MERL-L4-M02","MERL-L4-M03"],["MERL-L4-M03","MERL-L4-M04"],["MERL-L4-M04","MERL-L4-M05"],["MERL-L4-M05","MERL-L4-M06"],["MERL-L4-M06","MERL-L4-M07"],
+    ["MERL-L5-M01","MERL-L5-M02"],["MERL-L5-M02","MERL-L5-M03"],["MERL-L5-M03","MERL-L5-M04"],["MERL-L5-M04","MERL-L5-M05"],["MERL-L5-M05","MERL-L5-M06"],["MERL-L5-M06","MERL-L5-M07"],["MERL-L5-M07","MERL-L5-M08"],["MERL-L5-M08","MERL-L5-M09"]
+  ],
+  "cross_level_dependencies": [
+    {"target":"MERL-L2-M01","requires_competencies":["MERL-COMP-IND-001","MERL-COMP-IND-002","MERL-COMP-IND-003"]},
+    {"target":"MERL-L3-M02","requires_competencies":["MERL-COMP-DQA-101"]},
+    {"target":"MERL-L3-M03","requires_competencies":["MERL-COMP-STA-201"]},
+    {"target":"MERL-L3-M04","requires_competencies":["MERL-COMP-STA-201"]},
+    {"target":"MERL-L4-M03","requires_competencies":["MERL-COMP-EVQ-301"]},
+    {"target":"MERL-L4-M04","requires_competencies":["MERL-COMP-DES-301","MERL-COMP-INF-201"]},
+    {"target":"MERL-L4-M06","requires_competencies":["MERL-COMP-IMP-301"]},
+    {"target":"MERL-L5-M06","requires_competencies":["MERL-COMP-PY-201","MERL-COMP-INF-201"]},
+    {"target":"MERL-L5-M07","requires_competencies":["MERL-COMP-DGV-401"]},
+    {"target":"MERL-ASMT-599","requires_competencies":["MERL-COMP-SYS-401","MERL-COMP-IMP-301","MERL-COMP-PY-201","MERL-COMP-DGV-401","MERL-COMP-COM-401"]}
+  ],
+  "credential_gates": {
+    "default": {"overall_percent":70,"minimum_competency_percent":60,"mandatory_practicals_complete":true,"level_project_passed":true},
+    "MERL-L5": {"overall_percent":70,"minimum_competency_percent":65,"mandatory_practicals_complete":true,"level_project_passed":true,"capstone_eligible":true}
+  }
+}

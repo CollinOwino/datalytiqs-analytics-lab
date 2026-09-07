@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0.0",
+  "programme_id":"MERL-PRO",
+  "weighting":{"knowledge_checks":10,"practical_labs":25,"case_studies":20,"data_analysis_assignments":15,"level_projects":10,"final_capstone":20},
+  "assessments":[
+    {"id":"MERL-ASMT-101","level":"MERL-L1","type":"level_project","title":"Results Architecture Project","case":"MERL-CASE-001","requires":["theory_of_change","results_chain","logframe","preliminary_indicator_matrix"],"rubric":"MERL-RUB-001","pass_mark":70,"credential_gate":true},
+    {"id":"MERL-ASMT-201","level":"MERL-L2","type":"level_project","title":"Applied M&E System Design","case":"MERL-CASE-002","requires":["theory_of_change","logframe","indicator_reference_sheets","me_plan","sampling_plan","data_collection_instrument","data_quality_plan"],"rubric":"MERL-RUB-002","pass_mark":70,"credential_gate":true},
+    {"id":"MERL-ASMT-301","level":"MERL-L3","type":"level_project","title":"Programme Performance Analytics","case":"MERL-CASE-003","dataset":"MERL-DS-006","requires":["clean_dataset","descriptive_analysis","inferential_analysis","dashboard","evidence_brief"],"rubric":"MERL-RUB-003","pass_mark":70,"credential_gate":true},
+    {"id":"MERL-ASMT-401","level":"MERL-L4","type":"level_project","title":"Independent Evaluation Simulation","case":"MERL-CASE-004","requires":["evaluation_matrix","design_justification","analysis","findings","recommendations","management_response_matrix"],"rubric":"MERL-RUB-004","pass_mark":70,"credential_gate":true},
+    {"id":"MERL-ASMT-501","level":"MERL-L5","type":"level_project","title":"Institutional MERL Architecture","case":"MERL-CASE-005","requires":["institutional_results_architecture","governance_model","data_governance_plan","dashboard_specification","learning_agenda"],"rubric":"MERL-RUB-005","pass_mark":70,"credential_gate":true},
+    {"id":"MERL-ASMT-599","level":"MERL-L5","type":"capstone","title":"Integrated MERL and Decision Intelligence Capstone","case":"MERL-CASE-099","requires":["theory_of_change","results_framework","indicator_reference_sheets","me_plan","sampling_methodology","data_collection_tools","data_quality_assessment","clean_analytical_dataset","statistical_analysis","dashboard","evaluation_design","evaluation_findings","management_recommendations","learning_agenda","executive_evidence_brief"],"rubric":"MERL-RUB-099","pass_mark":75,"minimum_dimension_score":65,"credential_gate":true}
+  ],
+  "rubrics":[
+    {"id":"MERL-RUB-001","dimensions":[["causal_logic",25],["results_chain_quality",20],["logframe_quality",25],["indicator_quality",20],["professional_presentation",10]]},
+    {"id":"MERL-RUB-002","dimensions":[["system_coherence",20],["indicator_technical_quality",20],["sampling_and_tools",20],["data_quality_controls",20],["feasibility_and_governance",20]]},
+    {"id":"MERL-RUB-003","dimensions":[["data_preparation",15],["analytical_correctness",25],["visualisation",15],["interpretation",20],["management_relevance",15],["reproducibility",10]]},
+    {"id":"MERL-RUB-004","dimensions":[["evaluation_questions",15],["design_rigour",25],["methodological_execution",20],["triangulation",15],["findings_and_recommendations",15],["ethics_and_professionalism",10]]},
+    {"id":"MERL-RUB-005","dimensions":[["architecture",20],["governance",20],["data_governance",20],["decision_intelligence",20],["learning_and_adaptation",20]]},
+    {"id":"MERL-RUB-099","dimensions":[["merl_design",15],["measurement_and_data_quality",15],["analytics",15],["evaluation_rigour",15],["governance_and_ethics",10],["decision_intelligence",10],["learning_and_adaptation",10],["executive_communication",10]]}
+  ],
+  "submission_policy":{"resubmission_allowed":true,"max_resubmissions_default":2,"feedback_required_before_resubmission":true,"plagiarism_and_authenticity_check":true},
+  "automatic_scoring":{"knowledge_checks":true,"objective_computational_outputs":true,"rubric_based_projects":false,"capstone":false},
+  "human_review_required_for":["level_projects","evaluation_reports","qualitative_analysis","capstone","professional_practice_judgements"]
+}

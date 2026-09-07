@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0.0",
+  "programme_id":"MERL-PRO",
+  "platform":"Tutor LMS",
+  "course_model":"one programme with five credentialed levels represented as sequential course sections; level exit awards may also be published as stackable courses if commercial packaging requires",
+  "content_types":{"lesson":"Tutor lesson","quiz":"Tutor quiz","assignment":"Tutor assignment","project":"Tutor assignment + rubric","case_lab":"Tutor assignment linked to case pack","analytics_lab":"external activity link to DatalytIQs Analytics Lab","peer_activity":"external activity link to DatalytIQs Community","capstone":"Tutor assignment + external Analytics Lab project + human review"},
+  "course":{"slug":"merl-professional-pathway","title":"Monitoring, Evaluation, Research & Learning Professional Pathway","category":"Monitoring, Evaluation & Learning","difficulty":"beginner-to-expert","sequential":true,"certificate":true,"featured":true},
+  "level_sections":[
+    {"level":"MERL-L1","section_title":"Level 1 — M&E Foundations","module_count":5,"level_project":"MERL-ASMT-101","award":"Certificate in M&E Foundations"},
+    {"level":"MERL-L2","section_title":"Level 2 — Applied Monitoring & Evaluation","module_count":7,"level_project":"MERL-ASMT-201","award":"Certificate in Applied M&E"},
+    {"level":"MERL-L3","section_title":"Level 3 — M&E Data Analytics","module_count":6,"level_project":"MERL-ASMT-301","award":"Professional Certificate in M&E Data Analytics"},
+    {"level":"MERL-L4","section_title":"Level 4 — Evaluation & Impact Evaluation","module_count":7,"level_project":"MERL-ASMT-401","award":"Advanced Certificate in Evaluation and Learning"},
+    {"level":"MERL-L5","section_title":"Level 5 — Advanced MERL & Decision Intelligence","module_count":9,"level_project":"MERL-ASMT-501","capstone":"MERL-ASMT-599","award":"Professional Diploma in MERL and Decision Intelligence"}
+  ],
+  "module_template":{"topic_order":["orientation","lesson_1","worked_example","practice","lesson_2","case_activity","lesson_3","knowledge_check","practical_assignment","reflection_and_application"],"completion_requires":["all_required_lessons","knowledge_check_pass","mandatory_practical_submission"]},
+  "lesson_template":{"fields":["stable_id","title","learning_outcomes","content","worked_example","exercise_id","resources","competency_ids","estimated_minutes","completion_rule"]},
+  "quiz_defaults":{"pass_mark":70,"attempts":3,"shuffle_questions":true,"show_explanations_after_attempt":true,"question_bank_required":true},
+  "assignment_defaults":{"resubmission_allowed":true,"rubric_visible_before_submission":true,"human_feedback":true,"portfolio_artifact":true},
+  "unlock_rules":{"module":"previous_module_complete","level":"previous_level_credential_gate_passed","capstone":"MERL-L5 complete and MERL-ASMT-501 passed"},
+  "integration_points":{"analytics_lab":{"launch_type":"signed deep link","parameters":["learner_id","course_id","activity_id","case_id","dataset_id"],"completion_callback":"activity_result"},"community":{"launch_type":"deep link","space":"MERL Professional Community","activity_types":["peer_review","case_discussion","facilitator_clinic","reflection"]}},
+  "gradebook":{"knowledge_checks":10,"practical_labs":25,"case_studies":20,"data_analysis_assignments":15,"level_projects":10,"final_capstone":20,"minimum_overall":70},
+  "credential_metadata":{"issuer":"DatalytIQs Academy","evidence_url_required":true,"competency_transcript":true,"verification_id":true},
+  "automation":{"on_enrolment":["diagnostic_assessment","recommended_entry_level","create_learning_record"],"on_lesson_complete":["update_progress","evaluate_unlocks"],"on_lab_result":["record_outputs","score_objective_checks","route_for_human_review_if_needed"],"on_level_gate_pass":["issue_level_credential","unlock_next_level"],"on_capstone_pass":["issue_final_diploma","generate_competency_transcript"]}
+}

@@ -1,0 +1,129 @@
+schema_version: 1.0.0
+programme:
+  id: MERL-PRO
+  title: Monitoring, Evaluation, Research & Learning Professional Pathway
+  subtitle: From Foundations to Advanced Evidence, Impact Evaluation and Decision Intelligence
+  provider: DatalytIQs Academy
+  delivery: blended-online
+  language: en
+  target_audience:
+    - beginners entering M&E
+    - project and programme officers
+    - government planners and statisticians
+    - NGO and development practitioners
+    - researchers and evaluators
+    - managers responsible for performance and learning
+  pedagogy: [learn, observe, practise, analyse, interpret, submit, feedback, apply]
+  competency_dimensions: [knowledge, application, professional_practice]
+  global_rules:
+    quiz_only_completion_allowed: false
+    minimum_overall_pass_percent: 70
+    minimum_competency_percent: 60
+    resubmission_allowed: true
+    sequential_unlock: true
+    portfolio_required: true
+levels:
+  - id: MERL-L1
+    title: M&E Foundations
+    award: Certificate in M&E Foundations
+    entry: no-prior-M&E-required
+    exit_capability: explain core M&E concepts and construct a coherent results architecture
+    project: MERL-ASMT-101
+    modules:
+      - id: MERL-L1-M01
+        title: Introduction to Monitoring, Evaluation and Learning
+        lessons:
+          - {id: MERL-L1-M01-L01, title: What M&E is and is not, outcomes: [distinguish monitoring evaluation research audit and inspection, explain the purpose of learning in M&E], exercise: MERL-EX-001, competencies: [MERL-COMP-FND-001]}
+          - {id: MERL-L1-M01-L02, title: Monitoring vs evaluation vs research, outcomes: [classify management questions by evidence function, choose an appropriate evidence approach], exercise: MERL-EX-002, competencies: [MERL-COMP-FND-002]}
+          - {id: MERL-L1-M01-L03, title: Learning and evidence use, outcomes: [explain evidence-to-decision pathways, identify learning loops], exercise: MERL-EX-003, competencies: [MERL-COMP-FND-003]}
+      - id: MERL-L1-M02
+        title: Project and Programme Logic
+        lessons:
+          - {id: MERL-L1-M02-L01, title: Inputs activities and outputs, outcomes: [classify results-chain elements, distinguish delivery from change], exercise: MERL-EX-004, competencies: [MERL-COMP-RES-001]}
+          - {id: MERL-L1-M02-L02, title: Outcomes and impact, outcomes: [differentiate short medium and long term results, write outcome statements], exercise: MERL-EX-005, competencies: [MERL-COMP-RES-002]}
+          - {id: MERL-L1-M02-L03, title: Assumptions risks and causal links, outcomes: [identify causal assumptions, distinguish assumptions from risks], exercise: MERL-EX-006, competencies: [MERL-COMP-RES-003]}
+      - id: MERL-L1-M03
+        title: Theory of Change
+        lessons:
+          - {id: MERL-L1-M03-L01, title: Causal pathways, outcomes: [map causal pathways, identify intermediate outcomes], exercise: MERL-EX-007, competencies: [MERL-COMP-TOC-001]}
+          - {id: MERL-L1-M03-L02, title: Assumptions and external factors, outcomes: [surface assumptions, identify external influences], exercise: MERL-EX-008, competencies: [MERL-COMP-TOC-002]}
+          - {id: MERL-L1-M03-L03, title: Building and testing a Theory of Change, outcomes: [construct a complete theory of change, critically test causal logic], exercise: MERL-EX-009, competencies: [MERL-COMP-TOC-003]}
+      - id: MERL-L1-M04
+        title: Logical Frameworks
+        lessons:
+          - {id: MERL-L1-M04-L01, title: Logframe architecture, outcomes: [explain logframe columns and hierarchy, populate a basic logframe], exercise: MERL-EX-010, competencies: [MERL-COMP-LFM-001]}
+          - {id: MERL-L1-M04-L02, title: Vertical and horizontal logic, outcomes: [test vertical logic, test indicator and verification alignment], exercise: MERL-EX-011, competencies: [MERL-COMP-LFM-002]}
+          - {id: MERL-L1-M04-L03, title: Quality checking a logframe, outcomes: [diagnose weak logframes, correct logical inconsistencies], exercise: MERL-EX-012, competencies: [MERL-COMP-LFM-003]}
+      - id: MERL-L1-M05
+        title: Introduction to Indicators
+        lessons:
+          - {id: MERL-L1-M05-L01, title: Indicator concepts, outcomes: [distinguish output outcome and impact indicators, identify quantitative and qualitative indicators], exercise: MERL-EX-013, competencies: [MERL-COMP-IND-001]}
+          - {id: MERL-L1-M05-L02, title: SMART and CREAM criteria, outcomes: [assess indicator quality, rewrite weak indicators], exercise: MERL-EX-014, competencies: [MERL-COMP-IND-002]}
+          - {id: MERL-L1-M05-L03, title: Disaggregation and indicator limitations, outcomes: [choose useful disaggregation, identify indicator blind spots], exercise: MERL-EX-015, competencies: [MERL-COMP-IND-003]}
+  - id: MERL-L2
+    title: Applied Monitoring & Evaluation
+    award: Certificate in Applied M&E
+    prerequisites: [MERL-L1]
+    exit_capability: design a functional project M&E system with indicators tools sampling and data-quality controls
+    project: MERL-ASMT-201
+    modules:
+      - {id: MERL-L2-M01, title: Indicator Development, lessons: [indicator construction, numerators denominators and units, indicator reference sheets]}
+      - {id: MERL-L2-M02, title: Baselines Targets and Benchmarks, lessons: [baseline design, target setting methods, benchmarking and trajectories]}
+      - {id: MERL-L2-M03, title: M&E Plans and Performance Frameworks, lessons: [M&E plan components, performance measurement frameworks, roles frequency and reporting cycles]}
+      - {id: MERL-L2-M04, title: Data Collection Methods, lessons: [quantitative methods, qualitative methods, administrative and digital data]}
+      - {id: MERL-L2-M05, title: Sampling for M&E, lessons: [sampling frames and probability methods, sample size concepts, stratification clustering and nonresponse]}
+      - {id: MERL-L2-M06, title: Questionnaire and Instrument Design, lessons: [question formulation, skip logic and response scales, pilot testing and instrument quality]}
+      - {id: MERL-L2-M07, title: Data Quality Assurance, lessons: [data quality dimensions, data quality assessments, verification audit trails and corrective action]}
+  - id: MERL-L3
+    title: M&E Data Analytics
+    award: Professional Certificate in M&E Data Analytics
+    prerequisites: [MERL-L2]
+    exit_capability: clean analyse visualise interpret and report M&E data using Excel Python and dashboards
+    project: MERL-ASMT-301
+    modules:
+      - {id: MERL-L3-M01, title: Excel for M&E, lessons: [data cleaning and validation, pivot tables and KPI calculations, Excel dashboards]}
+      - {id: MERL-L3-M02, title: Descriptive Statistics, lessons: [distributions and central tendency, cross tabulation and group comparisons, interpreting descriptive evidence]}
+      - {id: MERL-L3-M03, title: Statistical Inference for M&E, lessons: [confidence intervals, hypothesis tests, correlation ANOVA and regression]}
+      - {id: MERL-L3-M04, title: Python for M&E, lessons: [pandas workflow, statistical analysis in Python, reproducible scripts and outputs]}
+      - {id: MERL-L3-M05, title: M&E Dashboards, lessons: [dashboard information architecture, KPI visualisation, exception and trend reporting]}
+      - {id: MERL-L3-M06, title: Performance Reporting, lessons: [findings and interpretation, management implications, evidence briefs and recommendations]}
+  - id: MERL-L4
+    title: Evaluation & Impact Evaluation
+    award: Advanced Certificate in Evaluation and Learning
+    prerequisites: [MERL-L3]
+    exit_capability: design manage and conduct rigorous process outcome and impact evaluations
+    project: MERL-ASMT-401
+    modules:
+      - {id: MERL-L4-M01, title: Evaluation Fundamentals, lessons: [evaluation purposes and types, evaluation lifecycle, evaluation governance and ethics]}
+      - {id: MERL-L4-M02, title: Evaluation Questions and Criteria, lessons: [evaluation questions, OECD DAC criteria, evaluation matrices]}
+      - {id: MERL-L4-M03, title: Evaluation Designs, lessons: [experimental designs, quasi experimental designs, non experimental designs]}
+      - {id: MERL-L4-M04, title: Impact Evaluation, lessons: [counterfactual reasoning, difference in differences and matching, RDD IV and causal interpretation]}
+      - {id: MERL-L4-M05, title: Qualitative Evaluation, lessons: [coding and thematic analysis, triangulation, contribution analysis and mixed methods]}
+      - {id: MERL-L4-M06, title: Economic Evaluation, lessons: [cost effectiveness, cost benefit analysis, value for money]}
+      - {id: MERL-L4-M07, title: Evaluation Management, lessons: [terms of reference, inception and work planning, reporting and management response]}
+  - id: MERL-L5
+    title: Advanced MERL & Decision Intelligence
+    award: Professional Diploma in MERL and Decision Intelligence
+    prerequisites: [MERL-L4]
+    exit_capability: lead institutional MERL systems advanced evaluation evidence governance predictive analytics and adaptive management
+    project: MERL-ASMT-501
+    capstone: MERL-ASMT-599
+    modules:
+      - {id: MERL-L5-M01, title: Institutional M&E Systems, lessons: [enterprise M&E architecture, governance and accountability, institutional reporting systems]}
+      - {id: MERL-L5-M02, title: Strategic Planning and Performance Management, lessons: [strategy to results alignment, work plans and budgets, performance contracts and scorecards]}
+      - {id: MERL-L5-M03, title: Government M&E, lessons: [public sector M&E architecture, official statistics and accountability, county and national performance systems]}
+      - {id: MERL-L5-M04, title: Advanced Data Quality and Governance, lessons: [metadata and lineage, privacy security and access control, reproducibility and governance]}
+      - {id: MERL-L5-M05, title: GIS and Spatial M&E, lessons: [spatial data concepts, service coverage mapping, spatial disparities and targeting]}
+      - {id: MERL-L5-M06, title: Predictive Analytics for M&E, lessons: [forecasting, risk scoring, early warning indicators]}
+      - {id: MERL-L5-M07, title: AI for Monitoring Evaluation and Learning, lessons: [AI assisted evidence workflows, qualitative and document synthesis, human validation ethics and governance]}
+      - {id: MERL-L5-M08, title: Learning and Adaptive Management, lessons: [learning agendas, feedback loops, adaptive management]}
+      - {id: MERL-L5-M09, title: Communicating Evidence, lessons: [executive communication, policy and donor products, data storytelling and visual communication]}
+completion:
+  level_gate:
+    overall_percent: 70
+    every_mandatory_competency_percent: 60
+    practical_artifacts_complete: true
+    level_project_passed: true
+  final_award:
+    requires_levels: [MERL-L1, MERL-L2, MERL-L3, MERL-L4, MERL-L5]
+    capstone: MERL-ASMT-599

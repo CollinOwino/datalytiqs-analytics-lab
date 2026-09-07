@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0.0",
+  "programme_id":"MERL-PRO",
+  "datasets":[
+    {"id":"MERL-DS-001","title":"Community Education Project Baseline","format":"xlsx","level":1,"case":"MERL-CASE-001","purpose":"results architecture and indicator identification","fields":["site_id","enrolment","attendance_rate","completion_rate","gender","location"]},
+    {"id":"MERL-DS-002","title":"County Youth Employment Baseline","format":"xlsx","level":2,"case":"MERL-CASE-002","purpose":"baseline target setting sampling and tools","fields":["beneficiary_id","age","gender","ward","employment_status","income","training_status"]},
+    {"id":"MERL-DS-003","title":"Routine Service Delivery Register","format":"csv","level":2,"case":"MERL-CASE-002","purpose":"data quality assessment","fields":["facility_id","month","service_count","reported_total","verified_total","report_date"]},
+    {"id":"MERL-DS-004","title":"Programme Monitoring Panel","format":"xlsx","level":3,"case":"MERL-CASE-003","purpose":"Excel and descriptive analytics","fields":["unit_id","period","target","actual","cost","beneficiaries","region","sex","age_group"]},
+    {"id":"MERL-DS-005","title":"Beneficiary Outcome Survey","format":"csv","level":3,"case":"MERL-CASE-003","purpose":"inferential statistics and regression","fields":["respondent_id","treatment","baseline_score","endline_score","age","gender","region","exposure"]},
+    {"id":"MERL-DS-006","title":"Multi-year Programme Performance Dataset","format":"xlsx","level":3,"case":"MERL-CASE-003","purpose":"level 3 analytics project","fields":["programme","county","year","quarter","indicator","baseline","target","actual","budget","expenditure","beneficiaries"]},
+    {"id":"MERL-DS-007","title":"Evaluation Treatment Comparison Dataset","format":"csv","level":4,"case":"MERL-CASE-004","purpose":"impact evaluation","fields":["id","treatment","pre_outcome","post_outcome","assignment_score","covariates","cluster"]},
+    {"id":"MERL-DS-008","title":"Qualitative Evaluation Excerpts","format":"json","level":4,"case":"MERL-CASE-004","purpose":"coding thematic analysis and triangulation","fields":["source_id","stakeholder_group","question","excerpt","site"]},
+    {"id":"MERL-DS-009","title":"Institutional Performance Warehouse","format":"xlsx","level":5,"case":"MERL-CASE-005","purpose":"institutional dashboard governance and predictive analytics","fields":["department","programme","indicator","period","target","actual","risk_rating","budget","expenditure","data_owner"]},
+    {"id":"MERL-DS-010","title":"Service Coverage Geospatial Dataset","format":"geojson","level":5,"case":"MERL-CASE-005","purpose":"GIS coverage and disparity analysis","fields":["facility_id","latitude","longitude","population_served","service_rate","county","ward"]},
+    {"id":"MERL-DS-099","title":"Integrated County Development Programme Capstone Pack","format":"bundle","level":5,"case":"MERL-CASE-099","purpose":"final capstone","contains":["programme_documents","budget_data","targets","beneficiary_records","survey_data","administrative_data","qualitative_excerpts","geospatial_data"]}
+  ],
+  "cases":[
+    {"id":"MERL-CASE-001","title":"Secondary Education Improvement Initiative","sector":"education","level":1,"challenge":"translate a narrative intervention into a defensible results architecture","artifacts":["project_brief","stakeholder_map","MERL-DS-001"]},
+    {"id":"MERL-CASE-002","title":"County Youth Employment and Enterprise Programme","sector":"livelihoods","level":2,"challenge":"design an operational M&E system from baseline to DQA","artifacts":["programme_design","budget_summary","MERL-DS-002","MERL-DS-003"]},
+    {"id":"MERL-CASE-003","title":"Integrated Service Delivery Performance Review","sector":"public_service","level":3,"challenge":"clean analyse visualise and interpret multi-year programme performance","artifacts":["MERL-DS-004","MERL-DS-005","MERL-DS-006","management_questions"]},
+    {"id":"MERL-CASE-004","title":"Independent Outcome and Impact Evaluation","sector":"development_programme","level":4,"challenge":"select and execute a rigorous mixed-method evaluation design","artifacts":["evaluation_TOR","MERL-DS-007","MERL-DS-008","stakeholder_interviews"]},
+    {"id":"MERL-CASE-005","title":"Institutional MERL Transformation","sector":"government_and_NGO","level":5,"challenge":"architect an enterprise MERL and decision-intelligence system","artifacts":["strategic_plan","organisation_chart","MERL-DS-009","MERL-DS-010","reporting_calendar"]},
+    {"id":"MERL-CASE-099","title":"County Integrated Development Programme Capstone","sector":"multi_sector","level":5,"challenge":"integrate MERL design data systems analytics evaluation governance learning and executive communication","artifacts":["MERL-DS-099"]}
+  ],
+  "data_governance":{"synthetic_or_deidentified_for_training":true,"personally_identifiable_information_allowed":false,"learner_uploads":"isolated per project","networked_execution":"disabled by default","retention":"course-policy-controlled"}
+}
