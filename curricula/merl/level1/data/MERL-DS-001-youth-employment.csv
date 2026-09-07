@@ -1,0 +1,121 @@
+participant_id,county,sex,age,enrolled,completed_training,employed_6m
+Y0001,Homa Bay,Male,24,0,0,0
+Y0002,Migori,Male,34,0,0,0
+Y0003,Homa Bay,Female,29,0,0,0
+Y0004,Kisumu,Female,29,1,1,0
+Y0005,Kisumu,Female,19,0,0,0
+Y0006,Homa Bay,Female,30,0,0,0
+Y0007,Siaya,Female,21,1,1,1
+Y0008,Homa Bay,Female,28,1,1,1
+Y0009,Siaya,Male,30,1,1,0
+Y0010,Homa Bay,Male,18,0,0,0
+Y0011,Kisumu,Male,29,1,1,1
+Y0012,Kisumu,Male,20,0,0,0
+Y0013,Homa Bay,Female,21,1,1,1
+Y0014,Kisumu,Female,32,1,1,0
+Y0015,Siaya,Male,23,0,0,0
+Y0016,Migori,Male,29,0,0,0
+Y0017,Siaya,Male,18,1,1,1
+Y0018,Homa Bay,Male,29,0,0,0
+Y0019,Siaya,Male,33,1,1,0
+Y0020,Siaya,Female,18,0,0,0
+Y0021,Siaya,Female,27,1,1,0
+Y0022,Kisumu,Female,18,0,0,0
+Y0023,Homa Bay,Male,27,1,1,1
+Y0024,Migori,Male,33,0,0,0
+Y0025,Siaya,Female,23,1,1,1
+Y0026,Siaya,Female,22,1,1,0
+Y0027,Kisumu,Male,20,0,0,0
+Y0028,Migori,Male,28,0,0,0
+Y0029,Siaya,Female,33,1,1,0
+Y0030,Migori,Male,33,1,1,0
+Y0031,Homa Bay,Male,29,0,0,0
+Y0032,Siaya,Male,20,1,1,0
+Y0033,Kisumu,Female,31,0,0,0
+Y0034,Migori,Female,32,1,0,0
+Y0035,Siaya,Female,30,1,1,1
+Y0036,Kisumu,Male,20,1,1,0
+Y0037,Siaya,Female,20,1,1,0
+Y0038,Kisumu,Female,29,1,1,1
+Y0039,Homa Bay,Male,27,1,1,0
+Y0040,Migori,Female,27,1,1,1
+Y0041,Kisumu,Male,25,0,0,0
+Y0042,Siaya,Female,23,1,0,0
+Y0043,Homa Bay,Female,18,1,1,0
+Y0044,Siaya,Male,26,1,1,0
+Y0045,Migori,Female,34,1,0,0
+Y0046,Homa Bay,Male,33,1,0,0
+Y0047,Homa Bay,Male,20,1,1,0
+Y0048,Migori,Female,27,1,1,1
+Y0049,Homa Bay,Female,30,1,1,1
+Y0050,Kisumu,Male,24,1,1,0
+Y0051,Homa Bay,Female,20,0,0,0
+Y0052,Kisumu,Male,34,1,1,0
+Y0053,Migori,Male,23,1,1,1
+Y0054,Kisumu,Female,33,1,0,0
+Y0055,Siaya,Female,24,0,0,0
+Y0056,Siaya,Male,31,0,0,0
+Y0057,Siaya,Female,27,1,0,0
+Y0058,Siaya,Female,23,1,1,1
+Y0059,Siaya,Female,31,1,0,0
+Y0060,Siaya,Male,23,1,1,1
+Y0061,Siaya,Female,33,1,1,0
+Y0062,Siaya,Female,22,0,0,0
+Y0063,Homa Bay,Female,27,0,0,0
+Y0064,Siaya,Male,34,0,0,0
+Y0065,Homa Bay,Female,21,0,0,0
+Y0066,Homa Bay,Male,23,0,0,0
+Y0067,Kisumu,Male,28,1,0,0
+Y0068,Migori,Male,21,0,0,0
+Y0069,Kisumu,Male,32,0,0,0
+Y0070,Homa Bay,Male,23,1,1,1
+Y0071,Kisumu,Female,20,0,0,0
+Y0072,Kisumu,Female,20,0,0,0
+Y0073,Homa Bay,Male,19,1,1,1
+Y0074,Siaya,Female,20,0,0,0
+Y0075,Kisumu,Male,19,0,0,0
+Y0076,Migori,Male,33,0,0,0
+Y0077,Homa Bay,Female,22,0,0,0
+Y0078,Siaya,Male,23,0,0,0
+Y0079,Siaya,Female,23,1,1,0
+Y0080,Siaya,Female,30,1,0,0
+Y0081,Kisumu,Female,31,0,0,0
+Y0082,Homa Bay,Male,28,0,0,0
+Y0083,Siaya,Male,29,1,1,1
+Y0084,Migori,Male,32,1,1,1
+Y0085,Kisumu,Female,34,1,1,1
+Y0086,Homa Bay,Male,33,1,1,1
+Y0087,Siaya,Female,29,1,1,1
+Y0088,Migori,Female,22,0,0,0
+Y0089,Kisumu,Male,32,0,0,0
+Y0090,Homa Bay,Male,28,0,0,0
+Y0091,Migori,Male,29,1,1,0
+Y0092,Migori,Male,18,0,0,0
+Y0093,Kisumu,Female,19,0,0,0
+Y0094,Siaya,Male,18,1,1,0
+Y0095,Kisumu,Female,32,1,1,0
+Y0096,Siaya,Female,34,1,1,1
+Y0097,Homa Bay,Female,22,1,1,1
+Y0098,Siaya,Male,34,0,0,0
+Y0099,Migori,Female,27,1,0,0
+Y0100,Migori,Female,22,0,0,0
+Y0101,Kisumu,Male,23,0,0,0
+Y0102,Kisumu,Male,26,1,1,0
+Y0103,Migori,Male,32,1,1,0
+Y0104,Siaya,Female,25,0,0,0
+Y0105,Siaya,Female,28,0,0,0
+Y0106,Migori,Male,21,0,0,0
+Y0107,Homa Bay,Female,21,0,0,0
+Y0108,Homa Bay,Male,30,1,1,1
+Y0109,Homa Bay,Male,22,0,0,0
+Y0110,Siaya,Female,25,1,1,1
+Y0111,Migori,Female,31,0,0,0
+Y0112,Kisumu,Female,18,1,1,1
+Y0113,Migori,Male,29,0,0,0
+Y0114,Siaya,Male,27,1,1,1
+Y0115,Siaya,Male,29,1,1,1
+Y0116,Homa Bay,Male,21,0,0,0
+Y0117,Kisumu,Female,24,0,0,0
+Y0118,Kisumu,Female,18,0,0,0
+Y0119,Siaya,Male,25,1,1,1
+Y0120,Siaya,Male,29,1,1,1
