@@ -1,0 +1,82 @@
+schema_version: 1.0.0
+programme:
+  id: MERL-PRO-001
+  title: Monitoring, Evaluation, Research & Learning (MERL) Professional Pathway
+  provider: DatalytIQs Academy
+  mode: self-paced competency-based blended digital learning
+  progression: beginner-to-expert
+  pedagogy: [learn, observe, practise, analyse, interpret, submit, feedback, apply]
+  completion:
+    overall_pass_mark: 70
+    minimum_competency_score: 60
+    capstone_required: true
+  ecosystem:
+    academy: structured_learning
+    analytics_lab: practise_and_execute
+    community: collaborate_and_connect
+    professional_services: apply
+levels:
+  - id: MERL-L1
+    title: M&E Foundations
+    credential: Certificate in M&E Foundations
+    prerequisite: null
+    modules:
+      - {id: MERL-L1-M01, title: Introduction to Monitoring, Evaluation and Learning, lessons: [MERL-L1-M01-L01, MERL-L1-M01-L02, MERL-L1-M01-L03]}
+      - {id: MERL-L1-M02, title: Project and Programme Logic, lessons: [MERL-L1-M02-L01, MERL-L1-M02-L02, MERL-L1-M02-L03]}
+      - {id: MERL-L1-M03, title: Theory of Change, lessons: [MERL-L1-M03-L01, MERL-L1-M03-L02, MERL-L1-M03-L03]}
+      - {id: MERL-L1-M04, title: Logical Frameworks, lessons: [MERL-L1-M04-L01, MERL-L1-M04-L02, MERL-L1-M04-L03]}
+      - {id: MERL-L1-M05, title: Introduction to Indicators, lessons: [MERL-L1-M05-L01, MERL-L1-M05-L02, MERL-L1-M05-L03]}
+  - id: MERL-L2
+    title: Applied Monitoring & Evaluation
+    credential: Certificate in Applied M&E
+    prerequisite: MERL-L1
+    modules:
+      - {id: MERL-L2-M06, title: Indicator Development and Reference Sheets}
+      - {id: MERL-L2-M07, title: Baselines Targets and Benchmarks}
+      - {id: MERL-L2-M08, title: M&E Plans and Performance Frameworks}
+      - {id: MERL-L2-M09, title: Data Collection Methods}
+      - {id: MERL-L2-M10, title: Sampling for M&E}
+      - {id: MERL-L2-M11, title: Questionnaire and Instrument Design}
+      - {id: MERL-L2-M12, title: Data Quality Assurance}
+  - id: MERL-L3
+    title: M&E Data Analytics
+    credential: Professional Certificate in M&E
+    prerequisite: MERL-L2
+    modules:
+      - {id: MERL-L3-M13, title: Excel for M&E}
+      - {id: MERL-L3-M14, title: Descriptive Statistics}
+      - {id: MERL-L3-M15, title: Statistical Inference for M&E}
+      - {id: MERL-L3-M16, title: Python for M&E}
+      - {id: MERL-L3-M17, title: M&E Dashboards}
+      - {id: MERL-L3-M18, title: Performance Reporting and Interpretation}
+  - id: MERL-L4
+    title: Evaluation and Impact Evaluation
+    credential: Advanced Certificate in Evaluation & Learning
+    prerequisite: MERL-L3
+    modules:
+      - {id: MERL-L4-M19, title: Evaluation Fundamentals}
+      - {id: MERL-L4-M20, title: Evaluation Questions and OECD-DAC Criteria}
+      - {id: MERL-L4-M21, title: Evaluation Designs}
+      - {id: MERL-L4-M22, title: Impact Evaluation and Causal Inference}
+      - {id: MERL-L4-M23, title: Qualitative and Mixed-Methods Evaluation}
+      - {id: MERL-L4-M24, title: Economic Evaluation and Value for Money}
+      - {id: MERL-L4-M25, title: Evaluation Management}
+  - id: MERL-L5
+    title: Advanced MERL & Decision Intelligence
+    credential: Professional Diploma in MERL & Decision Intelligence
+    prerequisite: MERL-L4
+    modules:
+      - {id: MERL-L5-M26, title: Institutional M&E Systems}
+      - {id: MERL-L5-M27, title: Strategic Planning and Performance Management}
+      - {id: MERL-L5-M28, title: Government M&E and Public-Sector Accountability}
+      - {id: MERL-L5-M29, title: Advanced Data Quality and Governance}
+      - {id: MERL-L5-M30, title: GIS and Spatial M&E}
+      - {id: MERL-L5-M31, title: Predictive Analytics for M&E}
+      - {id: MERL-L5-M32, title: AI for Monitoring Evaluation and Learning}
+      - {id: MERL-L5-M33, title: Learning and Adaptive Management}
+      - {id: MERL-L5-M34, title: Communicating Evidence for Decisions}
+capstone:
+  id: MERL-CAP-001
+  title: County Integrated Development Programme MERL Capstone
+  prerequisite: MERL-L5-M34
+  required_outputs: [theory_of_change, results_framework, indicator_reference_sheets, monitoring_evaluation_plan, data_collection_instruments, sampling_methodology, data_quality_assessment, clean_dataset, statistical_analysis, dashboard, evaluation_design, evaluation_findings, management_recommendations, learning_agenda, executive_evidence_brief]
