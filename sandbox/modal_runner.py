@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 import secrets
@@ -6,16 +7,26 @@ import uuid
 from typing import Any
 
 import modal
-from fastapi import FastAPI, Header, HTTPException
 
 app = modal.App("datalytiqs-sandbox-runner")
-api = FastAPI(title="DatalytIQs Sandbox Runner", version="1.0")
 
 runner_image = (
     modal.Image.debian_slim(python_version="3.12")
-    .pip_install("pandas", "numpy", "scipy", "statsmodels", "matplotlib", "openpyxl")
+    .pip_install(
+        "pandas",
+        "numpy",
+        "scipy",
+        "statsmodels",
+        "matplotlib",
+        "openpyxl",
+        "fastapi"
+    )
 )
 
+with runner_image.imports():
+    from fastapi import FastAPI, Header, HTTPException
+
+api = FastAPI(title="DatalytIQs Sandbox Runner", version="1.0")
 # MVP result store. This intentionally stores only bounded structured results, never learner secrets.
 results = modal.Dict.from_name("datalytiqs-execution-results", create_if_missing=True)
 
@@ -68,10 +79,58 @@ def execute_job(execution_id: str, request: dict[str, Any]) -> None:
         result.update(status="failed", error={"code": "DATASET_TOO_LARGE", "message": "Dataset exceeds runner limit.", "retryable": False})
         results[execution_id] = result
         return
+    # Bootstrap the first supplied dataset into the learner namespace as `df`.
+    bootstrap = ""
+
+    if datasets:
+        dataset = datasets[0]
+        content_b64 = dataset.get("contentBase64") or ""
+        dataset_name = dataset.get("name") or "dataset.xlsx"
+
+        if content_b64:
+            try:
+                dataset_bytes = base64.b64decode(content_b64, validate=True)
+
+                if len(dataset_bytes) > MAX_DATASET_BYTES:
+                    result.update(
+                        status="failed",
+                        error={
+                            "code": "DATASET_TOO_LARGE",
+                            "message": "Decoded dataset exceeds runner limit.",
+                            "retryable": False,
+                        },
+                    )
+                    results[execution_id] = result
+                    return
+
+                encoded = base64.b64encode(dataset_bytes).decode("ascii")
+
+                bootstrap = f"""
+import base64 as _base64
+import io as _io
+import pandas as pd
+
+_dataset_bytes = _base64.b64decode({encoded!r})
+df = pd.read_excel(_io.BytesIO(_dataset_bytes))
+"""
+
+            except Exception as exc:
+                result.update(
+                    status="failed",
+                    error={
+                        "code": "INVALID_DATASET",
+                        "message": f"Unable to prepare dataset: {{exc}}",
+                        "retryable": False,
+                    },
+                )
+                results[execution_id] = result
+                return
+
+    execution_code = bootstrap + "\n" + code
 
     # The sandbox has no secrets and no network. Only the worker has the API bearer secret.
     sb = modal.Sandbox.create(
-        "python", "-I", "-c", code,
+        "python", "-I", "-c", execution_code,
         app=app,
         image=runner_image,
         timeout=timeout_s,
@@ -82,7 +141,7 @@ def execute_job(execution_id: str, request: dict[str, Any]) -> None:
         env={"MPLBACKEND": "Agg", "PYTHONUNBUFFERED": "1"},
     )
     try:
-        exit_code = sb.wait()
+        sb.wait(); exit_code = sb.returncode
         stdout = sb.stdout.read()[:max_output]
         stderr = sb.stderr.read()[:max_output]
         outputs = []
@@ -144,7 +203,7 @@ def cancel(execution_id: str, authorization: str | None = Header(default=None)):
         results[execution_id] = value
 
 
-@app.function(secrets=[modal.Secret.from_name("datalytiqs-runner-auth")])
+@app.function(image=runner_image, secrets=[modal.Secret.from_name("datalytiqs-runner-auth")])
 @modal.asgi_app()
 def web():
     return api
