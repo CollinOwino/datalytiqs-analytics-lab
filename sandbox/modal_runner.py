@@ -126,7 +126,243 @@ df = pd.read_excel(_io.BytesIO(_dataset_bytes))
                 results[execution_id] = result
                 return
 
-    execution_code = bootstrap + "\n" + code
+    learner_source = base64.b64encode(
+        code.encode("utf-8")
+    ).decode("ascii")
+
+    structured_bootstrap = """
+import ast as _ast
+import base64 as _base64
+import io as _structured_io
+import json as _structured_json
+
+_DATALYTIQS_PREFIX = "__DATALYTIQS_OUTPUT__"
+
+
+def _datalytiqs_emit(payload):
+    try:
+        payload_bytes = _structured_json.dumps(
+            payload,
+            default=str,
+        ).encode("utf-8")
+
+        payload_b64 = _base64.b64encode(
+            payload_bytes
+        ).decode("ascii")
+
+        print(_DATALYTIQS_PREFIX + payload_b64)
+
+    except Exception:
+        pass
+
+
+def _datalytiqs_clean(value):
+    try:
+        if pd.isna(value):
+            return None
+    except Exception:
+        pass
+
+    if hasattr(value, "item"):
+        try:
+            value = value.item()
+        except Exception:
+            pass
+
+    if isinstance(
+        value,
+        (str, int, float, bool),
+    ) or value is None:
+        return value
+
+    return str(value)
+
+
+def _datalytiqs_table(value):
+    try:
+        if isinstance(value, pd.Series):
+            frame = value.reset_index()
+
+            if len(frame.columns) == 2:
+                frame.columns = [
+                    str(frame.columns[0]),
+                    str(value.name or "value"),
+                ]
+
+        elif isinstance(value, pd.DataFrame):
+            frame = value.copy()
+
+            if not isinstance(
+                frame.index,
+                pd.RangeIndex,
+            ):
+                frame = frame.reset_index()
+
+        else:
+            return
+
+        row_count = len(frame)
+        max_rows = 200
+        truncated = row_count > max_rows
+
+        frame = frame.head(max_rows)
+
+        columns = [
+            str(column)
+            for column in frame.columns
+        ]
+
+        rows = []
+
+        for row in frame.itertuples(
+            index=False,
+            name=None,
+        ):
+            rows.append([
+                _datalytiqs_clean(item)
+                for item in row
+            ])
+
+        _datalytiqs_emit({
+            "kind": "table",
+            "table": {
+                "columns": columns,
+                "rows": rows,
+                "rowCount": row_count,
+                "truncated": truncated,
+            },
+        })
+
+    except Exception:
+        pass
+
+
+def _datalytiqs_capture_figures():
+    try:
+        import matplotlib.pyplot as _structured_plt
+
+        numbers = list(
+            _structured_plt.get_fignums()
+        )
+
+        for number in numbers:
+            figure = _structured_plt.figure(number)
+
+            buffer = _structured_io.BytesIO()
+
+            figure.savefig(
+                buffer,
+                format="png",
+                bbox_inches="tight",
+                dpi=120,
+            )
+
+            buffer.seek(0)
+
+            title = None
+
+            try:
+                if figure._suptitle is not None:
+                    title = figure._suptitle.get_text()
+
+                elif figure.axes:
+                    axis_title = (
+                        figure.axes[0].get_title()
+                    )
+
+                    if axis_title:
+                        title = axis_title
+
+            except Exception:
+                pass
+
+            _datalytiqs_emit({
+                "kind": "chart",
+                "chart": {
+                    "format": "png",
+                    "data": _base64.b64encode(
+                        buffer.read()
+                    ).decode("ascii"),
+                    "title": title,
+                },
+                "mimeType": "image/png",
+            })
+
+        if numbers:
+            _structured_plt.close("all")
+
+    except Exception:
+        pass
+
+
+try:
+    import matplotlib.pyplot as _structured_plt
+
+    def _datalytiqs_show(*args, **kwargs):
+        _datalytiqs_capture_figures()
+
+    _structured_plt.show = _datalytiqs_show
+
+except Exception:
+    pass
+"""
+
+    learner_wrapper = f"""
+_learner_source = _base64.b64decode(
+    {learner_source!r}
+).decode("utf-8")
+
+_tree = _ast.parse(
+    _learner_source,
+    filename="analysis.py",
+    mode="exec",
+)
+
+_result_name = "__datalytiqs_last_value__"
+
+if _tree.body and isinstance(
+    _tree.body[-1],
+    _ast.Expr,
+):
+    _expression = _tree.body[-1]
+
+    _tree.body[-1] = _ast.Assign(
+        targets=[
+            _ast.Name(
+                id=_result_name,
+                ctx=_ast.Store(),
+            )
+        ],
+        value=_expression.value,
+    )
+
+    _ast.fix_missing_locations(_tree)
+
+exec(
+    compile(
+        _tree,
+        "analysis.py",
+        "exec",
+    ),
+    globals(),
+    globals(),
+)
+
+if _result_name in globals():
+    _datalytiqs_table(
+        globals()[_result_name]
+    )
+
+_datalytiqs_capture_figures()
+"""
+
+    execution_code = (
+        bootstrap
+        + "\n"
+        + structured_bootstrap
+        + "\n"
+        + learner_wrapper
+    )
 
     # The sandbox has no secrets and no network. Only the worker has the API bearer secret.
     sb = modal.Sandbox.create(
@@ -144,12 +380,89 @@ df = pd.read_excel(_io.BytesIO(_dataset_bytes))
         sb.wait(); exit_code = sb.returncode
         stdout = sb.stdout.read()[:max_output]
         stderr = sb.stderr.read()[:max_output]
+
         outputs = []
         seq = 0
-        if stdout:
-            outputs.append({"id": str(uuid.uuid4()), "kind": "stdout", "sequence": seq, "text": stdout}); seq += 1
+
+        structured_prefix = "__DATALYTIQS_OUTPUT__"
+        console_lines = []
+
+        for line in stdout.splitlines(keepends=True):
+            stripped = line.strip()
+
+            if stripped.startswith(structured_prefix):
+                encoded_payload = stripped[
+                    len(structured_prefix):
+                ]
+
+                try:
+                    payload = json.loads(
+                        base64.b64decode(
+                            encoded_payload
+                        ).decode("utf-8")
+                    )
+
+                    kind = payload.get("kind")
+
+                    if (
+                        kind == "table"
+                        and payload.get("table")
+                    ):
+                        outputs.append({
+                            "id": str(uuid.uuid4()),
+                            "kind": "table",
+                            "sequence": seq,
+                            "table": payload["table"],
+                        })
+
+                        seq += 1
+                        continue
+
+                    if (
+                        kind == "chart"
+                        and payload.get("chart")
+                    ):
+                        outputs.append({
+                            "id": str(uuid.uuid4()),
+                            "kind": "chart",
+                            "sequence": seq,
+                            "chart": payload["chart"],
+                            "mimeType": payload.get(
+                                "mimeType",
+                                "image/png",
+                            ),
+                        })
+
+                        seq += 1
+                        continue
+
+                except Exception:
+                    pass
+
+            console_lines.append(line)
+
+        console_text = "".join(console_lines)
+
+        if console_text:
+            outputs.append({
+                "id": str(uuid.uuid4()),
+                "kind": "stdout",
+                "sequence": seq,
+                "text": console_text,
+            })
+
+            seq += 1
+
         if stderr:
-            outputs.append({"id": str(uuid.uuid4()), "kind": "stderr", "sequence": seq, "text": stderr}); seq += 1
+            outputs.append({
+                "id": str(uuid.uuid4()),
+                "kind": "stderr",
+                "sequence": seq,
+                "text": stderr,
+            })
+
+            seq += 1
+
         status = "succeeded" if exit_code == 0 else "failed"
         result.update(status=status, exitCode=exit_code, outputs=outputs)
     except modal.exception.TimeoutError:

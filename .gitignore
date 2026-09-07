@@ -34,3 +34,6 @@ outputs/
 *.log
 .vercel
 .env*
+*.before-structured-output
+*.bak
+runner-section.txt
