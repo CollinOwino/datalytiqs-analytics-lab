@@ -20,6 +20,11 @@ export async function getMerlLevel1State(){
  return data??[]
 }
 
+export async function getMerlLearnerContext(){
+ const {user}=await authenticated()
+ return {isTestAccount:user.app_metadata?.is_test_account===true}
+}
+
 export async function markLessonEvidence(moduleId:string,lessonIndex:number){
  if(!validModules.has(moduleId)||lessonIndex<0||lessonIndex>2) throw new Error('Invalid lesson evidence request.')
  const {supabase}=await authenticated()
