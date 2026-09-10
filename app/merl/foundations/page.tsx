@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect,useState} from 'react'
-import {getMerlLevel1State,getModuleQuiz,gradeModuleQuiz,markLessonEvidence,submitProfessionalEvidence} from './actions'
+import {getMerlLearnerContext,getMerlLevel1State,getModuleQuiz,gradeModuleQuiz,markLessonEvidence,submitProfessionalEvidence} from './actions'
 
 type Module={id:string;title:string;output:string;lessons:string[]}
 type Progress={module_id:string;lesson_evidence:Record<string,boolean>;evidence_submission:any;quiz_score:number|null;quiz_passed:boolean;quiz_attempts:number;module_completed_at:string|null}
@@ -15,10 +15,10 @@ const modules:Module[]=[
 ]
 
 export default function MerlFoundations(){
- const[open,setOpen]=useState('01'),[progress,setProgress]=useState<Record<string,Progress>>({}),[loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[message,setMessage]=useState('')
+ const[open,setOpen]=useState('01'),[progress,setProgress]=useState<Record<string,Progress>>({}),[loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[testAccount,setTestAccount]=useState(false)
  const[evidence,setEvidence]=useState<Record<string,string>>({}),[quiz,setQuiz]=useState<Record<string,QuizItem[]>>({}),[answers,setAnswers]=useState<Record<string,Record<string,string>>>({})
  async function refresh(){const rows=await getMerlLevel1State();const map:Record<string,Progress>={};rows.forEach((r:Progress)=>map[r.module_id]=r);setProgress(map);setLoading(false)}
- useEffect(()=>{refresh().catch(e=>{setMessage(e.message);setLoading(false)})},[])
+ useEffect(()=>{refresh().catch(e=>{setMessage(e.message);setLoading(false)});getMerlLearnerContext().then(context=>setTestAccount(context.isTestAccount)).catch(()=>{})},[])
  const p=(id:string)=>progress[id]
  const complete=(id:string)=>!!p(id)?.module_completed_at
  const lessonsDone=(m:Module)=>m.lessons.every((_,i)=>!!p(m.id)?.lesson_evidence?.[`${m.id}-${i}`])
@@ -29,6 +29,7 @@ export default function MerlFoundations(){
  return <main className="merl-main" style={{maxWidth:1100,margin:'0 auto',padding:'40px 24px',fontFamily:'system-ui',color:'#0b2c4d'}}>
   <a href="/">← DatalytIQs Analytics Lab</a><p style={{letterSpacing:2,fontSize:12,marginTop:28}}>MERL PROFESSIONAL PATHWAY · LEVEL 1</p><h1 className="merl-title" style={{fontSize:42,margin:'8px 0'}}>Monitoring & Evaluation Foundations</h1>
   <p style={{maxWidth:800,fontSize:18,lineHeight:1.6}}>Authenticated learner progress is stored in Supabase. Lesson evidence, professional submissions and quiz attempts survive refresh and sign-out; quiz scores are calculated by the database against a protected answer key.</p>
+  {testAccount&&<aside role="note" aria-label="Acceptance-test learner account" style={{padding:'14px 16px',margin:'18px 0',border:'2px solid #a65300',borderRadius:10,background:'#fff4e8',color:'#613000'}}><b>ACCEPTANCE-TEST LEARNER</b><br/><span>This progress is synthetic test data and must not be included in real learner reporting, certification or programme analytics.</span></aside>}
   {message&&<p role="status" aria-live="polite" aria-atomic="true" style={{padding:14,border:'1px solid #f4a261',borderRadius:8}}>{message}</p>}
   <section className="progress-card" aria-labelledby="credential-progress-label" style={{padding:20,border:'1px solid #d7dee7',borderRadius:12,margin:'28px 0',background:'#f6f8fb'}}><b id="credential-progress-label">Credential progress {loading?'…':`${credentialProgress}%`}</b><span className="progress-count" style={{float:'right'}}>{achieved}/25 evidence gates</span><div role="progressbar" aria-labelledby="credential-progress-label" aria-valuemin={0} aria-valuemax={100} aria-valuenow={loading?undefined:credentialProgress} style={{height:8,background:'#e5e7eb',borderRadius:8,marginTop:12}}><div style={{height:8,width:`${credentialProgress}%`,background:'#1565c0',borderRadius:8}}/></div></section>
   <section style={{display:'grid',gap:14}}>{modules.map((m,index)=>{const locked=index>0&&!complete(modules[index-1].id),expanded=open===m.id,mp=p(m.id),isComplete=complete(m.id);return <article key={m.id} style={{border:'1px solid #d7dee7',borderRadius:12,overflow:'hidden',opacity:locked?.58:1}}>
