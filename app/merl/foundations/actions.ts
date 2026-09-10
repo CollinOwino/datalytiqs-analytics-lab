@@ -48,18 +48,26 @@ export async function getModuleQuiz(moduleId:string){
 }
 
 export async function gradeModuleQuiz(moduleId:string,answers:Record<string,string>){
- if(!validModules.has(moduleId)) throw new Error('Invalid module.')
+ if(!validModules.has(moduleId)) return {ok:false as const,error:'Invalid module.'}
  const {supabase}=await authenticated()
- const {data,error}=await supabase.rpc('grade_merl_level1_quiz',{p_module_id:moduleId,p_answers:answers})
- if(error) throw new Error(error.message)
- const result=Array.isArray(data)?data[0]:data
- if(!result) throw new Error('Quiz grading returned no result; the attempt was not recorded.')
- const {data:rows,error:progressError}=await supabase.rpc('get_merl_level1_progress')
- if(progressError) throw new Error(`Quiz was graded but persistence could not be verified: ${progressError.message}`)
- const persisted=rows?.find((row:{module_id:string})=>row.module_id===moduleId)
- if(!persisted||persisted.quiz_attempts<result.attempts||persisted.quiz_score===null){
-  throw new Error('Quiz grading did not persist the score and attempt count.')
+ try{
+  const {data,error}=await supabase.rpc('grade_merl_level1_quiz',{p_module_id:moduleId,p_answers:answers})
+  if(error) return {ok:false as const,error:error.message}
+  const result=Array.isArray(data)?data[0]:data
+  if(!result) return {ok:false as const,error:'Quiz grading returned no result; the attempt was not recorded.'}
+
+  const {data:rows,error:progressError}=await supabase.rpc('get_merl_level1_progress')
+  if(progressError) return {ok:false as const,error:`Quiz was graded but persistence could not be verified: ${progressError.message}`}
+  const persisted=rows?.find((row:{module_id:string})=>row.module_id===moduleId)
+  const attempts=Number(result.attempts)
+  const score=Number(result.score)
+  if(!persisted||Number(persisted.quiz_attempts)<attempts||persisted.quiz_score===null){
+   return {ok:false as const,error:'Quiz grading did not persist the score and attempt count.'}
+  }
+
+  revalidatePath('/merl/foundations')
+  return {ok:true as const,score,passed:Boolean(result.passed),attempts}
+ }catch(error){
+  return {ok:false as const,error:error instanceof Error?error.message:'Quiz grading failed.'}
  }
- revalidatePath('/merl/foundations')
- return result
 }
