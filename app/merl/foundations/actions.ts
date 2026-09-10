@@ -9,7 +9,7 @@ const validModules=new Set(['01','02','03','04','05'])
 async function authenticated(){
  const supabase=await createClient()
  const {data:{user}}=await supabase.auth.getUser()
- if(!user) redirect('/login')
+ if(!user) redirect('/login?next=%2Fmerl%2Ffoundations')
  return {supabase,user}
 }
 
