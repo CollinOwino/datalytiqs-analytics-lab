@@ -22,7 +22,7 @@ export async function getMerlLevel1State(){
 
 export async function getMerlLearnerContext(){
  const {user}=await authenticated()
- return {isTestAccount:user.app_metadata?.is_test_account===true}
+ return {isTestAccount:user.app_metadata?.test_account===true||user.app_metadata?.is_test_account===true||user.app_metadata?.data_classification==='acceptance_test'}
 }
 
 export async function markLessonEvidence(moduleId:string,lessonIndex:number){
