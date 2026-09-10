@@ -52,6 +52,14 @@ export async function gradeModuleQuiz(moduleId:string,answers:Record<string,stri
  const {supabase}=await authenticated()
  const {data,error}=await supabase.rpc('grade_merl_level1_quiz',{p_module_id:moduleId,p_answers:answers})
  if(error) throw new Error(error.message)
+ const result=Array.isArray(data)?data[0]:data
+ if(!result) throw new Error('Quiz grading returned no result; the attempt was not recorded.')
+ const {data:rows,error:progressError}=await supabase.rpc('get_merl_level1_progress')
+ if(progressError) throw new Error(`Quiz was graded but persistence could not be verified: ${progressError.message}`)
+ const persisted=rows?.find((row:{module_id:string})=>row.module_id===moduleId)
+ if(!persisted||persisted.quiz_attempts<result.attempts||persisted.quiz_score===null){
+  throw new Error('Quiz grading did not persist the score and attempt count.')
+ }
  revalidatePath('/merl/foundations')
- return data?.[0]??null
+ return result
 }
