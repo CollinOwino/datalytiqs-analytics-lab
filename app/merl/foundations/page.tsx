@@ -46,7 +46,7 @@ export default function MerlFoundations(){
    </div>}
   </article>})}</section>
   <section className="case-card" style={{marginTop:32,padding:24,border:'1px solid #d7dee7',borderRadius:12}}><p style={{letterSpacing:1,fontSize:12}}>FOUNDATIONS CASE LAB</p><h2>County Youth Employment Programme</h2><p>Use the synthetic dataset to connect programme logic to measurable indicators and disaggregate results responsibly.</p><div className="case-links" style={{display:'flex',gap:12}}><a href="/api/merl/level1/dataset" download>Download synthetic dataset</a><a href="/merl/foundations/lab">Open Analytics Workspace →</a></div></section>
-  <section className="credential-card" style={{marginTop:32,padding:24,borderRadius:12,background:completed===5?'#eef8f1':'#f6f8fb'}}><h2>Level 1 credential gate</h2><p><b>{completed===5?'All module competency gates passed — portfolio is ready for final credential review.':'Locked — complete all five persistent competency gates.'}</b></p></section>
+  <section className="credential-card" style={{marginTop:32,padding:24,borderRadius:12,background:completed===5?'#eef8f1':'#f6f8fb'}}><h2>Level 1 credential gate</h2><p><b>{completed===5?'All module competency gates passed — portfolio is ready for final credential review.':'Locked — complete all five persistent competency gates.'}</b></p>{completed===5&&<a className="portfolio-link" href="/merl/foundations/portfolio">Open competency portfolio review →</a>}</section>
   <style jsx global>{`
    .skip-link{position:absolute;left:-9999px;top:8px;z-index:1000;background:#fff;color:#0b2c4d;padding:10px 14px;border:2px solid #0b2c4d;border-radius:6px}
    .skip-link:focus{left:12px}
@@ -54,6 +54,7 @@ export default function MerlFoundations(){
    .merl-main button,.merl-main a{min-height:44px}
    .merl-main button{font:inherit}
    .lesson-link{color:#0b2c4d;text-underline-offset:3px}
+   .portfolio-link{display:inline-flex;align-items:center;min-height:44px;background:#175d43;color:white!important;padding:8px 14px;border-radius:6px;text-decoration:none;font-weight:800}
    .merl-main button:focus-visible,.merl-main a:focus-visible,.merl-main textarea:focus-visible,.merl-main input:focus-visible{outline:3px solid #f4a261;outline-offset:3px}
    @media (max-width:640px){
     .merl-main{padding:24px 16px!important}
