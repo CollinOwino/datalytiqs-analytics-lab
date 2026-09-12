@@ -1,4 +1,4 @@
-import { getOrganizationContext } from '@/lib/organizations/context'
+import { getOrganizationContext } from '../../../lib/organizations/context'
 import { provisionPremiumOrganization, updateOrganizationConfiguration } from './actions'
 
 export default async function OrganizationOnboardingPage({
