@@ -69,6 +69,55 @@ export async function gradeDataScienceModuleTwoQuiz(answers:Record<string,string
   }catch(error){return {ok:false as const,error:error instanceof Error?error.message:'Quiz grading failed.'}}
 }
 
+export async function getDataScienceModuleThreeState(){
+  const {supabase}=await authenticated()
+  const {data,error}=await supabase.rpc('get_data_science_module3_state')
+  if(error) throw new Error(`Unable to load Module 03 progress: ${error.message}`)
+  return row(data)
+}
+
+export async function markDataScienceModuleThreeLesson(lessonIndex:number){
+  if(!Number.isInteger(lessonIndex)||lessonIndex<0||lessonIndex>2) throw new Error('Invalid lesson record.')
+  const {supabase}=await authenticated()
+  const {error}=await supabase.rpc('mark_data_science_module3_lesson',{p_lesson_index:lessonIndex})
+  if(error) throw new Error(error.message)
+  revalidatePath('/data-science/foundations/03')
+  return {ok:true}
+}
+
+export async function submitDataScienceModuleThreeEvidence(content:string){
+  const clean=content.trim()
+  if(clean.length<100||clean.length>20000) throw new Error('Professional evidence must contain 100 to 20,000 characters.')
+  const {supabase}=await authenticated()
+  const {data,error}=await supabase.rpc('submit_data_science_module3_evidence',{p_evidence_type:'Data Acquisition and Governance Plan',p_content:clean})
+  if(error) throw new Error(error.message)
+  revalidatePath('/data-science/foundations/03')
+  return {ok:true,id:data}
+}
+
+export async function getDataScienceModuleThreeQuiz(){
+  const {supabase}=await authenticated()
+  const {data,error}=await supabase.rpc('get_data_science_module3_quiz')
+  if(error) throw new Error(error.message)
+  return data??[]
+}
+
+export async function gradeDataScienceModuleThreeQuiz(answers:Record<string,string>){
+  const {supabase}=await authenticated()
+  try{
+    const {data,error}=await supabase.rpc('grade_data_science_module3_quiz',{p_answers:answers})
+    if(error) return {ok:false as const,error:error.message}
+    const result=row(data) as {score:number;passed:boolean;attempts:number;module_04_unlocked:boolean}|null
+    if(!result) return {ok:false as const,error:'Quiz grading returned no result; no attempt was recorded.'}
+    const {data:persisted,error:verifyError}=await supabase.rpc('get_data_science_module3_state')
+    if(verifyError) return {ok:false as const,error:`The quiz was graded, but persistence could not be verified: ${verifyError.message}`}
+    const state=row(persisted) as {quiz_attempts:number;quiz_score:number|null}|null
+    if(!state||Number(state.quiz_attempts)<Number(result.attempts)||state.quiz_score===null) return {ok:false as const,error:'The quiz transaction did not persist its score and attempt count.'}
+    revalidatePath('/data-science/foundations/03')
+    return {ok:true as const,score:Number(result.score),passed:Boolean(result.passed),attempts:Number(result.attempts),module04Unlocked:Boolean(result.module_04_unlocked)}
+  }catch(error){return {ok:false as const,error:error instanceof Error?error.message:'Quiz grading failed.'}}
+}
+
 export async function markDataScienceLesson(lessonIndex:number){
   if(!Number.isInteger(lessonIndex)||lessonIndex<0||lessonIndex>2) throw new Error('Invalid lesson record.')
   const {supabase}=await authenticated()
