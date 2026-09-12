@@ -1,5 +1,5 @@
-import { requireExecutiveOrganization } from '@/lib/organizations/context'
-import { createClient } from '@/lib/supabase/server'
+import { requireExecutiveOrganization } from '../../../lib/organizations/context'
+import { createClient } from '../../../lib/supabase/server'
 
 const widgetMeta = {
   workforce_learning: ['Workforce Learning','Assigned learning, active learners and participation'],
