@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '../supabase/server'
 import type { OrganizationContext } from './types'
 
 export async function getOrganizationContext(preferredOrganizationId?: string): Promise<OrganizationContext | null> {
