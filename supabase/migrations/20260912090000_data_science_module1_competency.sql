@@ -1,3 +1,4 @@
+-- Data Science Module 01 competency persistence and progression controls.
 create schema if not exists private;
 
 create table if not exists public.data_science_progress (
