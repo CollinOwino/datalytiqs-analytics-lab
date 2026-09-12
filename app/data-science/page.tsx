@@ -126,8 +126,8 @@ export default function DataScienceProgramme() {
                 {level.modules.map(([id, title, output]) => (
                   <li key={id}>
                     <b>{id}</b>
-                    <div><h4>{title}</h4><p>Professional output: {output}</p></div>
-                    <span>{levelIndex === 0 && id === '01' ? 'NEXT TO BUILD' : 'PLANNED'}</span>
+                    <div><h4>{levelIndex === 0 && id === '01'?<Link href="/data-science/foundations">{title}</Link>:title}</h4><p>Professional output: {output}</p></div>
+                    <span>{levelIndex === 0 && id === '01' ? 'AVAILABLE' : 'PLANNED'}</span>
                   </li>
                 ))}
               </ol>
@@ -153,7 +153,8 @@ export default function DataScienceProgramme() {
       <section className="ds-next" aria-labelledby="next-build-heading">
         <p>DEVELOPMENT STARTING POINT</p>
         <h2 id="next-build-heading">Module 01: Data, Decisions and the Data Science Workflow</h2>
-        <span>The next build will deliver three complete lessons, a problem-framing template, guided classification practice, professional evidence submission and a protected module quiz.</span>
+        <span>Three complete lessons, guided practice and the professional problem-framing template are now available. Persistent evidence submission and protected quiz grading form the next assessment build.</span>
+        <Link className="ds-module-link" href="/data-science/foundations">Open Module 01 →</Link>
       </section>
 
       <footer><span>Data Science Professional Pathway · Development version 0.1</span><Link href="/">DatalytIQs Analytics Lab</Link></footer>
