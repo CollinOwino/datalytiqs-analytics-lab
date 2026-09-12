@@ -10,38 +10,33 @@ const levels = [
     description: 'Build dependable analytical habits before introducing predictive models.',
     modules: [
       ['01', 'Data, Decisions and the Data Science Workflow', 'Problem framing brief'],
-      ['02', 'Python for Data Analysis', 'Reproducible analysis notebook'],
-      ['03', 'Statistics for Evidence', 'Statistical interpretation report'],
-      ['04', 'Data Preparation and Quality', 'Auditable cleaned dataset'],
-      ['05', 'Exploratory Analysis and Visualisation', 'Decision-focused insight brief'],
+      ['02', 'Data Types, Structures and Quality', 'Data quality assessment'],
+      ['03', 'Data Acquisition, Governance and Ethics', 'Data acquisition and governance plan'],
+      ['04', 'Exploratory Data Analysis', 'Exploratory analysis report'],
+      ['05', 'Statistical Reasoning and Inference', 'Inference plan and results brief'],
     ],
   },
   {
     id: '02',
     label: 'INTERMEDIATE',
     title: 'Applied Data Science',
-    credential: 'Applied Practitioner Certificate',
-    description: 'Develop, validate and communicate models against authentic organisational problems.',
+    credential: 'Applied Data Science Certificate',
+    description: 'Build reproducible analytical products and communicate validated evidence for decisions.',
     modules: [
-      ['06', 'SQL and Analytical Data Systems', 'Documented analytical dataset'],
-      ['07', 'Regression and Classification', 'Validated predictive model'],
-      ['08', 'Feature Engineering and Model Selection', 'Model comparison dossier'],
-      ['09', 'Unsupervised Learning', 'Segmentation study'],
-      ['10', 'Model Interpretation and Responsible AI', 'Model accountability report'],
+      ['06', 'Reproducible Analysis with Python', 'Python reproducibility package'],
+      ['07', 'Data Visualisation and Analytical Communication', 'Decision visualisation portfolio'],
+      ['08', 'Regression and Predictive Modelling', 'Predictive model validation report'],
     ],
   },
   {
     id: '03',
     label: 'ADVANCED',
     title: 'Advanced Data Science Systems',
-    credential: 'Advanced Professional Diploma',
-    description: 'Move from isolated models to governed, production-oriented analytical systems.',
+    credential: 'Professional Portfolio',
+    description: 'Operate governed machine-learning systems and defend an integrated professional capstone.',
     modules: [
-      ['11', 'Time Series and Forecasting', 'Forecasting system'],
-      ['12', 'Natural Language Processing', 'Text analytics application'],
-      ['13', 'Advanced Machine Learning', 'Ensemble modelling study'],
-      ['14', 'MLOps, Monitoring and Deployment', 'Production-readiness specification'],
-      ['15', 'Professional Capstone', 'End-to-end data science portfolio'],
+      ['09', 'Machine Learning Systems and Model Operations', 'ML release and operations plan'],
+      ['10', 'Data Science Capstone and Professional Portfolio', 'Capstone dossier and portfolio defence'],
     ],
   },
 ]
@@ -75,7 +70,7 @@ export default function DataScienceProgramme() {
 
       <section className="ds-hero">
         <div>
-          <p className="ds-kicker">DATA SCIENCE PROFESSIONAL PATHWAY · VERSION 0.1</p>
+          <p className="ds-kicker">DATA SCIENCE PROFESSIONAL PATHWAY · VERSION 1.0</p>
           <h1>From analytical foundations to production-ready data science.</h1>
           <p className="ds-lead">Learn to frame consequential questions, prepare trustworthy data, build defensible models and translate results into decisions. The programme advances through demonstrated competence—not attendance alone.</p>
           <div className="ds-actions">
@@ -93,8 +88,8 @@ export default function DataScienceProgramme() {
 
       <section className="ds-facts" aria-label="Programme summary">
         <div><strong>3</strong><span>progressive levels</span></div>
-        <div><strong>15</strong><span>competency modules</span></div>
-        <div><strong>45</strong><span>guided lessons</span></div>
+        <div><strong>10</strong><span>competency modules</span></div>
+        <div><strong>30</strong><span>guided lessons</span></div>
         <div><strong>1</strong><span>integrated portfolio</span></div>
       </section>
 
@@ -115,7 +110,7 @@ export default function DataScienceProgramme() {
           <span>Learners progress only after completing lesson practice, a professional output and a scored assessment at each module.</span>
         </div>
         <div className="ds-level-list">
-          {levels.map((level, levelIndex) => (
+          {levels.map((level) => (
             <article className="ds-level" key={level.id}>
               <header>
                 <div className="ds-level-number">{level.id}</div>
@@ -126,8 +121,8 @@ export default function DataScienceProgramme() {
                 {level.modules.map(([id, title, output]) => (
                   <li key={id}>
                     <b>{id}</b>
-                    <div><h4>{levelIndex === 0 && id === '01'?<Link href="/data-science/foundations">{title}</Link>:title}</h4><p>Professional output: {output}</p></div>
-                    <span>{levelIndex === 0 && id === '01' ? 'AVAILABLE' : 'PLANNED'}</span>
+                    <div><h4><Link href={id==='01'?'/data-science/foundations':`/data-science/foundations/${id}`}>{title}</Link></h4><p>Professional output: {output}</p></div>
+                    <span>AVAILABLE</span>
                   </li>
                 ))}
               </ol>
@@ -151,13 +146,13 @@ export default function DataScienceProgramme() {
       </section>
 
       <section className="ds-next" aria-labelledby="next-build-heading">
-        <p>DEVELOPMENT STARTING POINT</p>
-        <h2 id="next-build-heading">Module 01: Data, Decisions and the Data Science Workflow</h2>
-        <span>Three complete lessons, guided practice and the professional problem-framing template are now available. Persistent evidence submission and protected quiz grading form the next assessment build.</span>
-        <Link className="ds-module-link" href="/data-science/foundations">Open Module 01 →</Link>
+        <p>PROGRAMME RELEASE · VERSION 1.0</p>
+        <h2 id="next-build-heading">Ten modules. Thirty lessons. One defensible professional portfolio.</h2>
+        <span>The complete pathway is available with persistent lesson records, professional evidence, protected assessment gates and prerequisite-controlled progression from foundations to capstone.</span>
+        <Link className="ds-module-link" href="/data-science/foundations">Begin Module 01 →</Link>
       </section>
 
-      <footer><span>Data Science Professional Pathway · Development version 0.1</span><Link href="/">DatalytIQs Analytics Lab</Link></footer>
+      <footer><span>Data Science Professional Pathway · Version 1.0</span><Link href="/">DatalytIQs Analytics Lab</Link></footer>
     </main>
   )
 }
