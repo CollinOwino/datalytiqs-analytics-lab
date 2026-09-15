@@ -67,7 +67,7 @@ create table if not exists public.credentials (
   issue_date date not null default current_date,
   status text not null default 'valid' check (status in ('valid','revoked','superseded')),
   issued_by uuid not null references auth.users(id),
-  verification_slug text not null unique default encode(gen_random_bytes(12),'hex'),
+  verification_slug text not null unique default encode(extensions.gen_random_bytes(12),'hex'),
   snapshot jsonb not null default '{}'::jsonb,
   metadata jsonb not null default '{}'::jsonb,
   revoked_at timestamptz,
@@ -147,7 +147,7 @@ drop policy if exists credentials_learner_read on public.credentials;
 create policy credentials_learner_read on public.credentials for select to authenticated using(learner_user_id=auth.uid() or public.is_certification_admin());
 
 create or replace function public.issue_merl_foundations_credential(p_user_id uuid,p_learner_name text,p_review_notes text default null)
-returns text language plpgsql security definer set search_path=public as $
+returns text language plpgsql security definer set search_path=public as $$
 declare
   v_template public.certificate_templates%rowtype;
   v_request public.credential_review_requests%rowtype;
@@ -168,14 +168,14 @@ begin
   select coalesce(jsonb_agg(jsonb_build_object('key',signatory_key,'display_name',display_name,'title',title,'signature_image_url',signature_image_url) order by sort_order),'[]'::jsonb)
   into v_signatories from public.certificate_signatories where template_id=v_template.id and active;
   v_number:='DQA-MERL-'||to_char(current_date,'YYYY')||'-'||lpad(nextval('public.dqa_certificate_seq')::text,6,'0');
-  v_credential_id:='DQA-'||upper(substr(encode(gen_random_bytes(8),'hex'),1,16));
+  v_credential_id:='DQA-'||upper(substr(encode(extensions.gen_random_bytes(8),'hex'),1,16));
   insert into public.credentials(credential_id,certificate_number,template_id,learner_user_id,learner_name,programme_title,credential_type,result,issued_by,snapshot,metadata)
   values(v_credential_id,v_number,v_template.id,p_user_id,trim(p_learner_name),v_template.programme_title,v_template.credential_type,v_template.result_label,auth.uid(),
     jsonb_build_object('template',jsonb_build_object('code',v_template.code,'version',v_template.version,'certificate_title',v_template.certificate_title,'programme_title',v_template.programme_title,'achievement_statement',v_template.achievement_statement,'detail_statement',v_template.detail_statement,'theme',v_template.theme),'signatories',v_signatories),
     jsonb_build_object('eligibility_at_issue',v_elig,'review_notes',p_review_notes));
   update public.credential_review_requests set status='issued',reviewer_notes=p_review_notes,reviewed_by=auth.uid(),reviewed_at=now() where id=v_request.id;
   return v_credential_id;
-end $;
+end $$;
 
 grant execute on function public.merl_foundations_eligibility(uuid) to authenticated;
 grant execute on function public.issue_merl_foundations_credential(uuid,text,text) to authenticated;
