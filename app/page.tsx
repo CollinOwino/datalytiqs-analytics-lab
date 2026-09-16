@@ -1,16 +1,304 @@
 const stages = [
-  ['01', 'Understand the Management Problem', 'Define the decision context, stakeholders and analytical questions.'],
-  ['02', 'Inspect & Prepare the Dataset', 'Review variables, data types, missingness and analytical readiness.'],
-  ['03', 'Conduct Descriptive Analysis', 'Summarise performance patterns with statistics, tables and visualisations.'],
-  ['04', 'Investigate Performance Drivers', 'Examine relationships and factors associated with learner outcomes.'],
-  ['05', 'Translate Findings into Insights', 'Connect statistical evidence to management implications and action.'],
-  ['06', 'Prepare the Analytical Report', 'Consolidate evidence, limitations, recommendations and final submission.']
-]
-const nav = ['Dashboard', 'Case Studies', 'Analytics Workspace', 'Datasets', 'Projects']
+  [
+    "01",
+    "Understand the Management Problem",
+    "Define the decision context, stakeholders and analytical questions.",
+  ],
+  [
+    "02",
+    "Inspect & Prepare the Dataset",
+    "Review variables, data types, missingness and analytical readiness.",
+  ],
+  [
+    "03",
+    "Conduct Descriptive Analysis",
+    "Summarise performance patterns with statistics, tables and visualisations.",
+  ],
+  [
+    "04",
+    "Investigate Performance Drivers",
+    "Examine relationships and factors associated with learner outcomes.",
+  ],
+  [
+    "05",
+    "Translate Findings into Insights",
+    "Connect statistical evidence to management implications and action.",
+  ],
+  [
+    "06",
+    "Prepare the Analytical Report",
+    "Consolidate evidence, limitations, recommendations and final submission.",
+  ],
+];
+const nav = [
+  "Dashboard",
+  "Case Studies",
+  "Analytics Workspace",
+  "Datasets",
+  "Projects",
+];
 const programmes = [
-  ['Secondary School Performance Analytics','Applied school-performance case study for evidence-based academic management.','/cases/001','Open School Analytics'],
-  ['MERL Foundations','Monitoring, Evaluation, Research and Learning competence pathway.','/merl/foundations','Explore MERL'],
-  ['Data Science','Applied data-science learning and analytical practice environment.','/data-science','Explore Data Science'],
-  ['CEO Intelligence Workspace','Premium executive intelligence workspace for organisational data, KPIs, scenarios and strategic direction.','/ceo','Open CEO Workspace']
-]
-export default function Home(){return <main className="app-shell"><aside className="sidebar"><div className="brand"><div className="brand-mark">D</div><div><strong>DatalytIQs</strong><span>Analytics Lab</span></div></div><nav>{nav.map((item,i)=><a className={i===0?'active':''} href={item==='Case Studies'?'/cases/001':'#'} key={item}>{item}</a>)}</nav><div className="sidebar-footer"><small>LEARNING PHILOSOPHY</small><p>Management Problem → Data → Evidence → Decision</p><a href="https://community.datalytiqsacademy.com">Community ↗</a></div></aside><section className="content"><header className="topbar"><div><span className="eyebrow">DATALYTIQS ACADEMY</span><h1>Analytics Lab</h1></div><div className="user"><span className="status"></span><div><strong>Learner</strong><small>Student workspace</small></div><div className="avatar">L</div></div></header><section className="hero"><div><span className="eyebrow gold">APPLIED ANALYTICS LEARNING ENVIRONMENT</span><h2>Turn data into <em>evidence.</em><br/>Turn evidence into decisions.</h2><p>Develop practical analytical competence through real datasets, reproducible analysis and decision-oriented case studies.</p><div className="actions"><a className="button primary" href="#programmes">Explore Analytics Environments</a><a className="button secondary" href="#stages">View learning pathway</a></div></div><div className="hero-model"><span>THE DATALYTIQS METHOD</span><b>Problem</b><i>↓</i><b>Data</b><i>↓</i><b>Analysis</b><i>↓</i><b>Evidence</b><i>↓</i><b>Decision</b></div></section><section id="programmes" className="programme-hub"><div className="section-title"><div><span className="eyebrow">DATALYTIQS ANALYTICS LAB</span><h3>Choose Your Analytics Environment</h3></div><p>Enter the programme, dashboard or analytical platform that matches your learning, analytical or executive decision-support objective.</p></div><div className="programme-grid">{programmes.map(([title,description,href,cta])=><article key={href}><span className="eyebrow">ACTIVE ENVIRONMENT</span><h3>{title}</h3><p>{description}</p><a className="button primary" href={href}>{cta} →</a></article>)}</div></section><section className="metrics"><article><span>ACTIVE CASE</span><strong>001</strong><small>Secondary School Performance</small></article><article><span>PROGRESS</span><strong>0%</strong><small>6 analytical stages</small></article><article><span>DATASETS</span><strong>1</strong><small>Ready for analysis</small></article><article><span>PROJECT STATUS</span><strong className="text-status">Ready</strong><small>Begin analytical workflow</small></article></section><section id="case001" className="case-card"><div className="case-head"><div><span className="case-number">CASE STUDY 001</span><h3>Secondary School Performance Analytics</h3><p>Evidence-Based Academic Management</p></div><span className="pill">FOUNDATION CASE</span></div><div className="case-grid"><div><h4>Management challenge</h4><p>A school leadership team needs defensible evidence about academic performance patterns and the factors associated with student outcomes so that interventions can be prioritised intelligently.</p></div><div><h4>Your analytical mission</h4><p>Transform the supplied school dataset into statistically sound findings, management insights and actionable recommendations.</p></div></div><div className="case-actions"><a className="button primary" href="/cases/001">Open Case Workspace →</a><span>Python · Excel/CSV · Statistical Analysis · Management Interpretation</span></div></section><section id="stages" className="pathway"><div className="section-title"><div><span className="eyebrow">CASE 001 PATHWAY</span><h3>Your analytical workflow</h3></div><p>Complete each stage sequentially. Your work becomes part of the final analytical report.</p></div><div className="stage-list">{stages.map(([n,t,d])=><article key={n}><span className="stage-num">{n}</span><div><h4>{t}</h4><p>{d}</p></div><span className="stage-state">NOT STARTED</span><a href={`/cases/001#stage-${n}`}>→</a></article>)}</div></section></section></main>}
+  [
+    "Secondary School Performance Analytics",
+    "Applied school-performance case study for evidence-based academic management.",
+    "/cases/001",
+    "Open School Analytics",
+  ],
+  [
+    "MERL Foundations",
+    "Monitoring, Evaluation, Research and Learning competence pathway.",
+    "/merl/foundations",
+    "Explore MERL",
+  ],
+  [
+    "Data Science",
+    "Applied data-science learning and analytical practice environment.",
+    "/data-science",
+    "Explore Data Science",
+  ],
+  [
+    "Data Task Qualification Series",
+    "Ten stackable, performance-based courses across questionnaire design, collection, cleaning, analysis, reporting and decisions.",
+    "/data-lifecycle",
+    "Explore DTQ Pathway",
+  ],
+  [
+    "Data Analytics",
+    "Practical Excel, SQL, statistics, dashboards and reporting for operational decisions.",
+    "/data-analytics",
+    "Explore Data Analytics",
+  ],
+  [
+    "Business Intelligence",
+    "KPI governance, data modelling, dashboards, scenarios and executive intelligence.",
+    "/business-intelligence",
+    "Explore Business Intelligence",
+  ],
+  [
+    "Modern Applied Statistics",
+    "Practical study design, inference, modelling, reproducibility and AI-era statistical judgement.",
+    "/statistics",
+    "Explore Statistics",
+  ],
+  [
+    "Excel for School Bursars — Kenya",
+    "School finance-control workbooks for fees, capitation, cashbooks, budgets, procurement and audit readiness.",
+    "/excel-school-bursars",
+    "Explore Bursar Excel",
+  ],
+  [
+    "Leadership and Policy Execution",
+    "Six-week practical leadership programme for public officers.",
+    "/public-leadership",
+    "Explore Public Leadership",
+  ],
+  [
+    "Senior Management Programme",
+    "Executive pathway for strategy, resources, governance, risk and institutional performance.",
+    "/senior-management",
+    "Explore Senior Management",
+  ],
+  [
+    "Digital Transformation & Data Systems",
+    "Executive programme for digital services, data governance, cybersecurity and benefits realisation.",
+    "/digital-transformation",
+    "Explore Digital Transformation",
+  ],
+  [
+    "CEO Intelligence Workspace",
+    "Premium executive intelligence workspace for organisational data, KPIs, scenarios and strategic direction.",
+    "/ceo",
+    "Open CEO Workspace",
+  ],
+];
+export default function Home() {
+  return (
+    <main className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-mark">D</div>
+          <div>
+            <strong>DatalytIQs</strong>
+            <span>Analytics Lab</span>
+          </div>
+        </div>
+        <nav>
+          {nav.map((item, i) => (
+            <a
+              className={i === 0 ? "active" : ""}
+              href={item === "Case Studies" ? "/cases/001" : "#"}
+              key={item}
+            >
+              {item}
+            </a>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          <small>LEARNING PHILOSOPHY</small>
+          <p>Management Problem → Data → Evidence → Decision</p>
+          <a href="https://community.datalytiqsacademy.com">Community ↗</a>
+        </div>
+      </aside>
+      <section className="content">
+        <header className="topbar">
+          <div>
+            <span className="eyebrow">DATALYTIQS ACADEMY</span>
+            <h1>Analytics Lab</h1>
+          </div>
+          <div className="user">
+            <span className="status"></span>
+            <div>
+              <strong>Learner</strong>
+              <small>Student workspace</small>
+            </div>
+            <div className="avatar">L</div>
+          </div>
+        </header>
+        <section className="hero">
+          <div>
+            <span className="eyebrow gold">
+              APPLIED ANALYTICS LEARNING ENVIRONMENT
+            </span>
+            <h2>
+              Turn data into <em>evidence.</em>
+              <br />
+              Turn evidence into decisions.
+            </h2>
+            <p>
+              Develop practical analytical competence through real datasets,
+              reproducible analysis and decision-oriented case studies.
+            </p>
+            <div className="actions">
+              <a className="button primary" href="#programmes">
+                Explore Analytics Environments
+              </a>
+              <a className="button secondary" href="#stages">
+                View learning pathway
+              </a>
+            </div>
+          </div>
+          <div className="hero-model">
+            <span>THE DATALYTIQS METHOD</span>
+            <b>Problem</b>
+            <i>↓</i>
+            <b>Data</b>
+            <i>↓</i>
+            <b>Analysis</b>
+            <i>↓</i>
+            <b>Evidence</b>
+            <i>↓</i>
+            <b>Decision</b>
+          </div>
+        </section>
+        <section id="programmes" className="programme-hub">
+          <div className="section-title">
+            <div>
+              <span className="eyebrow">DATALYTIQS ANALYTICS LAB</span>
+              <h3>Choose Your Analytics Environment</h3>
+            </div>
+            <p>
+              Enter the programme, dashboard or analytical platform that matches
+              your learning, analytical or executive decision-support objective.
+            </p>
+          </div>
+          <div className="programme-grid">
+            {programmes.map(([title, description, href, cta]) => (
+              <article key={href}>
+                <span className="eyebrow">ACTIVE ENVIRONMENT</span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <a className="button primary" href={href}>
+                  {cta} →
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section className="metrics">
+          <article>
+            <span>ACTIVE CASE</span>
+            <strong>001</strong>
+            <small>Secondary School Performance</small>
+          </article>
+          <article>
+            <span>PROGRESS</span>
+            <strong>0%</strong>
+            <small>6 analytical stages</small>
+          </article>
+          <article>
+            <span>DATASETS</span>
+            <strong>1</strong>
+            <small>Ready for analysis</small>
+          </article>
+          <article>
+            <span>PROJECT STATUS</span>
+            <strong className="text-status">Ready</strong>
+            <small>Begin analytical workflow</small>
+          </article>
+        </section>
+        <section id="case001" className="case-card">
+          <div className="case-head">
+            <div>
+              <span className="case-number">CASE STUDY 001</span>
+              <h3>Secondary School Performance Analytics</h3>
+              <p>Evidence-Based Academic Management</p>
+            </div>
+            <span className="pill">FOUNDATION CASE</span>
+          </div>
+          <div className="case-grid">
+            <div>
+              <h4>Management challenge</h4>
+              <p>
+                A school leadership team needs defensible evidence about
+                academic performance patterns and the factors associated with
+                student outcomes so that interventions can be prioritised
+                intelligently.
+              </p>
+            </div>
+            <div>
+              <h4>Your analytical mission</h4>
+              <p>
+                Transform the supplied school dataset into statistically sound
+                findings, management insights and actionable recommendations.
+              </p>
+            </div>
+          </div>
+          <div className="case-actions">
+            <a className="button primary" href="/cases/001">
+              Open Case Workspace →
+            </a>
+            <span>
+              Python · Excel/CSV · Statistical Analysis · Management
+              Interpretation
+            </span>
+          </div>
+        </section>
+        <section id="stages" className="pathway">
+          <div className="section-title">
+            <div>
+              <span className="eyebrow">CASE 001 PATHWAY</span>
+              <h3>Your analytical workflow</h3>
+            </div>
+            <p>
+              Complete each stage sequentially. Your work becomes part of the
+              final analytical report.
+            </p>
+          </div>
+          <div className="stage-list">
+            {stages.map(([n, t, d]) => (
+              <article key={n}>
+                <span className="stage-num">{n}</span>
+                <div>
+                  <h4>{t}</h4>
+                  <p>{d}</p>
+                </div>
+                <span className="stage-state">NOT STARTED</span>
+                <a href={`/cases/001#stage-${n}`}>→</a>
+              </article>
+            ))}
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
