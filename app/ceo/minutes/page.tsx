@@ -1,7 +1,8 @@
 import {redirect} from 'next/navigation'
 import Link from 'next/link'
 import {createClient} from '../../../lib/supabase/server'
-import {confirmMinutesItem,delegateAction,reviewEvidence,submitActionEvidence} from '../minutes-actions'\nimport MinutesProcessForm from './minutes-process-form'
+import {confirmMinutesItem,delegateAction,reviewEvidence,submitActionEvidence} from '../minutes-actions'
+import MinutesProcessForm from './minutes-process-form'
 import '../ceo.css'
 export const metadata={title:'Minutes Intelligence | DatalytIQs Executive Workspace',description:'Turn meeting minutes into executive briefs, confirmed decisions, delegated actions and evidence.'}
 export default async function MinutesPage(){
