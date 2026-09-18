@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import '../young-analysts.css'
+import './young-analysts.css'
 
 export const metadata: Metadata = {
   title: 'Young Analysts & Digital Skills Academy | DatalytIQs',
