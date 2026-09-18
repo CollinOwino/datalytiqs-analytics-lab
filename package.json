@@ -2,12 +2,24 @@
   "name": "datalytiqs-analytics-lab",
   "version": "0.1.0",
   "private": true,
-  "scripts": {"dev":"next dev","build":"next build","start":"next start"},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
-    "@supabase/ssr":"^0.7.0",
-    "@supabase/supabase-js":"^2.57.0",
-    "@types/node":"latest","@types/react":"latest","@types/react-dom":"latest",
-    "next":"latest","react":"latest","react-dom":"latest","typescript":"latest",
-    "xlsx":"^0.18.5"
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.57.0",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest",
+    "xlsx": "^0.18.5",
+    "mammoth": "^1.9.1",
+    "pdf-parse": "^1.1.1",
+    "@types/pdf-parse": "^1.1.5"
   }
 }
