@@ -1,0 +1,4 @@
+-- Production migration exam_practical_assessor_workflow_v1 was applied through Supabase.
+-- Adds reviewer_user_id, rubric_scores, determination, staff read policy,
+-- and security-definer review_ca35p_topic_practical RPC.
+-- Kept as an explicit repository parity marker; use Supabase migration history as canonical SQL for this release.
