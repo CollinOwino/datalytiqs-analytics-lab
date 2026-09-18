@@ -15,6 +15,9 @@
 .ceo * {
   box-sizing: border-box;
 }
+.ceo section[id] {
+  scroll-margin-top: 20px;
+}
 .ceo > aside {
   position: sticky;
   top: 0;
@@ -183,8 +186,9 @@
 }
 .ceo-metrics b {
   font:
-    700 27px Georgia,
+    700 clamp(22px, 2.1vw, 27px) Georgia,
     serif;
+  overflow-wrap: anywhere;
 }
 .ceo-metrics .empty {
   grid-column: 1/-1;
@@ -453,6 +457,7 @@
     display: flex;
     overflow-x: auto;
     margin: 22px 0 0;
+    scrollbar-width: thin;
   }
   .ceo aside > div:last-child {
     display: none;
@@ -476,6 +481,13 @@
   .ceo > section > header {
     align-items: flex-start;
     padding: 22px 0;
+  }
+  .ceo > section > header > div:first-child {
+    min-width: 0;
+  }
+  .ceo > section > header h1,
+  .ceo > section > header span {
+    overflow-wrap: anywhere;
   }
   .ceo-user {
     display: none;
