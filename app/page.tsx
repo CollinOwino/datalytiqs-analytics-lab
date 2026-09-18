@@ -11,6 +11,7 @@ const academyCatalogueUrl = 'https://datalytiqsacademy.com/courses/'
 
 const navigation = [
   ['Dashboard', '/'],
+  ['Exam Hub', '/exam-hub'],
   ['Case Studies', '/cases/001'],
   ['Analytics Workspace', '/python-editor'],
   ['Datasets', '/data-explorer'],
@@ -18,6 +19,7 @@ const navigation = [
 ]
 
 const environments = [
+  { eyebrow: 'EXAM COMPETENCY HUB', title: 'KASNEB CA35P Business Data Analytics', description: 'Syllabus-led preparation, practical-paper readiness, progress tracking and gated assessment access.', href: '/exam-hub', cta: 'Open CA35P hub' },
   { eyebrow: 'FOUNDATION CASE', title: 'Secondary School Performance Analytics', description: 'Applied school-performance case study for evidence-based academic management.', href: '/cases/001', cta: 'Open school analytics' },
   { eyebrow: 'LAB PATHWAY', title: 'MERL Foundations', description: 'Monitoring, evaluation, research and learning competence pathway with evidence gates.', href: '/merl/foundations', cta: 'Explore MERL' },
   { eyebrow: 'LAB PATHWAY', title: 'Data Science', description: 'Applied data-science learning and analytical practice environment.', href: '/data-science', cta: 'Explore data science' },
