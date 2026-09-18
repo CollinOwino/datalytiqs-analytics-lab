@@ -10,35 +10,27 @@ export async function startCa35p() {
   if (!user) redirect('/login?next=/exam-hub')
 
   const { error } = await supabase.rpc('enroll_in_exam_programme', { p_programme_code: 'CA35P' })
-  if (error) redirect(`/exam-hub?error=${encodeURIComponent(error.message)}`)
+  if (error) redirect('/exam-hub?state=action-error')
   revalidatePath('/exam-hub')
-  redirect('/exam-hub?started=1')
+  redirect('/exam-hub?state=enrolled')
 }
 
-export async function setTopicProgress(formData: FormData) {
-  const topicId = String(formData.get('topic_id') || '')
-  const enrollmentId = String(formData.get('enrollment_id') || '')
-  const status = String(formData.get('status') || '')
-  if (!topicId || !enrollmentId || !['in_progress', 'completed'].includes(status)) {
-    redirect('/exam-hub?error=Invalid%20progress%20request')
-  }
+export async function setSubtopicProgress(formData: FormData) {
+  const subtopicId=String(formData.get('subtopic_id')||''),topicCode=String(formData.get('topic_code')||''),status=String(formData.get('status')||'')
+  if(!subtopicId||!/^[1-5]\.0$/.test(topicCode)||!['in_progress','completed'].includes(status)) redirect('/exam-hub?state=action-error')
+  const supabase=await createClient();const{data:{user}}=await supabase.auth.getUser()
+  if(!user) redirect(`/login?next=${encodeURIComponent(`/exam-hub/${topicCode}`)}`)
+  const{error}=await supabase.rpc('record_exam_subtopic_progress',{p_subtopic_id:subtopicId,p_status:status})
+  if(error) redirect(`/exam-hub/${topicCode}?state=action-error`)
+  revalidatePath('/exam-hub');revalidatePath(`/exam-hub/${topicCode}`);redirect(`/exam-hub/${topicCode}?state=progress-saved`)
+}
 
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login?next=/exam-hub')
-
-  const now = new Date().toISOString()
-  const { error } = await supabase.from('exam_topic_progress').upsert({
-    topic_id: topicId,
-    enrollment_id: enrollmentId,
-    user_id: user.id,
-    status,
-    started_at: now,
-    completed_at: status === 'completed' ? now : null,
-    updated_at: now,
-  }, { onConflict: 'enrollment_id,topic_id' })
-
-  if (error) redirect(`/exam-hub?error=${encodeURIComponent(error.message)}`)
-  revalidatePath('/exam-hub')
-  redirect('/exam-hub?updated=1')
+export async function setTargetExamDate(formData: FormData) {
+  const targetDate=String(formData.get('target_exam_date')||'')
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(targetDate)) redirect('/exam-hub?state=action-error')
+  const supabase=await createClient();const{data:{user}}=await supabase.auth.getUser()
+  if(!user) redirect('/login?next=/exam-hub')
+  const{error}=await supabase.rpc('set_exam_target_date',{p_programme_code:'CA35P',p_target_exam_date:targetDate})
+  if(error) redirect('/exam-hub?state=action-error')
+  revalidatePath('/exam-hub');redirect('/exam-hub?state=study-plan-saved')
 }

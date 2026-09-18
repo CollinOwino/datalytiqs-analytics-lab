@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { createAdminClient } from '../../lib/supabase/admin'
 import { createClient } from '../../lib/supabase/server'
-import { setTopicProgress, startCa35p } from './actions'
+import { setTargetExamDate, startCa35p } from './actions'
 import './exam-hub.css'
+import './topic-workspace.css'
 
 export const metadata: Metadata = {
   title: 'CA35P Exam Competency Hub | DatalytIQs Academy',
@@ -19,7 +20,7 @@ type Topic = {
   exam_subtopics: Array<{ id: string; code: string; title: string; description: string | null; sequence_no: number }>
 }
 
-export default async function ExamHubPage({ searchParams }: { searchParams: Promise<{ error?: string; started?: string; updated?: string }> }) {
+export default async function ExamHubPage({ searchParams }: { searchParams: Promise<{ state?: string }> }) {
   const query = await searchParams
   const admin = createAdminClient()
   const { data: programme, error: programmeError } = await admin
@@ -44,6 +45,7 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
   const { data: { user } } = await supabase.auth.getUser()
   let enrollment: any = null
   let progress: any[] = []
+  let subtopicProgress: any[] = []
   let grants: any[] = []
   if (user) {
     const [{ data: enrollmentRow }, { data: grantRows }] = await Promise.all([
@@ -53,15 +55,20 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
     enrollment = enrollmentRow
     grants = grantRows || []
     if (enrollment) {
-      const { data } = await supabase.from('exam_topic_progress').select('topic_id,status,completed_at').eq('enrollment_id', enrollment.id)
-      progress = data || []
+      const [{data:topicData},{data:subtopicData}]=await Promise.all([
+        supabase.from('exam_topic_progress').select('topic_id,status,completed_at').eq('enrollment_id',enrollment.id),
+        supabase.from('exam_subtopic_progress').select('subtopic_id,status,completed_at').eq('enrollment_id',enrollment.id),
+      ])
+      progress=topicData||[];subtopicProgress=subtopicData||[]
     }
   }
 
   const hasFullAccess = grants.some(grant => grant.access_level === 'full' && (!grant.expires_at || new Date(grant.expires_at) > new Date()))
   const progressByTopic = new Map(progress.map(row => [row.topic_id, row]))
   const completed = progress.filter(row => row.status === 'completed').length
-  const progressPercent = topics.length ? Math.round((completed / topics.length) * 100) : 0
+  const totalSubtopics=topics.reduce((sum,topic)=>sum+topic.exam_subtopics.length,0)
+  const completedSubtopics=subtopicProgress.filter(row=>row.status==='completed').length
+  const progressPercent=totalSubtopics?Math.round(completedSubtopics/totalSubtopics*100):0
   const bodyName = Array.isArray(programme.exam_bodies) ? programme.exam_bodies[0]?.name : (programme.exam_bodies as any)?.name
   const unlockUrl = `https://datalytiqsacademy.com/contact/?subject=${encodeURIComponent('Unlock CA35P Exam Competency Hub')}`
 
@@ -81,11 +88,13 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
     <section className="exam-status" aria-label="Learner status">
       <article><span>PROGRAMME</span><b>{programme.code}</b><small>{bodyName}</small></article>
       <article><span>ACCESS</span><b>{hasFullAccess ? 'Full' : 'Free tier'}</b><small>{hasFullAccess ? 'All syllabus topics available' : 'Topics 1–3 available'}</small></article>
-      <article><span>PROGRESS</span><b>{progressPercent}%</b><small>{completed}/{topics.length} topics completed</small></article>
+      <article><span>PROGRESS</span><b>{progressPercent}%</b><small>{completedSubtopics}/{totalSubtopics} subtopics · {completed}/{topics.length} topics</small></article>
       <article><span>SYLLABUS</span><b>2022</b><small>{syllabus.version_label}</small></article>
     </section>
 
-    {(query.error || query.started || query.updated) && <div className={`exam-notice ${query.error ? 'error' : ''}`} role="status">{query.error || (query.started ? 'Your free CA35P learning plan is active.' : 'Topic progress saved.')}</div>}
+    {user&&enrollment&&query.state&&['enrolled','progress-saved','study-plan-saved'].includes(query.state)&&<div className="exam-notice" role="status">{{enrolled:'Your free CA35P learning plan is active.','progress-saved':'Topic progress saved.','study-plan-saved':'Target exam date saved.'}[query.state]}</div>}
+    {query.state==='action-error'&&<div className="exam-notice error" role="alert">The requested update could not be completed.</div>}
+    {user&&enrollment&&<section className="study-plan-bar" aria-labelledby="study-plan-title"><div><span className="exam-kicker">PERSONAL STUDY PLAN</span><h2 id="study-plan-title">Set your target examination date</h2><p>{enrollment.target_exam_date?`Current target: ${new Date(`${enrollment.target_exam_date}T00:00:00`).toLocaleDateString('en-KE',{dateStyle:'long'})}`:'Add a target date to pace the remaining syllabus and practical work.'}</p></div><form action={setTargetExamDate}><label htmlFor="target-exam-date">Target date</label><input id="target-exam-date" name="target_exam_date" type="date" min={new Date(Date.now()+86400000).toISOString().slice(0,10)} defaultValue={enrollment.target_exam_date||''} required/><button type="submit">Save study target</button></form></section>}
 
     <section className="exam-section" id="syllabus" aria-labelledby="syllabus-title">
       <div className="exam-section-head"><div><span className="exam-kicker">STRUCTURED COVERAGE</span><h2 id="syllabus-title">Syllabus and learner progress</h2></div><p>The first three topics are included in free membership. Premium topics remain visible for planning but require an active entitlement.</p></div>
@@ -98,7 +107,7 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
           <div className="topic-number">{String(topic.sequence_no).padStart(2, '0')}</div>
           <div className="topic-content"><div className="topic-title"><div><span>{topic.code} · {free ? 'FREE ACCESS' : 'PREMIUM'}</span><h3>{topic.title}</h3></div><b className={`topic-badge ${topicProgress?.status || (accessible ? 'available' : 'locked')}`}>{topicProgress?.status?.replace('_', ' ') || (accessible ? 'available' : 'locked')}</b></div><p>{topic.description}</p>
             <details><summary>{topic.exam_subtopics.length} subtopics and learning outcomes</summary><ol>{topic.exam_subtopics.map(subtopic => <li key={subtopic.id}><b>{subtopic.code} {subtopic.title}</b><span>{subtopic.description}</span></li>)}</ol>{topic.learning_outcomes?.length > 0 && <div className="outcomes"><b>Learning outcomes</b><ul>{topic.learning_outcomes.map(outcome => <li key={outcome}>{outcome}</li>)}</ul></div>}</details>
-            <div className="topic-action">{!accessible ? <><span>Subscription required for this topic.</span><a href={unlockUrl}>Unlock programme →</a></> : !user ? <a href="/login?next=/exam-hub">Sign in to track progress →</a> : !enrollment ? <form action={startCa35p}><button type="submit">Start free access</button></form> : <form action={setTopicProgress}><input type="hidden" name="topic_id" value={topic.id}/><input type="hidden" name="enrollment_id" value={enrollment.id}/><input type="hidden" name="status" value={topicProgress?.status === 'in_progress' ? 'completed' : 'in_progress'}/><button type="submit">{topicProgress?.status === 'completed' ? 'Completed ✓' : topicProgress?.status === 'in_progress' ? 'Mark topic complete' : 'Start topic'}</button></form>}</div>
+            <div className="topic-action">{!accessible ? <><span>Subscription required for this topic.</span><a href={unlockUrl}>Unlock programme →</a></> : <><span>{topicProgress?.status==='completed'?'All subtopics completed.':'Open the guided workspace and record each evidence gate.'}</span><a href={`/exam-hub/${topic.code}`}>{topicProgress?.status==='completed'?'Review topic':'Open topic workspace'} →</a></>}</div>
           </div>
         </article>
       })}</div>
