@@ -1,0 +1,2 @@
+.lesson-card>header{align-items:flex-start}.lesson-card>header>.topic-badge{margin-left:auto;white-space:nowrap}.lesson-completion{display:flex;justify-content:flex-end;margin-top:20px}.lesson-completion a,.lesson-completion button{border:0;background:#0b2c4d;color:#fff;font-weight:800;padding:12px 18px;text-decoration:none;cursor:pointer}.lesson-completion a:focus-visible,.lesson-completion button:focus-visible{outline:3px solid #f4a261;outline-offset:3px}
+@media(max-width:600px){.lesson-card>header{flex-wrap:wrap}.lesson-card>header>.topic-badge{margin-left:0}}
