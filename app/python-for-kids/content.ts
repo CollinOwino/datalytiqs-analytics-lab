@@ -27,4 +27,7 @@ export const lessons: KidLesson[] = [
   {code:'3.3',module:3,title:'Build an Interactive Program',minutes:45,hook:'Combine input, variables and output into your first interactive creation.',discover:['Plan what your program asks, stores and displays.','Test with more than one safe answer.','Helpful output repeats the choice clearly.'],starter:'hero = input("Choose a hero name: ")\npower = input("Choose a superpower: ")\nprint(hero, "uses", power)',challenge:'Ask for a character and a mission, then print “Adventure:” followed by both answers.',change:'Add a safe third choice such as a setting.',debugCode:'character = input("Choose a character: ")\nmission = input("Choose a mission: ")\nprint("Adventure:", character mission)',debugHint:'Separate character and mission with a comma.',check:{question:'What should you do before sharing a program?',options:['Test different answers','Add private details','Remove all instructions'],answer:0},create:'Create and test a short interactive story starter.',reflection:'What did your test reveal about your program?',hints:['Create character and mission inputs.','Print a line beginning Adventure:.','Separate the stored answers with commas.'],expected:['Adventure: Luna find the map'],required:['character','mission','input','print'],inputs:['Luna','find the map']},
 ]
 
+import { advancedLessons } from './advanced-content'
+lessons.push(...advancedLessons)
+
 export function getLesson(code: string) { return lessons.find((lesson) => lesson.code === code) }

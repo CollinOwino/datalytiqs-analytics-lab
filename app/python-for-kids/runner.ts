@@ -1,56 +1,23 @@
 import { getLesson } from './content'
+type Value=string|number|boolean|Value[]|null
+type Line={indent:number;text:string;line:number}
+type FunctionValue={params:string[];body:Line[]}
+export type RunResult={ok:boolean;output:string;feedback:string;errorCategory?:string}
+const MAX_STEPS=500,MAX_OUTPUT=100
 
-type Value = string | number
-export type RunResult = { ok: boolean; output: string; feedback: string; errorCategory?: string }
+function splitTop(source:string,separator=','){const parts:string[]=[];let current='',depth=0,quote='';for(const char of source){if(quote){current+=char;if(char===quote)quote='';continue}if(char==='"'||char==="'"){quote=char;current+=char;continue}if('(['.includes(char))depth++;if(')]'.includes(char))depth--;if(char===separator&&depth===0){parts.push(current.trim());current=''}else current+=char}if(current.trim())parts.push(current.trim());return parts}
+function display(value:Value):string{if(Array.isArray(value))return `[${value.map(v=>typeof v==='string'?`'${v}'`:display(v)).join(', ')}]`;if(value===true)return'True';if(value===false)return'False';if(value===null)return'None';return String(value)}
 
-function valueOf(token: string, vars: Map<string, Value>): Value {
-  const value = token.trim()
-  if (/^-?\d+(\.\d+)?$/.test(value)) return Number(value)
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) return value.slice(1,-1)
-  if (/^[a-zA-Z_]\w*$/.test(value) && vars.has(value)) return vars.get(value)!
-  throw new Error(`I could not understand “${value}”. Check quotes and variable names.`)
+class Interpreter{
+  vars=new Map<string,Value>();functions=new Map<string,FunctionValue>();output:string[]=[];inputIndex=0;steps=0;inputs:string[]
+  constructor(inputs:string[]){this.inputs=inputs}
+  tick(){if(++this.steps>MAX_STEPS)throw new Error('The program reached the safe step limit. Check that every loop stops.');if(this.output.length>MAX_OUTPUT)throw new Error('The program produced too much output for this lesson.')}
+  value(token:string):Value{const s=token.trim();if(!s)return'';if((s[0]==='"'&&s.at(-1)==='"')||(s[0]==="'"&&s.at(-1)==="'"))return s.slice(1,-1);if(/^-?\d+(\.\d+)?$/.test(s))return Number(s);if(s==='True')return true;if(s==='False')return false;const list=s.match(/^\[(.*)\]$/);if(list)return splitTop(list[1]).map(x=>this.expr(x));const index=s.match(/^([A-Za-z_]\w*)\[(\d+)\]$/);if(index){const v=this.vars.get(index[1]);if(!Array.isArray(v))throw new Error(`${index[1]} is not a list.`);if(Number(index[2])>=v.length)throw new Error(`Index ${index[2]} is outside this list.`);return v[Number(index[2])]}const call=s.match(/^([A-Za-z_]\w*)\((.*)\)$/);if(call){const args=splitTop(call[2]).map(x=>this.expr(x));if(call[1]==='len'){if(!Array.isArray(args[0])&&typeof args[0]!=='string')throw new Error('len() needs a list or text value.');return args[0].length}if(call[1]==='sum'){if(!Array.isArray(args[0])||args[0].some(x=>typeof x!=='number'))throw new Error('sum() needs a list of numbers.');return(args[0] as number[]).reduce((a,b)=>a+b,0)}return this.callFunction(call[1],args)}if(this.vars.has(s))return this.vars.get(s)!;throw new Error(`I could not find “${s}”. Check its spelling and quotes.`)}
+  expr(source:string):Value{const s=source.trim();const comparison=s.match(/^(.*?)\s*(==|!=|>=|<=|>|<)\s*(.*?)$/);if(comparison){const a=this.expr(comparison[1]),b=this.expr(comparison[3]);return comparison[2]==='=='?a===b:comparison[2]==='!='?a!==b:comparison[2]==='>'?(a as number)>(b as number):comparison[2]==='<'?(a as number)<(b as number):comparison[2]==='>='?(a as number)>=(b as number):(a as number)<=(b as number)}const plus=splitTop(s,'+');if(plus.length>1)return plus.map(x=>this.expr(x)).reduce<Value>((a,b)=>typeof a==='number'&&typeof b==='number'?a+b:String(a)+String(b),0);for(const op of ['-','*','/']){const at=s.lastIndexOf(op);if(at>0){const a=this.expr(s.slice(0,at)),b=this.expr(s.slice(at+1));if(typeof a!=='number'||typeof b!=='number')throw new Error('Arithmetic operators need numbers.');return op==='-'?a-b:op==='*'?a*b:a/b}}return this.value(s)}
+  callFunction(name:string,args:Value[]){const fn=this.functions.get(name);if(!fn)throw new Error(`Function ${name} is not defined.`);if(args.length!==fn.params.length)throw new Error(`${name} needs ${fn.params.length} value(s).`);const saved=new Map(this.vars);fn.params.forEach((p,i)=>this.vars.set(p,args[i]));const result=this.block(fn.body,0,fn.body[0]?.indent??0);this.vars=saved;return result.value??null}
+  block(lines:Line[],start:number,indent:number):{next:number;value?:Value}{let i=start;while(i<lines.length){const row=lines[i];if(row.indent<indent)return{next:i};if(row.indent>indent)throw new Error(`Line ${row.line} has unexpected indentation.`);this.tick();const text=row.text;const def=text.match(/^def\s+([A-Za-z_]\w*)\((.*?)\):$/);if(def){const end=this.endBlock(lines,i+1,indent);this.functions.set(def[1],{params:splitTop(def[2]),body:lines.slice(i+1,end)});i=end;continue}if(/^(if|elif)\s+(.+):$/.test(text)){i=this.ifChain(lines,i,indent);continue}const forMatch=text.match(/^for\s+([A-Za-z_]\w*)\s+in\s+(.+):$/);if(forMatch){const end=this.endBlock(lines,i+1,indent);let values:Value[];const range=forMatch[2].match(/^range\((\d+)\)$/);if(range)values=Array.from({length:Number(range[1])},(_,x)=>x);else{const v=this.expr(forMatch[2]);if(!Array.isArray(v))throw new Error('A for loop needs a list or range.');values=v}for(const value of values){this.vars.set(forMatch[1],value);const result=this.block(lines.slice(i+1,end),0,lines[i+1]?.indent??indent+4);if(result.value!==undefined)return{next:end,value:result.value}}i=end;continue}const whileMatch=text.match(/^while\s+(.+):$/);if(whileMatch){const end=this.endBlock(lines,i+1,indent);while(Boolean(this.expr(whileMatch[1]))){this.tick();const result=this.block(lines.slice(i+1,end),0,lines[i+1]?.indent??indent+4);if(result.value!==undefined)return{next:end,value:result.value}}i=end;continue}const ret=text.match(/^return\s+(.+)$/);if(ret)return{next:i+1,value:this.expr(ret[1])};const append=text.match(/^([A-Za-z_]\w*)\.append\((.*)\)$/);if(append){const list=this.vars.get(append[1]);if(!Array.isArray(list))throw new Error(`${append[1]} is not a list.`);list.push(this.expr(append[2]));i++;continue}const assignment=text.match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/);if(assignment){const input=assignment[2].match(/^input\((['"])(.*?)\1\)$/);if(input){this.output.push(input[2]);this.vars.set(assignment[1],this.inputs[this.inputIndex++]??'idea')}else this.vars.set(assignment[1],this.expr(assignment[2]));i++;continue}const printed=text.match(/^print\((.*)\)$/);if(printed){this.output.push(splitTop(printed[1]).map(x=>display(this.expr(x))).join(' '));i++;continue}const call=text.match(/^([A-Za-z_]\w*)\((.*)\)$/);if(call){this.callFunction(call[1],splitTop(call[2]).map(x=>this.expr(x)));i++;continue}throw new Error(`Line ${row.line} needs a supported Python instruction.`)}return{next:i}}
+  endBlock(lines:Line[],start:number,parentIndent:number){let i=start;if(i>=lines.length||lines[i].indent<=parentIndent)throw new Error(`Line ${lines[start-1].line} needs an indented block.`);while(i<lines.length&&lines[i].indent>parentIndent)i++;return i}
+  ifChain(lines:Line[],start:number,indent:number){let i=start,chosen=false;while(i<lines.length){const row=lines[i],condition=row.text.match(/^(if|elif)\s+(.+):$/),isElse=row.text==='else:';if(row.indent!==indent||(!condition&&!isElse))break;const end=this.endBlock(lines,i+1,indent);if(!chosen&&(isElse||Boolean(this.expr(condition![2])))){this.block(lines.slice(i+1,end),0,lines[i+1].indent);chosen=true}i=end}return i}
 }
 
-function expression(source: string, vars: Map<string, Value>): Value {
-  const parts = source.trim().split(/\s*([+\-*/])\s*/)
-  if (parts.length === 1) return valueOf(parts[0], vars)
-  let result = valueOf(parts[0], vars)
-  for (let i=1;i<parts.length;i+=2) {
-    const right=valueOf(parts[i+1],vars); const op=parts[i]
-    if (typeof result !== 'number' || typeof right !== 'number') throw new Error('Use arithmetic operators with numbers, not text.')
-    result=op==='+'?result+right:op==='-'?result-right:op==='*'?result*right:result/right
-  }
-  return result
-}
-
-export function runFoundationCode(lessonCode: string, code: string): RunResult {
-  const lesson=getLesson(lessonCode)
-  if (!lesson) return {ok:false,output:'',feedback:'This lesson is not available.',errorCategory:'lesson'}
-  if (!code.trim() || code.length>2000) return {ok:false,output:'',feedback:'Keep your program between 1 and 2,000 characters.',errorCategory:'limit'}
-  if (/\b(import|from|open|eval|exec|compile|globals|locals|__\w+__|while|for|def|class|lambda|try|raise)\b/.test(code)) return {ok:false,output:'',feedback:'This foundations runner only supports print, safe input, variables and arithmetic.',errorCategory:'safety'}
-  const vars=new Map<string,Value>(); const output:string[]=[]; let inputIndex=0
-  try {
-    for (const [index,raw] of code.split(/\r?\n/).entries()) {
-      const line=raw.trim(); if (!line || line.startsWith('#')) continue
-      const assignment=line.match(/^([a-zA-Z_]\w*)\s*=\s*(.+)$/)
-      if (assignment) {
-        const input=assignment[2].match(/^input\((['"])(.*?)\1\)$/)
-        if (input) { output.push(input[2]); vars.set(assignment[1],lesson.inputs?.[inputIndex++] ?? 'idea'); continue }
-        vars.set(assignment[1],expression(assignment[2],vars)); continue
-      }
-      const printed=line.match(/^print\((.*)\)$/)
-      if (printed) {
-        const items=printed[1].split(/\s*,\s*(?=(?:[^'"]|'[^']*'|"[^"]*")*$)/).map((item)=>expression(item,vars))
-        output.push(items.join(' ')); continue
-      }
-      throw new Error(`Line ${index+1} needs a supported Python instruction.`)
-    }
-    const rendered=output.join('\n')
-    const requirementsMet=lesson.required.every((word)=>code.includes(word)) && lesson.expected.every((word)=>rendered.includes(word))
-    return requirementsMet
-      ? {ok:true,output:rendered,feedback:'Challenge complete — your output matches the goal.'}
-      : {ok:false,output:rendered,feedback:'Your program ran. Compare the output with the challenge goal and try one change.',errorCategory:'goal'}
-  } catch (error) {
-    return {ok:false,output:output.join('\n'),feedback:error instanceof Error?error.message:'Check your Python and try again.',errorCategory:'syntax'}
-  }
-}
+export function runFoundationCode(lessonCode:string,code:string):RunResult{const lesson=getLesson(lessonCode);if(!lesson)return{ok:false,output:'',feedback:'This lesson is not available.',errorCategory:'lesson'};if(!code.trim()||code.length>5000)return{ok:false,output:'',feedback:'Keep your program between 1 and 5,000 characters.',errorCategory:'limit'};if(/\b(import|from|open|eval|exec|compile|globals|locals|__\w+__|class|lambda|try|raise|with|yield|del)\b/.test(code))return{ok:false,output:'',feedback:'This safeguarded runner does not allow files, packages, networks or system commands.',errorCategory:'safety'};try{const lines=code.split(/\r?\n/).map((raw,index)=>({indent:raw.match(/^ */)?.[0].length??0,text:raw.trim(),line:index+1})).filter(row=>row.text&&!row.text.startsWith('#'));const runner=new Interpreter(lesson.inputs??[]);runner.block(lines,0,lines[0]?.indent??0);const output=runner.output.join('\n');const ok=lesson.required.every(word=>code.includes(word))&&lesson.expected.every(word=>output.includes(word));return ok?{ok:true,output,feedback:'Challenge complete — your output matches the goal.'}:{ok:false,output,feedback:'Your program ran. Compare the output with the challenge goal and try one change.',errorCategory:'goal'}}catch(error){return{ok:false,output:'',feedback:error instanceof Error?error.message:'Check your Python and try again.',errorCategory:'syntax'}}}
