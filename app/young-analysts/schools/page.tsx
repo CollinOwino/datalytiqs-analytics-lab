@@ -12,3 +12,5 @@ export default function SchoolsPage(){
  <section id="access" className="ya-school"><div><span className="ya-kicker">LICENSING ARCHITECTURE</span><h2>School access is a first-class entitlement.</h2><p>The existing DatalytIQs learning engine already distinguishes school access from individual full and guided access. The next schema increment will add institution, club and cohort ownership without duplicating learner progress.</p></div><div className="ya-school-flow">{['Institution licence','Coordinator','Cohort','Assignments','Evidence','Progress report'].map((x,i)=><p key={x}><b>{i+1}</b>{x}</p>)}</div></section>
  </main>
 }
+
+/* preview acceptance trigger */
