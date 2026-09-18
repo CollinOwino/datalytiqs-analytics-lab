@@ -69,6 +69,8 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
   const totalSubtopics=topics.reduce((sum,topic)=>sum+topic.exam_subtopics.length,0)
   const completedSubtopics=subtopicProgress.filter(row=>row.status==='completed').length
   const progressPercent=totalSubtopics?Math.round(completedSubtopics/totalSubtopics*100):0
+  const nextTopic=topics.find(topic=>{const row=progressByTopic.get(topic.id);const free=topic.sequence_no<=programme.free_topic_limit;const grant=grants.some(g=>(g.access_level==='full'||(g.access_level==='topic'&&g.topic_id===topic.id))&&(!g.expires_at||new Date(g.expires_at)>new Date()));return (free||grant)&&row?.status!=='completed'})
+  const targetDays=enrollment?.target_exam_date?Math.max(0,Math.ceil((new Date(enrollment.target_exam_date+'T00:00:00').getTime()-Date.now())/86400000)):null
   const bodyName = Array.isArray(programme.exam_bodies) ? programme.exam_bodies[0]?.name : (programme.exam_bodies as any)?.name
   const unlockUrl = `https://datalytiqsacademy.com/contact/?subject=${encodeURIComponent('Unlock CA35P Exam Competency Hub')}`
 
@@ -89,8 +91,10 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
       <article><span>PROGRAMME</span><b>{programme.code}</b><small>{bodyName}</small></article>
       <article><span>ACCESS</span><b>{hasFullAccess ? 'Full' : 'Free tier'}</b><small>{hasFullAccess ? 'All syllabus topics available' : 'Topics 1–3 available'}</small></article>
       <article><span>PROGRESS</span><b>{progressPercent}%</b><small>{completedSubtopics}/{totalSubtopics} subtopics · {completed}/{topics.length} topics</small></article>
-      <article><span>SYLLABUS</span><b>2022</b><small>{syllabus.version_label}</small></article>
+      <article><span>SYLLABUS</span><b>{syllabus.version_label}</b><small>Published programme version</small></article>
     </section>
+
+    {user&&enrollment&&<section className="learner-command" aria-label="Study command centre"><div><span className="exam-kicker">YOUR NEXT BEST ACTION</span><h2>{nextTopic?`Continue ${nextTopic.code} · ${nextTopic.title}`:'Syllabus coverage complete'}</h2><p>{nextTopic?'Resume the next accessible topic, complete its evidence gates and then attempt the topic assessment.':'Review your evidence profile and prepare for the full mock assessment.'}</p>{nextTopic?<a className="exam-button primary" href={`/exam-hub/${nextTopic.code}`}>Resume learning</a>:<a className="exam-button primary" href="#assessments">Open assessment centre</a>}</div><aside><span>OVERALL COVERAGE</span><b>{progressPercent}%</b><small>{completedSubtopics}/{totalSubtopics} subtopics complete</small>{targetDays!==null?<><span>EXAM COUNTDOWN</span><b>{targetDays}</b><small>days to target examination date</small></>:null}</aside></section>}
 
     {user&&enrollment&&query.state&&['enrolled','progress-saved','study-plan-saved'].includes(query.state)&&<div className="exam-notice" role="status">{{enrolled:'Your free CA35P learning plan is active.','progress-saved':'Topic progress saved.','study-plan-saved':'Target exam date saved.'}[query.state]}</div>}
     {query.state==='action-error'&&<div className="exam-notice error" role="alert">The requested update could not be completed.</div>}

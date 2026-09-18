@@ -108,6 +108,8 @@ export async function submitTopicPractical(formData: FormData) {
 export async function setTargetExamDate(formData: FormData) {
   const targetDate=String(formData.get('target_exam_date')||'')
   if(!/^\d{4}-\d{2}-\d{2}$/.test(targetDate)) redirect('/exam-hub?state=action-error')
+  const target=new Date(targetDate+'T00:00:00Z');const tomorrow=new Date();tomorrow.setUTCHours(0,0,0,0);tomorrow.setUTCDate(tomorrow.getUTCDate()+1)
+  if(Number.isNaN(target.getTime())||target<tomorrow) redirect('/exam-hub?state=action-error')
   const supabase=await createClient();const{data:{user}}=await supabase.auth.getUser()
   if(!user) redirect('/login?next=/exam-hub')
   const{error}=await supabase.rpc('set_exam_target_date',{p_programme_code:'CA35P',p_target_exam_date:targetDate})
