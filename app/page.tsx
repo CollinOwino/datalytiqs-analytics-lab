@@ -11,6 +11,7 @@ const academyCatalogueUrl = 'https://datalytiqsacademy.com/courses/'
 
 const navigation = [
   ['Dashboard', '/'],
+  ['Python for Kids', '/python-for-kids'],
   ['Exam Hub', '/exam-hub'],
   ['Case Studies', '/cases/001'],
   ['Analytics Workspace', '/python-editor'],
@@ -19,6 +20,7 @@ const navigation = [
 ]
 
 const environments = [
+  { eyebrow: 'FREE FOUNDATIONS', title: 'Python for Kids: Code, Create & Solve', description: 'Safeguarded coding practice for ages 10–16. Complete Modules 1–3 free with private progress and competency evidence.', href: '/python-for-kids', cta: 'Start Python foundations' },
   { eyebrow: 'EXAM COMPETENCY HUB', title: 'KASNEB CA35P Business Data Analytics', description: 'Syllabus-led preparation, practical-paper readiness, progress tracking and gated assessment access.', href: '/exam-hub', cta: 'Open CA35P hub' },
   { eyebrow: 'FOUNDATION CASE', title: 'Secondary School Performance Analytics', description: 'Applied school-performance case study for evidence-based academic management.', href: '/cases/001', cta: 'Open school analytics' },
   { eyebrow: 'LAB PATHWAY', title: 'MERL Foundations', description: 'Monitoring, evaluation, research and learning competence pathway with evidence gates.', href: '/merl/foundations', cta: 'Explore MERL' },
