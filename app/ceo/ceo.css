@@ -168,6 +168,15 @@
 .ceo-metrics article.critical {
   border-top-color: #c63d3d;
 }
+.ceo-metrics article.unit-warning {
+  border-top-color: #c63d3d;
+  background: #fff8f5;
+}
+.ceo-metrics .metric-warning {
+  color: #9f2727;
+  font-weight: 700;
+  line-height: 1.35;
+}
 .ceo-metrics span,
 .ceo-metrics small {
   color: #637789;
