@@ -1,0 +1,9 @@
+field,prompt,learner_response
+business_decision,"What decision must management make?",
+success_measure,"What measurable result defines success?",
+data_sources,"Which governed data sources are required?",
+quality_risks,"What completeness, accuracy or bias risks exist?",
+analysis_type,"Is the work descriptive, predictive or prescriptive?",
+deployment,"How will evidence enter the decision workflow?",
+monitoring,"Which performance and risk indicators will be monitored?",
+owner,"Who is accountable for the decision and controls?",

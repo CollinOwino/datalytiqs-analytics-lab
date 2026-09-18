@@ -1,0 +1,7 @@
+item,category,budget_kes,actual_kes,activity_units,tax_adjustment_kes
+Direct materials,Variable cost,3200000,3698000,8600,0
+Direct labour,Variable cost,2400000,2580000,8600,0
+Factory overhead,Fixed cost,1800000,1910000,8600,120000
+Administration,Fixed cost,1250000,1340000,8600,85000
+Vehicle depreciation,Tax adjustment,650000,650000,0,210000
+Entertainment,Tax adjustment,180000,195000,0,195000

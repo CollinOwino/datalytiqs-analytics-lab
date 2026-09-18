@@ -1,0 +1,6 @@
+risk_id,risk_domain,scenario,likelihood_1_5,impact_1_5,current_control,owner,treatment
+R01,Purpose,"Data reused beyond stated learner-support purpose",4,5,"Policy approval",Data Protection Officer,
+R02,Fairness,"Prediction error differs across learner groups",3,5,"Quarterly model review",Model Owner,
+R03,Security,"Shared credentials expose identifiable data",4,5,"Password policy",IT Manager,
+R04,Adoption,"Managers bypass dashboard definitions",4,3,"User training",Analytics Lead,
+R05,Tooling,"Large workbook fails during monthly close",3,4,"Manual backup",Finance Manager,

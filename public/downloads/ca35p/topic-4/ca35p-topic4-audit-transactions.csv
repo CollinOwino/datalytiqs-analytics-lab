@@ -1,0 +1,8 @@
+transaction_id,supplier,invoice_no,po_amount_kes,received_amount_kes,invoice_amount_kes,payment_date,approver
+T001,Alpha Supplies,AS-1042,248000,248000,248000,2026-06-05,MNjeri
+T002,Lake Services,LS-778,490000,475000,490000,2026-06-07,AOtieno
+T003,Alpha Supplies,AS-1042,248000,248000,248000,2026-06-09,MNjeri
+T004,Metro Office,MO-331,502000,502000,502000,2026-06-12,AOtieno
+T005,Kisumu Tech,KT-119,499000,499000,499000,2026-06-14,AOtieno
+T006,Kisumu Tech,KT-120,498500,498500,498500,2026-06-14,AOtieno
+T007,Lake Services,LS-790,315000,315000,332000,2026-06-18,MNjeri
