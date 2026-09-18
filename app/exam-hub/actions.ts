@@ -116,3 +116,18 @@ export async function setTargetExamDate(formData: FormData) {
   if(error) redirect('/exam-hub?state=action-error')
   revalidatePath('/exam-hub');redirect('/exam-hub?state=study-plan-saved')
 }
+
+export async function reviewTopicPractical(formData: FormData) {
+  const submissionId=String(formData.get('submission_id')||'')
+  const topicCode=String(formData.get('topic_code')||'')
+  const score=(name:string)=>Number(formData.get(name))
+  const feedback=String(formData.get('reviewer_feedback')||'').trim()
+  if(!/^[0-9a-f-]{36}$/i.test(submissionId)||!/^\d\.0$/.test(topicCode)||feedback.length<20) redirect(`/exam-hub/${topicCode||'1.0'}?state=review-invalid#practical-submission`)
+  const supabase=await createClient()
+  const{data:{user}}=await supabase.auth.getUser()
+  if(!user) redirect(`/login?next=${encodeURIComponent('/exam-hub/'+topicCode)}`)
+  const{error}=await supabase.rpc('review_ca35p_topic_practical',{p_submission_id:submissionId,p_structure:score('structure'),p_method:score('method'),p_interpretation:score('interpretation'),p_recommendation:score('recommendation'),p_feedback:feedback})
+  if(error) redirect(`/exam-hub/${topicCode}?state=review-error#practical-submission`)
+  revalidatePath(`/exam-hub/${topicCode}`);revalidatePath('/exam-hub')
+  redirect(`/exam-hub/${topicCode}?state=review-saved#practical-submission`)
+}
