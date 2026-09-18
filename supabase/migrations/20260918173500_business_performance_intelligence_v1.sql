@@ -1,0 +1,9 @@
+alter table public.ceo_datasets add column if not exists data_environment text not null default 'production', add column if not exists temporal_metadata jsonb not null default '{}'::jsonb;
+alter table public.ceo_datasets drop constraint if exists ceo_datasets_data_environment_check;
+alter table public.ceo_datasets add constraint ceo_datasets_data_environment_check check (data_environment in ('production','test'));
+alter table public.ceo_kpi_definitions add column if not exists tolerance_percent numeric not null default 5, add column if not exists period_grain text, add column if not exists period_sort_mode text not null default 'row';
+alter table public.ceo_metrics add column if not exists kpi_definition_id bigint references public.ceo_kpi_definitions(id) on delete set null, add column if not exists dataset_id uuid references public.ceo_datasets(id) on delete set null, add column if not exists target_value numeric, add column if not exists target_variance numeric, add column if not exists target_variance_percent numeric, add column if not exists quality_score numeric, add column if not exists executive_signal text;
+alter table public.ceo_scenarios add column if not exists kpi_definition_id bigint references public.ceo_kpi_definitions(id) on delete set null, add column if not exists dataset_id uuid references public.ceo_datasets(id) on delete set null;
+update public.ceo_datasets set data_environment='test' where lower(name) like '%acceptance test%' or lower(source_filename) like '%acceptance%test%' or lower(name) like '%synthetic%';
+update public.ceo_risk_alerts a set status='closed' where exists (select 1 from public.ceo_kpi_definitions k join public.ceo_datasets d on d.id=k.dataset_id where k.id=a.kpi_definition_id and d.data_environment='test');
+comment on column public.ceo_datasets.data_environment is 'production datasets contribute to executive analytics; test datasets remain retained but excluded.';
