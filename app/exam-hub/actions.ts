@@ -66,6 +66,45 @@ export async function submitTopicOnePractical(formData: FormData) {
   redirect('/exam-hub/1.0?state=practical-submitted#practical-submission')
 }
 
+export async function submitTopicQuiz(formData: FormData) {
+  const topicCode = String(formData.get('topic_code') || '')
+  if (!/^[1-5]\.0$/.test(topicCode)) redirect('/exam-hub?state=action-error')
+  const answers = Object.fromEntries(
+    ['q1', 'q2', 'q3', 'q4', 'q5'].map((code) => [code, String(formData.get(code) || '')]),
+  )
+  if (Object.values(answers).some((answer) => !['a', 'b', 'c', 'd'].includes(answer))) {
+    redirect(`/exam-hub/${topicCode}?state=quiz-incomplete#topic-quiz`)
+  }
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect(`/login?next=${encodeURIComponent(`/exam-hub/${topicCode}`)}`)
+  const { error } = await supabase.rpc('submit_ca35p_topic_quiz', { p_topic_code: topicCode, p_answers: answers })
+  if (error) redirect(`/exam-hub/${topicCode}?state=action-error#topic-quiz`)
+  revalidatePath('/exam-hub')
+  revalidatePath(`/exam-hub/${topicCode}`)
+  redirect(`/exam-hub/${topicCode}?state=quiz-submitted#topic-quiz`)
+}
+
+export async function submitTopicPractical(formData: FormData) {
+  const topicCode = String(formData.get('topic_code') || '')
+  const summary = String(formData.get('summary') || '').trim()
+  const evidenceLink = String(formData.get('evidence_link') || '').trim()
+  if (!/^[1-5]\.0$/.test(topicCode) || summary.length < 80 || summary.length > 3000 || (evidenceLink && !/^https:\/\/\S+$/.test(evidenceLink))) {
+    redirect(`/exam-hub/${topicCode || '1.0'}?state=practical-invalid#practical-submission`)
+  }
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect(`/login?next=${encodeURIComponent(`/exam-hub/${topicCode}`)}`)
+  const { error } = await supabase.rpc('submit_ca35p_topic_practical', {
+    p_topic_code: topicCode,
+    p_summary: summary,
+    p_evidence_link: evidenceLink || null,
+  })
+  if (error) redirect(`/exam-hub/${topicCode}?state=action-error#practical-submission`)
+  revalidatePath(`/exam-hub/${topicCode}`)
+  redirect(`/exam-hub/${topicCode}?state=practical-submitted#practical-submission`)
+}
+
 export async function setTargetExamDate(formData: FormData) {
   const targetDate=String(formData.get('target_exam_date')||'')
   if(!/^\d{4}-\d{2}-\d{2}$/.test(targetDate)) redirect('/exam-hub?state=action-error')

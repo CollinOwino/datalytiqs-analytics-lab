@@ -1,0 +1,5 @@
+scenario,rows,users,refresh_frequency,sensitive_data,manual_steps,recovery_time_hours,recommendation
+Monthly branch report,45000,2,Monthly,No,3,2,
+Customer risk model,780000,8,Daily,Yes,11,24,
+Board KPI pack,120000,5,Weekly,Yes,6,8,
+One-off survey analysis,18000,1,Once,No,2,1,
