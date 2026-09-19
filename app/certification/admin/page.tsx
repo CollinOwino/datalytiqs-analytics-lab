@@ -3,7 +3,8 @@ import { createClient } from '../../../lib/supabase/server'
 import { issueMerlFoundationsCredential, reviewMerlFoundationsRequest, reviewMealLevel2Request, updateCertificateSignatory } from '../actions'
 import '../certification.css'
 
-export default async function CertificationAdminPage() {
+export default async function CertificationAdminPage({searchParams}:{searchParams:Promise<{meal_review_error?:string;meal_review_success?:string}>}) {
+  const params=await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?next=%2Fcertification%2Fadmin')
@@ -97,6 +98,8 @@ export default async function CertificationAdminPage() {
 
     <section className="cert-panel">
       <h2>MEAL Level 2 professional review queue</h2>
+      {params.meal_review_error&&<p role="alert" className="cert-error"><b>Review not submitted:</b> {params.meal_review_error}</p>}
+      {params.meal_review_success&&<p role="status" className="cert-success"><b>Review decision saved.</b></p>}
       <p>Score all eight dimensions from 0–3. Approval requires at least 16/24, with no zero in Integrity/Protection or Accountability. Reviewers cannot approve their own portfolio. Test learners may be reviewed for QA but are never credential-eligible.</p>
       <div className="cert-review">
         {(mealRequests || []).length ? mealRequests!.map((r:any)=><article key={r.id}>
