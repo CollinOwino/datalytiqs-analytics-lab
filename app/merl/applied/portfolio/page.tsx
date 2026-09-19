@@ -1,7 +1,8 @@
 import {redirect} from 'next/navigation'
 import {createClient} from '../../../../lib/supabase/server'
 import PortfolioControls from './portfolio-controls'
-import {MEAL_RUBRIC} from '../../meal-rubric'\nconst modules=[
+import {MEAL_RUBRIC} from '../../meal-rubric'
+const modules=[
  ['06','Data Collection Planning','Operational data-collection plan'],
  ['07','Tools, Protocols and Fieldwork','Tested collection tool and field protocol'],
  ['08','Sampling for MERL Practice','Defensible sampling plan'],
