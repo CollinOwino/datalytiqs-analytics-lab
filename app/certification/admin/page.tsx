@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '../../../lib/supabase/server'
-import { issueMerlFoundationsCredential, updateCertificateSignatory } from '../actions'
+import { issueMerlFoundationsCredential, reviewMerlFoundationsRequest, updateCertificateSignatory } from '../actions'
 import '../certification.css'
 
 export default async function CertificationAdminPage() {
@@ -73,12 +73,23 @@ export default async function CertificationAdminPage() {
           <b>{r.learner_name || 'Learner name not supplied'}</b>
           <p>Status: <strong>{r.status.toUpperCase()}</strong> · Requested {new Date(r.requested_at).toLocaleString('en-KE')}</p>
           <small>Learner ID: {r.user_id}</small>
-          {r.status !== 'issued' && <form action={issueMerlFoundationsCredential}>
+          {r.status === 'pending' && <form action={reviewMerlFoundationsRequest}>
+            <input type="hidden" name="request_id" value={r.id}/>
+            <label>Reviewer notes<textarea name="review_notes" rows={3} placeholder="Quality/authenticity findings; required for return/rejection"/></label>
+            <div className="cert-actions">
+              <button type="submit" name="decision" value="approved">Approve review</button>
+              <button type="submit" name="decision" value="changes_requested">Return for revision</button>
+              <button type="submit" name="decision" value="rejected">Reject review</button>
+            </div>
+          </form>}
+          {r.status === 'approved' && <form action={issueMerlFoundationsCredential}>
             <input type="hidden" name="user_id" value={r.user_id}/>
             <label>Certificate learner name<input name="learner_name" defaultValue={r.learner_name || ''} required minLength={3}/></label>
-            <label>Reviewer notes<textarea name="review_notes" rows={3} placeholder="Quality/authenticity review notes"/></label>
-            <button type="submit">Approve and issue credential</button>
+            <label>Issuance notes<textarea name="review_notes" rows={3} defaultValue={r.reviewer_notes || ''} placeholder="Final issuance note"/></label>
+            <button type="submit">Issue approved credential</button>
           </form>}
+          {r.status === 'changes_requested' && <p><b>Returned for revision.</b> The learner must resubmit the credential review request after addressing the reviewer notes.</p>}
+          {r.status === 'rejected' && <p><b>Review rejected.</b> A new learner request is required before this portfolio can be reconsidered.</p>}
         </article>) : <p>No credential review requests are waiting.</p>}
       </div>
     </section>
