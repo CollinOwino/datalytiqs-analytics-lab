@@ -12,7 +12,8 @@ const modules=[
 type Progress={module_id:string;lesson_evidence:Record<string,boolean>|null;evidence_submission:unknown;quiz_score:number|null;quiz_passed:boolean;quiz_attempts:number;module_completed_at:string|null}
 export default async function Level2Portfolio(){
  const supabase=await createClient();const{data:{user}}=await supabase.auth.getUser();if(!user)redirect('/login?next=%2Fmerl%2Fapplied%2Fportfolio')
- const{data,error}=await supabase.rpc('get_merl_level2_progress');if(error)throw new Error(error.message)\n const {data:review}=await supabase.from('meal_level2_review_requests').select('status,rubric_total,reviewer_notes,requested_at').eq('user_id',user.id).maybeSingle()
+ const{data,error}=await supabase.rpc('get_merl_level2_progress');if(error)throw new Error(error.message)
+ const {data:review}=await supabase.from('meal_level2_review_requests').select('status,rubric_total,reviewer_notes,requested_at').eq('user_id',user.id).maybeSingle()
  const progress:Record<string,Progress>={};(data??[]).forEach((row:Progress)=>progress[row.module_id]=row)
  const completed=modules.filter(([id])=>progress[id]?.module_completed_at).length
  const gates=modules.reduce((n,[id])=>n+[0,1,2].filter(i=>progress[id]?.lesson_evidence?.[`${id}-${i}`]).length+(progress[id]?.evidence_submission?1:0)+(progress[id]?.quiz_passed?1:0),0)
