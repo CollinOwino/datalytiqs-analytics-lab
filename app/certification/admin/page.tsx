@@ -28,7 +28,8 @@ export default async function CertificationAdminPage() {
   const [{ data: signatories }, { data: requests }, { data: credentials }, { data: mealRequests }] = await Promise.all([
     template ? supabase.from('certificate_signatories').select('*').eq('template_id',template.id).order('sort_order') : Promise.resolve({data:[] as any[]}),
     template ? supabase.from('credential_review_requests').select('id,user_id,status,learner_name,learner_declaration,requested_at,reviewer_notes').eq('template_id',template.id).order('requested_at',{ascending:false}) : Promise.resolve({data:[] as any[]}),
-    template ? supabase.from('credentials').select('credential_id,certificate_number,learner_name,issue_date,status').eq('template_id',template.id).order('created_at',{ascending:false}).limit(20) : Promise.resolve({data:[] as any[]}),\n    supabase.from('meal_level2_review_requests').select('id,user_id,learner_name,status,test_account_snapshot,rubric_scores,rubric_total,reviewer_notes,requested_at').order('requested_at',{ascending:false}),
+    template ? supabase.from('credentials').select('credential_id,certificate_number,learner_name,issue_date,status').eq('template_id',template.id).order('created_at',{ascending:false}).limit(20) : Promise.resolve({data:[] as any[]}),
+    supabase.from('meal_level2_review_requests').select('id,user_id,learner_name,status,test_account_snapshot,rubric_scores,rubric_total,reviewer_notes,requested_at').order('requested_at',{ascending:false}),
   ])
 
   return <main className="cert-shell">
