@@ -19,3 +19,12 @@
 .ya-data-table progress{width:100px;vertical-align:middle}
 @media(max-width:560px){.ya-data-table{min-width:620px}.ya-nav nav{padding-bottom:5px}.ya-test-banner{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.ya-shell *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Interactive learning workspace */
+.ya-preview details{margin-top:14px;padding:12px;border:1px solid var(--ya-line);background:#fff}
+.ya-preview summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
+.ya-preview fieldset{margin:12px 0;padding:12px;border:1px solid var(--ya-line)}
+.ya-preview fieldset label{display:block;padding:7px 0;line-height:1.5}
+.ya-preview input[type="text"],.ya-preview input:not([type]),.ya-preview textarea{display:block;width:100%;box-sizing:border-box;margin:6px 0 12px;padding:10px;border:1px solid var(--ya-line);font:inherit}
+.ya-preview button{min-height:44px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer}
+.ya-preview button:disabled{cursor:not-allowed;opacity:.55}
