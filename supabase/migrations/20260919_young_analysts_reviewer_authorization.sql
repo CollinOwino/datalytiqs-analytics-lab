@@ -30,7 +30,7 @@ begin
 end; $$;
 revoke all on function public.review_young_analyst_evidence(uuid,integer,integer,integer,integer,text) from public,anon;
 grant execute on function public.review_young_analyst_evidence(uuid,integer,integer,integer,integer,text) to authenticated;
-revoke all on public.young_analyst_lesson_progress,public.young_analyst_evidence,public.young_analyst_quiz_attempts,public.young_analyst_reviews,public.young_analyst_competency_state from anon;
+revoke all on public.young_analyst_lesson_progress,public.young_analyst_evidence,public.young_analyst_quiz_attempts,public.young_analyst_reviews,public.young_analyst_competency_state from anon;\nrevoke all on public.young_analyst_lesson_progress,public.young_analyst_evidence,public.young_analyst_quiz_attempts,public.young_analyst_reviews,public.young_analyst_competency_state from authenticated;
 grant select,insert,update on public.young_analyst_lesson_progress to authenticated;
 grant select,insert on public.young_analyst_evidence to authenticated;
 grant select,insert on public.young_analyst_quiz_attempts to authenticated;
