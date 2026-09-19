@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '../../../lib/supabase/server'
-import { issueMerlFoundationsCredential, updateCertificateSignatory } from '../actions'
+import { issueMerlFoundationsCredential, reviewMerlFoundationsRequest, reviewMealLevel2Request, updateCertificateSignatory } from '../actions'
 import '../certification.css'
 
 export default async function CertificationAdminPage() {
@@ -25,10 +25,11 @@ export default async function CertificationAdminPage() {
     .limit(1)
     .maybeSingle()
 
-  const [{ data: signatories }, { data: requests }, { data: credentials }] = await Promise.all([
+  const [{ data: signatories }, { data: requests }, { data: credentials }, { data: mealRequests }] = await Promise.all([
     template ? supabase.from('certificate_signatories').select('*').eq('template_id',template.id).order('sort_order') : Promise.resolve({data:[] as any[]}),
     template ? supabase.from('credential_review_requests').select('id,user_id,status,learner_name,learner_declaration,requested_at,reviewer_notes').eq('template_id',template.id).order('requested_at',{ascending:false}) : Promise.resolve({data:[] as any[]}),
     template ? supabase.from('credentials').select('credential_id,certificate_number,learner_name,issue_date,status').eq('template_id',template.id).order('created_at',{ascending:false}).limit(20) : Promise.resolve({data:[] as any[]}),
+    supabase.from('meal_level2_review_requests').select('id,user_id,learner_name,status,test_account_snapshot,rubric_scores,rubric_total,reviewer_notes,requested_at').order('requested_at',{ascending:false}),
   ])
 
   return <main className="cert-shell">
@@ -73,13 +74,62 @@ export default async function CertificationAdminPage() {
           <b>{r.learner_name || 'Learner name not supplied'}</b>
           <p>Status: <strong>{r.status.toUpperCase()}</strong> · Requested {new Date(r.requested_at).toLocaleString('en-KE')}</p>
           <small>Learner ID: {r.user_id}</small>
-          {r.status !== 'issued' && <form action={issueMerlFoundationsCredential}>
+          {r.status === 'pending' && <form action={reviewMerlFoundationsRequest}>
+            <input type="hidden" name="request_id" value={r.id}/>
+            <label>Reviewer notes<textarea name="review_notes" rows={3} placeholder="Quality/authenticity findings; required for return/rejection"/></label>
+            <div className="cert-actions">
+              <button type="submit" name="decision" value="approved">Approve review</button>
+              <button type="submit" name="decision" value="changes_requested">Return for revision</button>
+              <button type="submit" name="decision" value="rejected">Reject review</button>
+            </div>
+          </form>}
+          {r.status === 'approved' && <form action={issueMerlFoundationsCredential}>
             <input type="hidden" name="user_id" value={r.user_id}/>
             <label>Certificate learner name<input name="learner_name" defaultValue={r.learner_name || ''} required minLength={3}/></label>
-            <label>Reviewer notes<textarea name="review_notes" rows={3} placeholder="Quality/authenticity review notes"/></label>
-            <button type="submit">Approve and issue credential</button>
+            <label>Issuance notes<textarea name="review_notes" rows={3} defaultValue={r.reviewer_notes || ''} placeholder="Final issuance note"/></label>
+            <button type="submit">Issue approved credential</button>
           </form>}
+          {r.status === 'changes_requested' && <p><b>Returned for revision.</b> The learner must resubmit the credential review request after addressing the reviewer notes.</p>}
+          {r.status === 'rejected' && <p><b>Review rejected.</b> A new learner request is required before this portfolio can be reconsidered.</p>}
         </article>) : <p>No credential review requests are waiting.</p>}
+      </div>
+    </section>
+
+    <section className="cert-panel">
+      <h2>MEAL Level 2 professional review queue</h2>
+      <p>Score all eight dimensions from 0–3. Approval requires at least 16/24, with no zero in Integrity/Protection or Accountability. Reviewers cannot approve their own portfolio. Test learners may be reviewed for QA but are never credential-eligible.</p>
+      <div className="cert-review">
+        {(mealRequests || []).length ? mealRequests!.map((r:any)=><article key={r.id}>
+          <b>{r.learner_name}</b> {r.test_account_snapshot&&<strong> · ACCEPTANCE-TEST LEARNER</strong>}
+          <p>Status: <strong>{r.status.toUpperCase()}</strong> · Requested {new Date(r.requested_at).toLocaleString('en-KE')}</p>
+          <small>Learner ID: {r.user_id}</small>
+          {r.rubric_total!=null&&<p>Professional rubric: <b>{r.rubric_total}/24</b></p>}
+          {r.status==='pending'&&<form action={reviewMealLevel2Request}>
+            <input type="hidden" name="request_id" value={r.id}/>
+            <div className="cert-admin-grid">
+              {[
+                ['results_logic','Results logic'],
+                ['measurement','Measurement'],
+                ['integrity','Integrity / protection · CRITICAL'],
+                ['accountability','Accountability · CRITICAL'],
+                ['analysis','Analysis'],
+                ['learning','Learning'],
+                ['adaptation','Adaptation'],
+                ['communication','Communication'],
+              ].map(([key,label])=><label key={key}>{label}<select name={key} required defaultValue=""><option value="" disabled>Score 0–3</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>)}
+            </div>
+            <label>Reviewer notes<textarea name="review_notes" rows={3} placeholder="Required for return/rejection; recommended for approval"/></label>
+            <div className="cert-actions">
+              <button type="submit" name="decision" value="approved">Approve professional review</button>
+              <button type="submit" name="decision" value="changes_requested">Return for revision</button>
+              <button type="submit" name="decision" value="rejected">Reject review</button>
+            </div>
+          </form>}
+          {r.status==='approved'&&<p><b>Professional review approved.</b> {r.test_account_snapshot?'Credential issuance is blocked because this is a synthetic/acceptance-test learner.':'Credential issuance requires the separate governed issuance gate.'}</p>}
+          {r.status==='changes_requested'&&<p><b>Returned for revision.</b> Learner may resubmit after addressing reviewer notes.</p>}
+          {r.status==='rejected'&&<p><b>Review rejected.</b> Learner may submit a new governed request after remediation.</p>}
+          {r.reviewer_notes&&<p>Reviewer notes: {r.reviewer_notes}</p>}
+        </article>) : <p>No MEAL Level 2 professional review requests are waiting.</p>}
       </div>
     </section>
 

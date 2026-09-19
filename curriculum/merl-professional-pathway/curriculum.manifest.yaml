@@ -1,8 +1,8 @@
 schema_version: 1.0.0
 programme:
   id: MERL-PRO
-  title: Monitoring, Evaluation, Research & Learning Professional Pathway
-  subtitle: From Foundations to Advanced Evidence, Impact Evaluation and Decision Intelligence
+  title: Monitoring, Evaluation, Accountability & Learning Professional Pathway
+  subtitle: From Foundations to Accountability, Evidence, Learning, Adaptation and Decision Intelligence
   provider: DatalytIQs Academy
   delivery: blended-online
   language: en
@@ -61,10 +61,10 @@ levels:
           - {id: MERL-L1-M05-L02, title: SMART and CREAM criteria, outcomes: [assess indicator quality, rewrite weak indicators], exercise: MERL-EX-014, competencies: [MERL-COMP-IND-002]}
           - {id: MERL-L1-M05-L03, title: Disaggregation and indicator limitations, outcomes: [choose useful disaggregation, identify indicator blind spots], exercise: MERL-EX-015, competencies: [MERL-COMP-IND-003]}
   - id: MERL-L2
-    title: Applied Monitoring & Evaluation
+    title: Applied MEAL Systems
     award: Certificate in Applied M&E
     prerequisites: [MERL-L1]
-    exit_capability: design a functional project M&E system with indicators tools sampling and data-quality controls
+    exit_capability: design a functional project MEAL system with indicators tools sampling data-quality controls accountability feedback learning and adaptation
     project: MERL-ASMT-201
     modules:
       - {id: MERL-L2-M01, title: Indicator Development, lessons: [indicator construction, numerators denominators and units, indicator reference sheets]}
@@ -73,7 +73,7 @@ levels:
       - {id: MERL-L2-M04, title: Data Collection Methods, lessons: [quantitative methods, qualitative methods, administrative and digital data]}
       - {id: MERL-L2-M05, title: Sampling for M&E, lessons: [sampling frames and probability methods, sample size concepts, stratification clustering and nonresponse]}
       - {id: MERL-L2-M06, title: Questionnaire and Instrument Design, lessons: [question formulation, skip logic and response scales, pilot testing and instrument quality]}
-      - {id: MERL-L2-M07, title: Data Quality Assurance, lessons: [data quality dimensions, data quality assessments, verification audit trails and corrective action]}
+      - {id: MERL-L2-M07, title: Data Quality Assurance, lessons: [data quality dimensions, data quality assessments, verification audit trails and corrective action]}\n      - {id: MERL-L2-M08, title: Accountability and Feedback Systems, lessons: [stakeholder information needs and participation, safe feedback response closure and escalation, communication back safeguarding and inclusion]}\n      - {id: MERL-L2-M09, title: Learning and Adaptive Management, lessons: [learning agendas and priority questions, pause reflect and sensemaking, adaptation decision logs ownership and follow up]}
   - id: MERL-L3
     title: M&E Data Analytics
     award: Professional Certificate in M&E Data Analytics
