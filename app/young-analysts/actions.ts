@@ -4,6 +4,7 @@ import {revalidatePath} from 'next/cache'
 import {redirect} from 'next/navigation'
 import {createClient} from '../../lib/supabase/server'
 import {youngAnalystQuestionBank} from './question-bank'
+import {youngAnalystAnswerKey} from './question-key.server'
 
 const validTracks=new Set(['excel-data-literacy','statistics','research','ai-literacy','data-analytics-teens'])
 const validStatuses=new Set(['learning','evidence_submitted','revision_needed','competent'])
@@ -37,7 +38,7 @@ export async function gradeYoungQuiz(track:string,moduleCode:string,answers:Reco
  const items=youngAnalystQuestionBank.filter(q=>q.track===track&&q.module===moduleCode)
  if(!items.length) return {ok:false as const,error:'No scored items are configured for this module yet.'}
  if(items.some(q=>answers[q.id]===undefined)) return {ok:false as const,error:'Answer every question before submitting.'}
- const correct=items.filter(q=>answers[q.id]===q.answer).length
+ const correct=items.filter(q=>answers[q.id]===youngAnalystAnswerKey[q.id]?.answer).length
  const score=Math.round(correct/items.length*100),passed=score>=70
  const {supabase,user}=await auth()
  const {data:prior}=await supabase.from('young_analyst_quiz_attempts').select('attempt_no').eq('user_id',user.id).eq('module_code',moduleCode).order('attempt_no',{ascending:false}).limit(1)
@@ -45,7 +46,7 @@ export async function gradeYoungQuiz(track:string,moduleCode:string,answers:Reco
  const {error}=await supabase.from('young_analyst_quiz_attempts').insert({user_id:user.id,track_slug:track,module_code:moduleCode,attempt_no:attempt,score,passed,answers})
  if(error) return {ok:false as const,error:error.message}
  revalidatePath('/young-analysts/learn/'+track)
- return {ok:true as const,score,passed,attempts:attempt,feedback:items.map(q=>({id:q.id,correct:answers[q.id]===q.answer,rationale:q.rationale}))}
+ return {ok:true as const,score,passed,attempts:attempt,feedback:items.map(q=>({id:q.id,correct:answers[q.id]===youngAnalystAnswerKey[q.id]?.answer,rationale:youngAnalystAnswerKey[q.id]?.rationale||''}))}
 }
 
 export async function submitYoungEvidence(input:{track:string;moduleCode:string;title:string;evidence:string;reflection:string;datasetId?:string}){
