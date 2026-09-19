@@ -88,3 +88,7 @@ revoke execute on function public.review_meal_level2_request(uuid,text,jsonb,tex
 grant execute on function public.review_meal_level2_request(uuid,text,jsonb,text) to authenticated;
 revoke execute on function public.assert_meal_level2_credential_issuable(uuid) from public,anon;
 grant execute on function public.assert_meal_level2_credential_issuable(uuid) to authenticated;
+
+-- Force all state changes through the governed SECURITY DEFINER RPCs above.
+revoke insert, update, delete on table public.meal_level2_review_requests from anon, authenticated;
+grant select on table public.meal_level2_review_requests to authenticated;
