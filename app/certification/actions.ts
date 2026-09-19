@@ -142,3 +142,40 @@ export async function issueMerlFoundationsCredential(formData: FormData) {
   revalidatePath('/certification')
   redirect(`/certificate/${data}`)
 }
+
+
+export async function requestMealLevel2Review(formData: FormData) {
+  const { supabase } = await auth()
+  const learnerName = String(formData.get('learner_name') || '').trim()
+  const declaration = formData.get('declaration') === 'on'
+  const { error } = await supabase.rpc('request_meal_level2_review', {
+    p_learner_name: learnerName,
+    p_declaration: declaration,
+  })
+  if (error) throw new Error(error.message)
+  revalidatePath('/merl/applied/portfolio')
+  revalidatePath('/certification/admin')
+}
+
+export async function reviewMealLevel2Request(formData: FormData) {
+  const { supabase } = await requireCertificationAdmin()
+  const requestId = String(formData.get('request_id') || '')
+  const decision = String(formData.get('decision') || '')
+  const notes = String(formData.get('review_notes') || '').trim() || null
+  const keys = ['results_logic','measurement','integrity','accountability','analysis','learning','adaptation','communication']
+  const scores: Record<string, number> = {}
+  for (const key of keys) {
+    const raw = String(formData.get(key) ?? '')
+    if (!/^[0-3]$/.test(raw)) throw new Error('Score every MEAL rubric dimension from 0 to 3.')
+    scores[key] = Number(raw)
+  }
+  const { error } = await supabase.rpc('review_meal_level2_request', {
+    p_request_id: requestId,
+    p_decision: decision,
+    p_scores: scores,
+    p_notes: notes,
+  })
+  if (error) throw new Error(error.message)
+  revalidatePath('/certification/admin')
+  revalidatePath('/merl/applied/portfolio')
+}
