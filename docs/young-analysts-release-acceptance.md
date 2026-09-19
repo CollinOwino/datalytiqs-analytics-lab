@@ -43,3 +43,15 @@ Do not merge to `main` until the Vercel Preview deployment is READY and every re
 
 ## Merge gate
 Only merge after: Preview READY → route smoke test PASS → mobile/accessibility PASS → security review PASS.
+
+
+## Educational quality gate
+- Every live programme states observable learner outcomes rather than only topics.
+- Challenges require a question, evidence product, review criteria and learner explanation/reflection.
+- Progress signals are used for formative support and are not presented as measures of innate ability.
+- Age bands are entry guidance; competency evidence can justify a different starting point.
+- Planned programmes remain clearly distinguishable from implemented programmes.
+- AI learning requires verification and limitations, not uncritical tool use.
+
+## Production-readiness boundary
+The release candidate is an enriched shell and synthetic acceptance environment. It must not be described as a fully implemented school information system. Before real minors' data is admitted, separately verify authentication, role-based authorisation, guardian relationship enforcement, consent/notice requirements, retention/deletion rules, auditability and incident-response procedures.
