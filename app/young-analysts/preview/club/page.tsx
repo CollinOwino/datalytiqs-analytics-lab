@@ -1,2 +1,16 @@
-import Link from 'next/link'; import {previewInstitution,previewChallenges} from '../data'; import '../../young-analysts.css'
-export default function Club(){return <main className="ya-shell ya-preview"><header className="ya-nav"><Link href="/young-analysts/preview">← Institution</Link><strong>{previewInstitution.club}</strong></header><section className="ya-section"><span className="ya-kicker">CLUB DASHBOARD · SYNTHETIC</span><h2>{previewInstitution.club}</h2><div className="ya-metrics">{[['Cohorts',1],['Learners',12],['Instructors',2],['Challenges',2]].map(([a,b])=><article key={a}><b>{b}</b><span>{a}</span></article>)}</div><div className="ya-panel"><h3>{previewInstitution.cohort}</h3><p>Python for Kids · Builder pathway · acceptance-test cohort.</p><Link href="/young-analysts/preview/cohort">Open cohort roster →</Link></div><div className="ya-panel"><h3>Challenge programme</h3>{previewChallenges.map(c=><p key={c.id}><b>{c.title}</b><br/><small>{c.skill} · {c.status}</small></p>)}</div></section></main>}
+import Link from 'next/link'
+import {previewInstitution,previewChallenges,previewMetrics} from '../data'
+import '../../young-analysts.css'
+
+export default function Club(){
+ return <main id="main-content" className="ya-shell ya-preview">
+  <a className="ya-skip" href="#main-content">Skip to content</a>
+  <header className="ya-nav"><Link href="/young-analysts/preview">← Institution</Link><strong>{previewInstitution.club}</strong></header>
+  <section className="ya-section">
+   <span className="ya-kicker">CLUB DASHBOARD · SYNTHETIC</span><h2>{previewInstitution.club}</h2>
+   <div className="ya-metrics">{[['Cohorts',1],['Learners',previewMetrics.learners],['Instructors',previewMetrics.instructors],['Challenges',previewMetrics.openChallenges]].map(([a,b])=><article key={a}><b>{b}</b><span>{a}</span></article>)}</div>
+   <div className="ya-panel"><h3>{previewInstitution.cohort}</h3><p>Python for Kids · Builder pathway · acceptance-test cohort.</p><Link href="/young-analysts/preview/cohort">Open cohort roster →</Link></div>
+   <div className="ya-panel"><h3>Challenge programme</h3>{previewChallenges.map(c=><p key={c.id}><b>{c.title}</b><br/><small>{c.skill} · {c.status}</small></p>)}</div>
+  </section>
+ </main>
+}
