@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { createClient } from '../../lib/supabase/server'
 
 async function auth() {
@@ -175,7 +176,13 @@ export async function reviewMealLevel2Request(formData: FormData) {
     p_scores: scores,
     p_notes: notes,
   })
-  if (error) throw new Error(error.message)
+  if (error) {
+    const message = error.message === 'Reviewers cannot review their own portfolio'
+      ? 'You cannot review your own portfolio. Assign another certification reviewer.'
+      : error.message
+    redirect('/certification/admin?meal_review_error=' + encodeURIComponent(message))
+  }
   revalidatePath('/certification/admin')
   revalidatePath('/merl/applied/portfolio')
+  redirect('/certification/admin?meal_review_success=1')
 }
