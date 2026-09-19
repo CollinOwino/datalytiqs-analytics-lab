@@ -63,14 +63,11 @@ export async function submitYoungEvidence(input:{track:string;moduleCode:string;
 export async function reviewYoungEvidence(input:{evidenceId:string,method:number,testing:number,reasoning:number,responsible:number,feedback:string}){
  const scores=[input.method,input.testing,input.reasoning,input.responsible]
  if(scores.some(x=>!Number.isInteger(x)||x<0||x>3)) throw new Error('Rubric scores must be whole numbers from 0 to 3.')
- const {supabase,user}=await auth()
- const {data:evidence,error:readError}=await supabase.from('young_analyst_evidence').select('id,user_id,track_slug,module_code').eq('id',input.evidenceId).single()
- if(readError||!evidence) throw new Error('Evidence not found.')
- const total=scores.reduce((a,b)=>a+b,0),competent=total>=8&&input.responsible>0
- const {error}=await supabase.from('young_analyst_reviews').insert({evidence_id:input.evidenceId,reviewer_id:user.id,method_score:input.method,testing_score:input.testing,reasoning_score:input.reasoning,responsible_score:input.responsible,total_score:total,decision:competent?'competent':'revision_needed',feedback:input.feedback.trim()})
+ const {supabase}=await auth()
+ const {data,error}=await supabase.rpc('review_young_analyst_evidence',{p_evidence_id:input.evidenceId,p_method:input.method,p_testing:input.testing,p_reasoning:input.reasoning,p_responsible:input.responsible,p_feedback:input.feedback.trim()})
  if(error) throw new Error(error.message)
- await supabase.from('young_analyst_evidence').update({status:competent?'competent':'revision_needed'}).eq('id',input.evidenceId)
- await supabase.from('young_analyst_competency_state').upsert({user_id:evidence.user_id,track_slug:evidence.track_slug,module_code:evidence.module_code,status:competent?'competent':'revision_needed',rubric_score:total,updated_at:new Date().toISOString()},{onConflict:'user_id,track_slug,module_code'})
- revalidatePath('/young-analysts/instructor'); revalidatePath('/young-analysts/learn/'+evidence.track_slug)
- return {ok:true,total,decision:competent?'competent':'revision_needed'}
+ const result=data?.[0]
+ if(!result) throw new Error('Review did not return a result.')
+ revalidatePath('/young-analysts/instructor'); revalidatePath('/young-analysts/learn/'+result.track_slug)
+ return {ok:true,total:result.total_score,decision:result.decision}
 }
