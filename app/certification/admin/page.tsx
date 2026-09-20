@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '../../../lib/supabase/server'
-import { issueMerlFoundationsCredential, reviewMerlFoundationsRequest, reviewMealLevel2Request, updateCertificateSignatory } from '../actions'
+import { issueMerlFoundationsCredential, reviewMerlFoundationsRequest, updateCertificateSignatory } from '../actions'
+import MealReviewForm from './meal-review-form'
 import '../certification.css'
 
 export default async function CertificationAdminPage() {
@@ -104,27 +105,7 @@ export default async function CertificationAdminPage() {
           <p>Status: <strong>{r.status.toUpperCase()}</strong> · Requested {new Date(r.requested_at).toLocaleString('en-KE')}</p>
           <small>Learner ID: {r.user_id}</small>
           {r.rubric_total!=null&&<p>Professional rubric: <b>{r.rubric_total}/24</b></p>}
-          {r.status==='pending'&&<form action={reviewMealLevel2Request}>
-            <input type="hidden" name="request_id" value={r.id}/>
-            <div className="cert-admin-grid">
-              {[
-                ['results_logic','Results logic'],
-                ['measurement','Measurement'],
-                ['integrity','Integrity / protection · CRITICAL'],
-                ['accountability','Accountability · CRITICAL'],
-                ['analysis','Analysis'],
-                ['learning','Learning'],
-                ['adaptation','Adaptation'],
-                ['communication','Communication'],
-              ].map(([key,label])=><label key={key}>{label}<select name={key} required defaultValue=""><option value="" disabled>Score 0–3</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>)}
-            </div>
-            <label>Reviewer notes<textarea name="review_notes" rows={3} placeholder="Required for return/rejection; recommended for approval"/></label>
-            <div className="cert-actions">
-              <button type="submit" name="decision" value="approved">Approve professional review</button>
-              <button type="submit" name="decision" value="changes_requested">Return for revision</button>
-              <button type="submit" name="decision" value="rejected">Reject review</button>
-            </div>
-          </form>}
+          {r.status==='pending'&&<MealReviewForm requestId={r.id}/>}
           {r.status==='approved'&&<p><b>Professional review approved.</b> {r.test_account_snapshot?'Credential issuance is blocked because this is a synthetic/acceptance-test learner.':'Credential issuance requires the separate governed issuance gate.'}</p>}
           {r.status==='changes_requested'&&<p><b>Returned for revision.</b> Learner may resubmit after addressing reviewer notes.</p>}
           {r.status==='rejected'&&<p><b>Review rejected.</b> Learner may submit a new governed request after remediation.</p>}
