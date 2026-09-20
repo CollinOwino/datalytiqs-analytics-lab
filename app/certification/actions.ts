@@ -157,16 +157,33 @@ export async function requestMealLevel2Review(formData: FormData) {
   revalidatePath('/certification/admin')
 }
 
-export async function reviewMealLevel2Request(formData: FormData) {
-  const { supabase } = await requireCertificationAdmin()
+export type MealLevel2ReviewResult = { ok: boolean; message: string }
+
+export async function reviewMealLevel2Request(_prevState: MealLevel2ReviewResult, formData: FormData): Promise<MealLevel2ReviewResult> {
+  const { supabase, user } = await requireCertificationAdmin()
   const requestId = String(formData.get('request_id') || '')
   const decision = String(formData.get('decision') || '')
   const notes = String(formData.get('review_notes') || '').trim() || null
+
+  const { data: request, error: requestError } = await supabase
+    .from('meal_level2_review_requests')
+    .select('user_id,status')
+    .eq('id', requestId)
+    .maybeSingle()
+  if (requestError) return { ok: false, message: requestError.message }
+  if (!request) return { ok: false, message: 'Review request not found.' }
+  if (request.user_id === user.id) {
+    return { ok: false, message: 'You cannot review your own portfolio. Assign another certification reviewer.' }
+  }
+  if (request.status !== 'pending') {
+    return { ok: false, message: 'Only pending portfolios can be reviewed.' }
+  }
+
   const keys = ['results_logic','measurement','integrity','accountability','analysis','learning','adaptation','communication']
   const scores: Record<string, number> = {}
   for (const key of keys) {
     const raw = String(formData.get(key) ?? '')
-    if (!/^[0-3]$/.test(raw)) throw new Error('Score every MEAL rubric dimension from 0 to 3.')
+    if (!/^[0-3]$/.test(raw)) return { ok: false, message: 'Score every MEAL rubric dimension from 0 to 3.' }
     scores[key] = Number(raw)
   }
   const { error } = await supabase.rpc('review_meal_level2_request', {
@@ -175,7 +192,8 @@ export async function reviewMealLevel2Request(formData: FormData) {
     p_scores: scores,
     p_notes: notes,
   })
-  if (error) throw new Error(error.message)
+  if (error) return { ok: false, message: error.message }
   revalidatePath('/certification/admin')
   revalidatePath('/merl/applied/portfolio')
+  return { ok: true, message: 'Professional review decision recorded.' }
 }
