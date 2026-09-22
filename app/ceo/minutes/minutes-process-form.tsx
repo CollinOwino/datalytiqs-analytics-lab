@@ -1,18 +1,130 @@
-'use client'
-import {useActionState} from 'react'
-import {processMinutes} from '../minutes-actions'
 
-type Props={expanded?:boolean}
-const initial={ok:false,message:''}
-export default function MinutesProcessForm({expanded=false}:Props){
- const[state,action,pending]=useActionState(processMinutes,initial)
- return <form action={action}>
-  {expanded?<label>Meeting / minutes title<input name="title" required placeholder="Management Committee Meeting — 18 September 2026"/></label>:<label>Ask DatalytIQs or drop a file here…<input name="file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"/></label>}
-  {expanded&&<label>Minutes file<input name="file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"/></label>}
-  {!expanded&&<input name="title" required placeholder="Meeting or document title"/>}
-  <label>{expanded?'Minutes text':'Or paste minutes / executive instructions here…'}<textarea name="minutes_text" rows={expanded?8:3} placeholder={expanded?'Or paste the approved or draft minutes here…':'Paste text here when no file is selected.'}/></label>
-  {state.message&&<p role="status" aria-live="polite" style={{padding:'10px 12px',border:'1px solid currentColor',borderRadius:8}}>{state.message}</p>}
-  <button type="submit" disabled={pending}>{pending?'Processing…':expanded?'Process Minutes':'Process'}</button>
-  <small>Private organizational storage · PDF, DOCX or TXT · maximum 10 MB · extracted records require human confirmation.</small>
- </form>
+'use client'
+
+import { useActionState } from 'react'
+import { processMinutes } from '../minutes-actions'
+
+type Props = {
+  expanded?: boolean
+}
+
+const initial = {
+  ok: false,
+  message: '',
+}
+
+export default function MinutesProcessForm({
+  expanded = false,
+}: Props) {
+  const [state, action, pending] = useActionState(
+    processMinutes,
+    initial
+  )
+
+  return (
+    <form
+      action={action}
+      className="minutes-intake-form"
+      aria-label="Process meeting minutes"
+      aria-busy={pending}
+    >
+      <div className="minutes-intake-intro">
+        <span className="minutes-step">01 / MEETING RECORD</span>
+        <h3>Provide your meeting minutes</h3>
+        <p>
+          Upload a document, paste the minutes, or provide both.
+          DatalytIQs will prepare an executive brief and proposed
+          organizational records.
+        </p>
+      </div>
+
+      <div className="minutes-form-fields">
+        <label htmlFor="minutes-title">
+          Meeting or document title
+          <input
+            id="minutes-title"
+            name="title"
+            type="text"
+            required
+            maxLength={200}
+            placeholder="Management Committee Meeting — 18 September 2026"
+            disabled={pending}
+          />
+        </label>
+
+        <div className="minutes-upload-field">
+          <label htmlFor="minutes-file">
+            Upload minutes
+          </label>
+
+          <p id="minutes-file-help">
+            PDF, DOCX or TXT · Maximum 10 MB
+          </p>
+
+          <input
+            id="minutes-file"
+            name="file"
+            type="file"
+            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+            aria-describedby="minutes-file-help"
+            disabled={pending}
+          />
+        </div>
+
+        <div
+          className="minutes-input-divider"
+          aria-hidden="true"
+        >
+          <span>OR PASTE YOUR MINUTES</span>
+        </div>
+
+        <label htmlFor="minutes-text">
+          Minutes text
+          <textarea
+            id="minutes-text"
+            name="minutes_text"
+            rows={expanded ? 9 : 6}
+            placeholder="Paste approved or draft meeting minutes here..."
+            disabled={pending}
+          />
+        </label>
+
+        <p className="minutes-input-hint">
+          Provide at least one source: an uploaded document
+          or pasted minutes.
+        </p>
+      </div>
+
+      {state.message && (
+        <div
+          className={
+            state.ok
+              ? 'minutes-feedback minutes-feedback-success'
+              : 'minutes-feedback minutes-feedback-error'
+          }
+          role="status"
+          aria-live="polite"
+        >
+          {state.message}
+        </div>
+      )}
+
+      <div className="minutes-form-footer">
+        <button
+          type="submit"
+          className="minutes-submit-button"
+          disabled={pending}
+        >
+          {pending
+            ? 'Processing minutes…'
+            : 'Analyse Minutes'}
+        </button>
+
+        <p className="minutes-privacy-note">
+          Private organizational storage. Extracted decisions
+          and actions require human confirmation.
+        </p>
+      </div>
+    </form>
+  )
 }
