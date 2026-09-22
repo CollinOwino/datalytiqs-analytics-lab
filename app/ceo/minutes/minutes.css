@@ -1,0 +1,151 @@
+
+/* Minutes Intelligence — document intake */
+
+.minutes-intake-form {
+  display: grid;
+  gap: 28px;
+  max-width: 100%;
+}
+
+.minutes-intake-intro {
+  padding-bottom: 22px;
+  border-bottom: 1px solid #dce5ee;
+}
+
+.minutes-step {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #946016;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.minutes-intake-intro h3 {
+  margin: 0 0 10px;
+  color: #0b2c4d;
+  font: 700 25px/1.3 Georgia, serif;
+}
+
+.minutes-intake-intro p {
+  max-width: 760px;
+  margin: 0;
+  color: #586b7e;
+  line-height: 1.7;
+}
+
+.minutes-form-fields {
+  display: grid;
+  gap: 22px;
+}
+
+.minutes-intake-form label {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  color: #0b2c4d;
+  font-weight: 700;
+}
+
+.minutes-upload-field {
+  padding: 24px;
+  border: 2px dashed #aebfce;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.minutes-upload-field p {
+  margin: 6px 0 16px;
+  color: #586b7e;
+  font-size: 13px;
+}
+
+.minutes-intake-form input[type="file"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dce5ee;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.minutes-input-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #61758a;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.minutes-input-divider::before,
+.minutes-input-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #dce5ee;
+}
+
+.minutes-input-hint {
+  margin: -10px 0 0;
+  color: #586b7e;
+  font-size: 13px;
+}
+
+.minutes-form-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding-top: 22px;
+  border-top: 1px solid #dce5ee;
+}
+
+.ceo-minutes .minutes-submit-button {
+  min-width: 190px;
+  background: #d99a2b;
+  color: #0b2c4d;
+  font-weight: 800;
+}
+
+.minutes-privacy-note {
+  max-width: 450px;
+  margin: 0;
+  color: #586b7e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.minutes-feedback {
+  padding: 16px 18px;
+  border: 1px solid;
+  border-radius: 9px;
+  line-height: 1.6;
+}
+
+.minutes-feedback-success {
+  border-color: #a6d7b8;
+  background: #eaf7ef;
+  color: #17663c;
+}
+
+.minutes-feedback-error {
+  border-color: #e8b2b2;
+  background: #fff1f1;
+  color: #922c2c;
+}
+
+@media (max-width: 700px) {
+  .minutes-upload-field {
+    padding: 18px;
+  }
+
+  .minutes-form-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ceo-minutes .minutes-submit-button {
+    width: 100%;
+  }
+}
