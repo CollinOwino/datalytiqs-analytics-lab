@@ -149,3 +149,56 @@
     width: 100%;
   }
 }
+
+/* Minutes Intelligence — standalone layout correction */
+
+html,
+body {
+  min-width: 320px;
+}
+
+main.ceo.ceo-minutes {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #f6f8fb;
+}
+
+main.ceo.ceo-minutes > .ceo-minutes-shell {
+  display: block;
+  width: min(calc(100% - 48px), 1280px);
+  max-width: 1280px;
+  min-width: 0;
+  margin-inline: auto;
+  padding: 32px 0 88px;
+}
+
+main.ceo.ceo-minutes .ceo-minutes-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.7fr);
+  width: 100%;
+  min-width: 0;
+}
+
+main.ceo.ceo-minutes .ceo-panel,
+main.ceo.ceo-minutes .ceo-workspace-stats {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 1000px) {
+  main.ceo.ceo-minutes .ceo-minutes-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  main.ceo.ceo-minutes > .ceo-minutes-shell {
+    width: calc(100% - 28px);
+    padding: 20px 0 56px;
+  }
+}
