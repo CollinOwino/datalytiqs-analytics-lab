@@ -9,6 +9,8 @@ import {
   submitActionEvidence,
 } from '../minutes-actions'
 import MinutesProcessForm from './minutes-process-form'
+import DatasetUploadForm from './dataset-upload-form'
+import DatasetProfile from './dataset-profile'
 import '../ceo.css'
 import './minutes.css'
 
@@ -59,6 +61,20 @@ export default async function MinutesPage() {
   }
 
   const oid = link.organization_id
+  const { data: recentDatasets } = await supabase.from('ceo_datasets')
+    .select('id,name,source_filename,row_count,sheet_name,uploaded_at')
+    .eq('organisation_id', legacy.organisation_id).eq('data_environment', 'production')
+    .order('uploaded_at', { ascending: false }).limit(5)
+  const datasetIds = (recentDatasets ?? []).map(d => d.id)
+  const { data: profiles } = datasetIds.length
+    ? await supabase.from('ceo_analysis_snapshots')
+      .select('dataset_id,interpretation,findings,generated_at')
+      .eq('organisation_id', legacy.organisation_id).eq('analysis_type', 'descriptive')
+      .in('dataset_id', datasetIds).order('generated_at', { ascending: false }).limit(10)
+    : { data: [] }
+  const datasetsWithProfiles = (recentDatasets ?? []).map(d => ({
+    ...d, analysis: (profiles ?? []).find(p => p.dataset_id === d.id) ?? null,
+  }))
 
   const [
     { data: jobs },
@@ -231,11 +247,24 @@ export default async function MinutesPage() {
 
         <nav className="ceo-minutes-jump" aria-label="Minutes workspace sections">
           <a href="#minutes-intake-title">Process minutes</a>
+          <a href="#dataset-analysis">Analyse data</a>
           <a href="#executive-briefs">Executive briefs</a>
           {canLead && <a href="#proposed-records">Confirm proposals</a>}
           <a href="#decision-register">Decision register</a>
           {canLead && <a href="#delegation">Delegation</a>}
         </nav>
+
+        <section className="ceo-panel" id="dataset-analysis" aria-labelledby="dataset-analysis-title">
+          <div className="ceo-heading">
+            <p>SPREADSHEET INTELLIGENCE</p>
+            <h2 id="dataset-analysis-title">Analyse Excel and CSV data</h2>
+            <span>Upload organizational data to calculate descriptive statistics, review quality and explore distributions. This analysis is separate from meeting minutes and does not create decisions or actions.</span>
+          </div>
+          {['ceo', 'executive', 'analyst'].includes(legacy.role) && <DatasetUploadForm />}
+          <DatasetProfile datasets={datasetsWithProfiles} />
+          <p className="ceo-record-footnote">Charts show the uploaded data as recorded. A range marker locates the mean between the minimum and maximum; bars show category counts. These descriptions do not establish cause or validate the source.</p>
+          <Link href="/ceo#data">Configure KPI evidence in the command centre →</Link>
+        </section>
 
         <section className="ceo-panel" id="executive-briefs">
           <div className="ceo-heading">
