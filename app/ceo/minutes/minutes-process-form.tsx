@@ -80,6 +80,7 @@ export default function MinutesProcessForm({
             accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
             aria-describedby="minutes-file-help"
             disabled={pending}
+            onChange={() => textRef.current?.setCustomValidity('')}
           />
         </div>
 
