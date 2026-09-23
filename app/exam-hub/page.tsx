@@ -47,13 +47,16 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
   let progress: any[] = []
   let subtopicProgress: any[] = []
   let grants: any[] = []
+  let isReviewer = false
   if (user) {
-    const [{ data: enrollmentRow }, { data: grantRows }] = await Promise.all([
+    const [{ data: enrollmentRow }, { data: grantRows }, { data: staffRows }] = await Promise.all([
       supabase.from('exam_enrollments').select('id,status,target_exam_date,enrolled_at').eq('programme_id', programme.id).eq('user_id', user.id).maybeSingle(),
       supabase.from('exam_access_grants').select('id,access_level,topic_id,expires_at').eq('programme_id', programme.id).eq('user_id', user.id).is('revoked_at', null),
+      supabase.from('exam_programme_staff').select('role').eq('programme_id', programme.id).eq('user_id', user.id).eq('active', true).in('role', ['reviewer', 'instructor', 'administrator']).limit(1),
     ])
     enrollment = enrollmentRow
     grants = grantRows || []
+    isReviewer = Boolean(staffRows?.length)
     if (enrollment) {
       const [{data:topicData},{data:subtopicData}]=await Promise.all([
         supabase.from('exam_topic_progress').select('topic_id,status,completed_at').eq('enrollment_id',enrollment.id),
@@ -78,7 +81,7 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
     <a className="skip-link" href="#syllabus">Skip to CA35P syllabus</a>
     <header className="exam-header">
       <a className="exam-brand" href="/"><span>D</span><b>DatalytIQs</b><small>Exam Competency Hub</small></a>
-      <nav aria-label="Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a><a href="/">Analytics Lab</a></nav>
+      <nav aria-label="Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a>{isReviewer && <a href="/exam-hub/review">Review queue</a>}<a href="/">Analytics Lab</a></nav>
       {user ? <span className="account-chip">Signed in</span> : <a className="nav-cta" href="/login?next=/exam-hub">Sign in</a>}
     </header>
 
