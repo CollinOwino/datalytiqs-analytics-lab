@@ -412,6 +412,10 @@ main.ceo.ceo-minutes .ceo-panel {
 .ceo-action-form label { display: grid; gap: 7px; color: #0b2c4d; font-weight: 750; }
 .ceo-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .ceo-action-form button { justify-self: start; }
+.ceo-reject-form { margin-top: 12px; padding-top: 16px; border-top: 1px solid #dce5ee; }
+.ceo-minutes .ceo-reject-form button { background: #fff; border: 1px solid #b84848; color: #8f2929; }
+.ceo-minutes .ceo-reject-form button:hover { background: #fff3f3; filter: none; }
+.ceo-brief-source { margin: 12px 0 18px; color: #0b2c4d; font-size: 1.05rem; overflow-wrap: anywhere; }
 
 @media (max-width: 800px) {
   .ceo-workspace-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
