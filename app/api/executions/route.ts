@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 
 import { getExecutionProvider } from '../../../lib/execution/provider'
+import { account } from '../../../lib/persistence/account'
 import type {
   DatasetRef,
   ExecutionRequest,
@@ -37,6 +38,8 @@ async function getCaseDatasets(caseId?: string): Promise<DatasetRef[]> {
 }
 
 export async function POST(req: NextRequest) {
+  const identity = await account()
+  if (!identity) return NextResponse.json({ error: { code: 'UNAUTHENTICATED' } }, { status: 401, headers: { 'cache-control': 'private, no-store' } })
   try {
     const body = (await req.json()) as ExecutionRequest
 
@@ -70,19 +73,27 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    body.requestId =
-      body.requestId ||
-      req.headers.get('x-request-id') ||
-      crypto.randomUUID()
+    if (body.caseId !== undefined && body.caseId !== '001') {
+      return NextResponse.json({ error: { code: 'INVALID_CASE' } }, { status: 400 })
+    }
+    const projectId = body.metadata?.projectId
+    if (projectId) {
+      const { data: project } = await identity.supabase.from('learner_projects').select('id')
+        .eq('id', projectId).eq('user_id', identity.userId).maybeSingle()
+      if (!project) return NextResponse.json({ error: { code: 'PROJECT_NOT_FOUND' } }, { status: 404 })
+    }
+    body.metadata = projectId ? { projectId, stage: '03' } : { stage: '03' }
+
+    body.requestId = crypto.randomUUID()
+    body.learnerId = identity.userId
+    body.packages = []
+    body.runtime = undefined
 
     body.limits = {
-      timeoutMs: Math.min(body.limits?.timeoutMs || 30_000, 60_000),
-      memoryMb: Math.min(body.limits?.memoryMb || 512, 1024),
-      cpuSeconds: Math.min(body.limits?.cpuSeconds || 20, 45),
-      maxOutputBytes: Math.min(
-        body.limits?.maxOutputBytes || 2_000_000,
-        5_000_000
-      ),
+      timeoutMs: Math.max(1_000, Math.min(Number(body.limits?.timeoutMs) || 30_000, 60_000)),
+      memoryMb: Math.max(64, Math.min(Number(body.limits?.memoryMb) || 512, 1024)),
+      cpuSeconds: Math.max(1, Math.min(Number(body.limits?.cpuSeconds) || 20, 45)),
+      maxOutputBytes: Math.max(1_024, Math.min(Number(body.limits?.maxOutputBytes) || 2_000_000, 5_000_000)),
       network: 'disabled',
     }
 
@@ -92,16 +103,25 @@ export async function POST(req: NextRequest) {
      */
     const canonicalDatasets = await getCaseDatasets(body.caseId)
 
-    if (canonicalDatasets.length > 0) {
-      body.datasets = canonicalDatasets
-    }
+    body.datasets = canonicalDatasets
 
     const accepted = await getExecutionProvider().execute(body)
+    if (!/^[a-zA-Z0-9_-]{1,150}$/.test(accepted.executionId)) {
+      await getExecutionProvider().cancel(accepted.executionId).catch(() => undefined)
+      throw new Error('Execution identifier is invalid.')
+    }
+    const { error: custodyError } = await identity.supabase.from('learner_execution_jobs').insert({
+      execution_id: accepted.executionId, user_id: identity.userId, request_id: accepted.requestId,
+    })
+    if (custodyError) {
+      if (custodyError.code !== '23505') await getExecutionProvider().cancel(accepted.executionId).catch(() => undefined)
+      throw new Error('Execution custody could not be recorded.')
+    }
 
     return NextResponse.json(accepted, {
       status: 202,
       headers: {
-        'cache-control': 'no-store',
+        'cache-control': 'private, no-store',
       },
     })
   } catch (e) {
@@ -120,10 +140,12 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  const identity = await account()
+  if (!identity) return NextResponse.json({ error: { code: 'UNAUTHENTICATED' } }, { status: 401 })
   try {
     return NextResponse.json(await getExecutionProvider().health(), {
       headers: {
-        'cache-control': 'no-store',
+        'cache-control': 'private, no-store',
       },
     })
   } catch (e) {
