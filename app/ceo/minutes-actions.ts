@@ -14,6 +14,12 @@ async function txContext(roles:string[]){
 type SourceRef={document_id?:string;page?:number;section?:string;quote?:string}
 type AiExtraction={brief_30_seconds:string;brief_2_minutes:string;decisions:{text:string;source:SourceRef}[];actions:{text:string;owner?:string;due?:string;source:SourceRef}[];risks:{text:string;source:SourceRef}[];unresolved_matters:{text:string;source:SourceRef}[]}
 function numberedSource(text:string){return text.split(/\r?\n/).map((s,i)=>`[L${i+1}] ${s}`).join('\n')}
+function looksLikeMinutes(text:string){
+ const sample=text.slice(0,12000)
+ const meeting=/\b(meeting|minutes|agenda|attendees|present|apologies|chairperson|chairman|chair)\b/i.test(sample)
+ const proceedings=/\b(resolved|agreed|approved|decided|action items?|matters arising|adjourned|next meeting|will prepare|will submit)\b/i.test(sample)
+ return meeting&&proceedings
+}
 async function extractWithAI(text:string,title:string):Promise<{data:AiExtraction|null,provider:string,model:string,input:number,output:number,error?:string}>{
  const key=process.env.OPENAI_API_KEY;if(!key)return{data:null,provider:'datalytiqs',model:'deterministic-v1',input:text.length,output:0,error:'OPENAI_API_KEY not configured'}
  const model=process.env.DATALYTIQS_MINUTES_MODEL||'gpt-5-mini';const source=numberedSource(text).slice(0,120000)
@@ -26,8 +32,8 @@ function parseMinutes(text:string){
  const decisions=sentences.filter(s=>/\b(resolved|agreed|approved|decided|adopted|confirmed)\b/i.test(s)).slice(0,12)
  const actions=sentences.filter(s=>/\b(action|shall|will|to be|responsible|deadline|follow[- ]?up|submit|prepare|provide|complete)\b/i.test(s)).filter(s=>!decisions.includes(s)).slice(0,16)
  const critical=sentences.filter(s=>/\b(urgent|overdue|risk|delay|deadline|concern|exception|pending)\b/i.test(s)).slice(0,6)
- const short=sentences.slice(0,3).join(' ').slice(0,900)
- const medium=sentences.slice(0,10).join(' ').slice(0,3000)
+ const short=sentences.slice(0,2).join(' ').slice(0,350)
+ const medium=sentences.slice(0,5).join(' ').slice(0,1000)
  return{lines:lines.length,sentences:sentences.length,decisions,actions,critical,brief30:short,brief2:medium}
 }
 export async function processMinutes(_previous:{ok:boolean;message:string},formData:FormData):Promise<{ok:boolean;message:string}>{
@@ -43,8 +49,9 @@ export async function processMinutes(_previous:{ok:boolean;message:string},formD
    try{if(file.type==='text/plain')text=bytes.toString('utf8');else if(file.type.includes('wordprocessingml')){const mammoth=(await import('mammoth')).default;const out=await mammoth.extractRawText({buffer:bytes});text=out.value}else{const pdf=(await import('pdf-parse')).default;const out=await pdf(bytes);text=out.text}}catch{return{ok:false,message:'The file could not be read. Use a text-based PDF/DOCX/TXT or paste the minutes text.'}}
   }
   if(text.trim().length<100)return{ok:false,message:'Provide at least 100 characters of extractable minutes text. Scanned/image-only PDFs are not supported yet; paste the text instead.'}
+  if(!looksLikeMinutes(text))return{ok:false,message:'This document does not appear to contain meeting proceedings. Check the source before submitting minutes.'}
   if(file&&file.size&&bytes){const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');storagePath=`${organizationId}/${crypto.randomUUID()}/${safe}`;const{error:ue}=await supabase.storage.from('ceo-documents').upload(storagePath,bytes,{contentType:file.type,upsert:false});if(ue)return{ok:false,message:'The document could not be stored securely. No organizational record was created.'}}
-  const fallback=parseMinutes(text);const ai=await extractWithAI(text,title);const parsed=ai.data?{...fallback,brief30:ai.data.brief_30_seconds,brief2:ai.data.brief_2_minutes,decisions:ai.data.decisions.map(x=>x.text),actions:ai.data.actions.map(x=>x.text),critical:ai.data.risks.map(x=>x.text)}:fallback
+  const fallback=parseMinutes(text);const ai=await extractWithAI(text,title);const parsed=ai.data?{...fallback,brief30:ai.data.brief_30_seconds.slice(0,350),brief2:ai.data.brief_2_minutes.slice(0,1000),decisions:ai.data.decisions.map(x=>x.text),actions:ai.data.actions.map(x=>x.text),critical:ai.data.risks.map(x=>x.text)}:fallback
   const{data:doc,error:de}=await supabase.from('ceo_documents').insert({organization_id:organizationId,uploaded_by:user.id,title,document_type:'minutes',storage_path:storagePath,mime_type:mimeType,file_size_bytes:fileSize,source_text:text,processing_status:'ready',metadata:{ingestion:storagePath?'file':'text',parser:'deterministic-v1'}}).select('id').single();if(de)throw de
   const{data:meeting,error:me}=await supabase.from('ceo_meetings').insert({organization_id:organizationId,title,status:'completed',created_by:user.id}).select('id').single();if(me)throw me
   const{error:mde}=await supabase.from('ceo_meeting_documents').insert({organization_id:organizationId,meeting_id:meeting.id,document_id:doc.id,purpose:'minutes'});if(mde)throw mde
@@ -58,13 +65,16 @@ export async function processMinutes(_previous:{ok:boolean;message:string},formD
  }
 }
 export async function confirmMinutesItem(formData:FormData){
- const{supabase}=await txContext(['ceo','executive']);const id=clean(formData.get('item_id'));if(!id)throw new Error('Missing item.')
+ const{supabase,organizationId}=await txContext(['ceo','executive']);const id=clean(formData.get('item_id'));if(!id)throw new Error('Missing item.')
+ const{data:item}=await supabase.from('ceo_decisions').select('source_document_id,workflow_state,record_type').eq('id',id).eq('organization_id',organizationId).single();if(!item||item.workflow_state!=='ai_generated')throw new Error('This proposal is no longer awaiting confirmation.')
+ const{data:source}=await supabase.from('ceo_documents').select('processing_status').eq('id',item.source_document_id).eq('organization_id',organizationId).single();if(source?.processing_status!=='ready')throw new Error('The source document is unavailable for confirmation.')
  const assignee=clean(formData.get('assignee_id'))||null,due=clean(formData.get('due_at'))||null
+ if(item.record_type==='proposed_action'&&(!assignee||!due))throw new Error('Assign an accountable officer and due date before confirming an action.')
  const{error}=await supabase.rpc('ceo_confirm_minutes_item',{p_item_id:id,p_responsible_user_id:assignee,p_due_at:due});if(error)throw new Error(error.message);revalidatePath('/ceo/minutes')
 }
 export async function delegateAction(formData:FormData){
  const{supabase}=await txContext(['ceo','executive','manager']);const action=clean(formData.get('action_id')),user=clean(formData.get('user_id')),due=clean(formData.get('due_at'))||null,note=clean(formData.get('note'))||null
- if(!action||!user)throw new Error('Select an action and responsible officer.')
+ if(!action||!user||!due)throw new Error('Select an action, responsible officer and due date.')
  const{error}=await supabase.rpc('ceo_delegate_action',{p_action_id:action,p_user_id:user,p_due_at:due,p_note:note});if(error)throw new Error(error.message);revalidatePath('/ceo/minutes')
 }
 export async function submitActionEvidence(formData:FormData){

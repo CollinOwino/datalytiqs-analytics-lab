@@ -9,6 +9,7 @@ import {
 } from '../minutes-actions'
 import MinutesProcessForm from './minutes-process-form'
 import '../ceo.css'
+import './minutes.css'
 
 export const metadata = {
   title: 'Minutes Intelligence | DatalytIQs Executive Workspace',
@@ -70,6 +71,7 @@ export default async function MinutesPage() {
       .select('id,created_at,result,source_document_id')
       .eq('organization_id', oid)
       .eq('job_type', 'minutes_intelligence')
+      .eq('status', 'succeeded')
       .order('created_at', { ascending: false })
       .limit(5),
 
@@ -79,6 +81,7 @@ export default async function MinutesPage() {
         'id,title,decision_text,record_type,workflow_state,due_at,evidence_considered'
       )
       .eq('organization_id', oid)
+      .neq('workflow_state', 'archived')
       .order('created_at', { ascending: false })
       .limit(30),
 
@@ -88,6 +91,7 @@ export default async function MinutesPage() {
         'id,title,description,status,assigned_to,due_at,decision_id'
       )
       .eq('organization_id', oid)
+      .neq('status', 'cancelled')
       .order('created_at', { ascending: false })
       .limit(30),
 
@@ -110,6 +114,7 @@ export default async function MinutesPage() {
   ])
 
   const canLead = ['ceo', 'executive'].includes(legacy.role)
+  const eligibleMembers = (members ?? []).filter((m: any) => m.role !== 'viewer' && m.role !== 'learner')
 
   const approvedActionIds = new Set(
     (items ?? [])
@@ -223,7 +228,15 @@ export default async function MinutesPage() {
           </div>
         </section>
 
-        <section className="ceo-panel">
+        <nav className="ceo-minutes-jump" aria-label="Minutes workspace sections">
+          <a href="#minutes-intake-title">Process minutes</a>
+          <a href="#executive-briefs">Executive briefs</a>
+          {canLead && <a href="#proposed-records">Confirm proposals</a>}
+          <a href="#decision-register">Decision register</a>
+          {canLead && <a href="#delegation">Delegation</a>}
+        </nav>
+
+        <section className="ceo-panel" id="executive-briefs">
           <div className="ceo-heading">
             <p>EXECUTIVE BRIEF</p>
             <h2>30-second and 2-minute views</h2>
@@ -285,7 +298,7 @@ export default async function MinutesPage() {
         </section>
 
         {canLead && (
-          <section className="ceo-panel">
+          <section className="ceo-panel" id="proposed-records">
             <div className="ceo-heading">
               <p>HUMAN CONFIRMATION</p>
               <h2>Proposed decisions and actions</h2>
@@ -336,12 +349,12 @@ export default async function MinutesPage() {
                         <div className="ceo-form-grid">
                           <label>
                             <span>Responsible officer</span>
-                            <select name="assignee_id">
+                            <select name="assignee_id" required>
                               <option value="">
-                                Confirm without assignee
+                                Select accountable officer
                               </option>
 
-                              {members?.map((m: any) => (
+                              {eligibleMembers.map((m: any) => (
                                 <option
                                   key={m.user_id}
                                   value={m.user_id}
@@ -361,6 +374,7 @@ export default async function MinutesPage() {
                             <input
                               name="due_at"
                               type="datetime-local"
+                              required
                             />
                           </label>
                         </div>
@@ -385,7 +399,7 @@ export default async function MinutesPage() {
           </section>
         )}
 
-        <section className="ceo-panel">
+        <section className="ceo-panel" id="decision-register">
           <div className="ceo-heading">
             <p>DECISION REGISTER</p>
             <h2>Approved organizational decisions</h2>
@@ -435,7 +449,7 @@ export default async function MinutesPage() {
         </section>
 
         {canLead && (
-          <section className="ceo-panel">
+          <section className="ceo-panel" id="delegation">
             <div className="ceo-heading">
               <p>DELEGATION</p>
               <h2>Assign confirmed actions</h2>
@@ -463,7 +477,7 @@ export default async function MinutesPage() {
                           <span>Officer</span>
                           <select name="user_id" required>
                             <option value="">Select officer</option>
-                            {members?.map((m: any) => (
+                            {eligibleMembers.map((m: any) => (
                               <option
                                 key={m.user_id}
                                 value={m.user_id}
@@ -483,6 +497,7 @@ export default async function MinutesPage() {
                           <input
                             name="due_at"
                             type="datetime-local"
+                            required
                           />
                         </label>
                       </div>

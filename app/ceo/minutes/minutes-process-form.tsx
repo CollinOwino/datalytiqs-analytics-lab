@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useRef } from 'react'
 import { processMinutes } from '../minutes-actions'
 
 type Props = {
@@ -20,6 +20,8 @@ export default function MinutesProcessForm({
     processMinutes,
     initial
   )
+  const fileRef = useRef<HTMLInputElement>(null)
+  const textRef = useRef<HTMLTextAreaElement>(null)
 
   return (
     <form
@@ -27,12 +29,21 @@ export default function MinutesProcessForm({
       className="minutes-intake-form"
       aria-label="Process meeting minutes"
       aria-busy={pending}
+      onSubmit={(event) => {
+        const text = textRef.current
+        if (!fileRef.current?.files?.length && !text?.value.trim()) {
+          event.preventDefault()
+          text?.setCustomValidity('Upload minutes or paste the meeting text.')
+          text?.reportValidity()
+        }
+      }}
     >
       <div className="minutes-intake-intro">
         <span className="minutes-step">01 / MEETING RECORD</span>
         <h3>Provide your meeting minutes</h3>
         <p>
-          Upload a document, paste the minutes, or provide both.
+          Upload a document or paste the minutes. If you provide both,
+          the uploaded file is analysed.
           DatalytIQs will prepare an executive brief and proposed
           organizational records.
         </p>
@@ -63,6 +74,7 @@ export default function MinutesProcessForm({
 
           <input
             id="minutes-file"
+            ref={fileRef}
             name="file"
             type="file"
             accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
@@ -82,16 +94,18 @@ export default function MinutesProcessForm({
           Minutes text
           <textarea
             id="minutes-text"
+            ref={textRef}
             name="minutes_text"
             rows={expanded ? 9 : 6}
             placeholder="Paste approved or draft meeting minutes here..."
             disabled={pending}
+            onInput={(event) => event.currentTarget.setCustomValidity('')}
           />
         </label>
 
         <p className="minutes-input-hint">
-          Provide at least one source: an uploaded document
-          or pasted minutes.
+          Provide at least one source. Review the proposed decisions and
+          actions against the original minutes before confirming them.
         </p>
       </div>
 
