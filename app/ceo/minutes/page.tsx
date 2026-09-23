@@ -4,6 +4,7 @@ import { createClient } from '../../../lib/supabase/server'
 import {
   confirmMinutesItem,
   delegateAction,
+  rejectMinutesItem,
   reviewEvidence,
   submitActionEvidence,
 } from '../minutes-actions'
@@ -68,7 +69,7 @@ export default async function MinutesPage() {
   ] = await Promise.all([
     supabase
       .from('ceo_ai_jobs')
-      .select('id,created_at,result,source_document_id')
+      .select('id,created_at,result,source_document_id,source_references')
       .eq('organization_id', oid)
       .eq('job_type', 'minutes_intelligence')
       .eq('status', 'succeeded')
@@ -258,6 +259,7 @@ export default async function MinutesPage() {
                       {new Date(j.created_at).toLocaleString('en-KE')}
                     </time>
                   </div>
+                  <h3 className="ceo-brief-source">{j.source_references?.[0]?.title || 'Meeting record'}</h3>
 
                   <div className="ceo-brief-grid">
                     <div>
@@ -303,8 +305,8 @@ export default async function MinutesPage() {
               <p>HUMAN CONFIRMATION</p>
               <h2>Proposed decisions and actions</h2>
               <span>
-                AI extraction is provisional until an authorized executive
-                confirms the record.
+                Extracted proposals are provisional until an authorized
+                executive verifies the source and confirms the record.
               </span>
             </div>
 
@@ -383,6 +385,14 @@ export default async function MinutesPage() {
                       <button type="submit">
                         Confirm as organizational record
                       </button>
+                    </form>
+                    <form action={rejectMinutesItem} className="ceo-action-form ceo-reject-form">
+                      <input type="hidden" name="item_id" value={x.id} />
+                      <label>
+                        <span>Reason for rejecting this extraction</span>
+                        <input name="reason" minLength={10} maxLength={500} required placeholder="For example, this was discussion, not an agreed action." />
+                      </label>
+                      <button type="submit">Reject proposal</button>
                     </form>
                   </article>
                 ))}
