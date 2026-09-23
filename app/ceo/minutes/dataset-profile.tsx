@@ -4,7 +4,7 @@ type Profile = {
   id: string; name: string; source_filename: string; row_count: number;
   sheet_name: string | null; uploaded_at: string;
   analysis?: { interpretation: string; findings: {
-    quality?: { missing_cells: number; duplicate_rows: number; columns: number };
+    quality?: { missing_cells: number; duplicate_rows: number; columns: number; source_sha256?: string };
     summaries?: NumericSummary[]; categories?: CategorySummary[]
   } } | null
 }
@@ -19,6 +19,7 @@ export default function DatasetProfile({ datasets }: { datasets: Profile[] }) {
         <div className="ceo-record-meta"><span className="ceo-status">DESCRIPTIVE PROFILE</span><time>{new Date(dataset.uploaded_at).toLocaleString('en-KE')}</time></div>
         <h3>{dataset.name}</h3>
         <p className="ceo-record-footnote">{dataset.source_filename} · {dataset.sheet_name || 'First worksheet'} · {fmt(dataset.row_count)} rows · {fmt(findings?.quality?.columns || 0)} columns · {fmt(findings?.quality?.missing_cells || 0)} missing cells · {fmt(findings?.quality?.duplicate_rows || 0)} duplicate rows</p>
+        {findings?.quality?.source_sha256 && <p className="ceo-record-footnote">Source SHA-256: <code>{findings.quality.source_sha256}</code></p>}
         {dataset.analysis ? <>
           <p>{dataset.analysis.interpretation}</p>
           {!!findings?.summaries?.length && <div className="minutes-profile-grid">
