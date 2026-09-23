@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useActionState, useRef } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import { processMinutes } from '../minutes-actions'
 
 type Props = {
@@ -22,6 +22,16 @@ export default function MinutesProcessForm({
   )
   const fileRef = useRef<HTMLInputElement>(null)
   const textRef = useRef<HTMLTextAreaElement>(null)
+  const [title, setTitle] = useState('')
+  const [minutesText, setMinutesText] = useState('')
+
+  useEffect(() => {
+    if (state.ok) {
+      setTitle('')
+      setMinutesText('')
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }, [state])
 
   return (
     <form
@@ -56,6 +66,8 @@ export default function MinutesProcessForm({
             id="minutes-title"
             name="title"
             type="text"
+            value={title}
+            onChange={(event) => setTitle(event.currentTarget.value)}
             required
             maxLength={200}
             placeholder="Management Committee Meeting — 18 September 2026"
@@ -97,10 +109,14 @@ export default function MinutesProcessForm({
             id="minutes-text"
             ref={textRef}
             name="minutes_text"
+            value={minutesText}
             rows={expanded ? 9 : 6}
             placeholder="Paste approved or draft meeting minutes here..."
             disabled={pending}
-            onInput={(event) => event.currentTarget.setCustomValidity('')}
+            onChange={(event) => {
+              event.currentTarget.setCustomValidity('')
+              setMinutesText(event.currentTarget.value)
+            }}
           />
         </label>
 
@@ -121,6 +137,7 @@ export default function MinutesProcessForm({
           aria-live="polite"
         >
           {state.message}
+          {!state.ok && <span className="minutes-retry-note"> If you selected a file, choose it again before retrying.</span>}
         </div>
       )}
 
