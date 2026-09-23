@@ -47,13 +47,16 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
   let progress: any[] = []
   let subtopicProgress: any[] = []
   let grants: any[] = []
+  let isReviewer = false
   if (user) {
-    const [{ data: enrollmentRow }, { data: grantRows }] = await Promise.all([
+    const [{ data: enrollmentRow }, { data: grantRows }, { data: staffRows }] = await Promise.all([
       supabase.from('exam_enrollments').select('id,status,target_exam_date,enrolled_at').eq('programme_id', programme.id).eq('user_id', user.id).maybeSingle(),
       supabase.from('exam_access_grants').select('id,access_level,topic_id,expires_at').eq('programme_id', programme.id).eq('user_id', user.id).is('revoked_at', null),
+      supabase.from('exam_programme_staff').select('role').eq('programme_id', programme.id).eq('user_id', user.id).eq('active', true).in('role', ['reviewer', 'instructor', 'administrator']).limit(1),
     ])
     enrollment = enrollmentRow
     grants = grantRows || []
+    isReviewer = Boolean(staffRows?.length)
     if (enrollment) {
       const [{data:topicData},{data:subtopicData}]=await Promise.all([
         supabase.from('exam_topic_progress').select('topic_id,status,completed_at').eq('enrollment_id',enrollment.id),
@@ -78,7 +81,7 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
     <a className="skip-link" href="#syllabus">Skip to CA35P syllabus</a>
     <header className="exam-header">
       <a className="exam-brand" href="/"><span>D</span><b>DatalytIQs</b><small>Exam Competency Hub</small></a>
-      <nav aria-label="Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a><a href="/">Analytics Lab</a></nav>
+      <nav aria-label="Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a>{isReviewer && <a href="/exam-hub/review">Review queue</a>}<a href="/">Analytics Lab</a></nav>
       {user ? <span className="account-chip">Signed in</span> : <a className="nav-cta" href="/login?next=/exam-hub">Sign in</a>}
     </header>
 
@@ -117,7 +120,7 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
       })}</div>
     </section>
 
-    <section className="assessment-band" id="assessments" aria-labelledby="assessment-title"><div className="exam-section-head inverse"><div><span className="exam-kicker">ASSESSMENT CENTRE</span><h2 id="assessment-title">Prepare under practical-paper conditions</h2></div><p>Assessment content follows the verified structure without reproducing protected historical question text.</p></div><div className="assessment-grid"><article><span>TOPIC PRACTICE</span><h3>Guided analytical exercises</h3><p>Use each topic’s learning outcomes as a practical checklist while original question sets are released.</p><b>Progress-linked</b></article><article><span>PRACTICAL WORK</span><h3>Spreadsheet competency tasks</h3><p>Prepare models, analyses, visualisations and decision outputs aligned to the six competency domains.</p><b>Computer based</b></article>{(assessments || []).map((assessment: any) => <article key={assessment.id}><span>FULL MOCK</span><h3>{assessment.title}</h3><p>{assessment.time_limit_minutes} minutes · {assessment.metadata?.total_marks || 100} marks · pass mark {assessment.pass_mark}%</p><b>Published blueprint</b></article>)}</div></section>
+    <section className="assessment-band" id="assessments" aria-labelledby="assessment-title"><div className="exam-section-head inverse"><div><span className="exam-kicker">ASSESSMENT CENTRE</span><h2 id="assessment-title">Prepare under practical-paper conditions</h2></div><p>Original practice cases and practical assignments support the topic assessments. The full mock is a planning blueprint until an attempt flow is available.</p></div><div className="assessment-grid"><article><span>TOPIC PRACTICE</span><h3>Case question bank</h3><p>Work through 20 original self-check cases across the five topics, then take each five-question scored quiz.</p><b>20 cases · 25 scored items</b></article><article><span>PRACTICAL WORK</span><h3>Spreadsheet competency tasks</h3><p>Prepare models, analyses, visualisations and decision outputs against the five assignment checklists.</p><b>Assessor reviewed</b></article>{(assessments || []).map((assessment: any) => <article key={assessment.id}><span>FULL MOCK BLUEPRINT</span><h3>{assessment.title}</h3><p>{assessment.time_limit_minutes} minutes · {assessment.metadata?.total_marks || 100} marks · pass mark {assessment.pass_mark}%. Online attempts are not yet available.</p><b>Planning reference</b></article>)}</div></section>
 
     <section className="exam-section" id="competencies" aria-labelledby="competencies-title"><div className="exam-section-head"><div><span className="exam-kicker">PERFORMANCE PROFILE</span><h2 id="competencies-title">Six assessable competencies</h2></div><p>Your evidence profile will consolidate topic practice, practical submissions and mock-assessment performance.</p></div><div className="competency-grid">{(competencies || []).map((competency: any) => <article key={competency.id}><span>{competency.code}</span><h3>{competency.title}</h3><p>{competency.description}</p></article>)}</div></section>
 

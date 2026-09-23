@@ -122,12 +122,15 @@ export async function reviewTopicPractical(formData: FormData) {
   const topicCode=String(formData.get('topic_code')||'')
   const score=(name:string)=>Number(formData.get(name))
   const feedback=String(formData.get('reviewer_feedback')||'').trim()
-  if(!/^[0-9a-f-]{36}$/i.test(submissionId)||!/^\d\.0$/.test(topicCode)||feedback.length<20) redirect(`/exam-hub/${topicCode||'1.0'}?state=review-invalid#practical-submission`)
+  const returnToReview = formData.get('return_to') === 'review'
+  const resultUrl=(state:string)=>returnToReview?`/exam-hub/review?state=${state}#review-queue`:`/exam-hub/${topicCode||'1.0'}?state=${state}#practical-submission`
+  const scores=['structure','method','interpretation','recommendation'].map(score)
+  if(!/^[0-9a-f-]{36}$/i.test(submissionId)||!/^[1-5]\.0$/.test(topicCode)||feedback.length<20||scores.some(value=>!Number.isInteger(value)||value<0||value>5)) redirect(resultUrl('review-invalid'))
   const supabase=await createClient()
   const{data:{user}}=await supabase.auth.getUser()
   if(!user) redirect(`/login?next=${encodeURIComponent('/exam-hub/'+topicCode)}`)
   const{error}=await supabase.rpc('review_ca35p_topic_practical',{p_submission_id:submissionId,p_structure:score('structure'),p_method:score('method'),p_interpretation:score('interpretation'),p_recommendation:score('recommendation'),p_feedback:feedback})
-  if(error) redirect(`/exam-hub/${topicCode}?state=review-error#practical-submission`)
-  revalidatePath(`/exam-hub/${topicCode}`);revalidatePath('/exam-hub')
-  redirect(`/exam-hub/${topicCode}?state=review-saved#practical-submission`)
+  if(error) redirect(resultUrl('review-error'))
+  revalidatePath(`/exam-hub/${topicCode}`);revalidatePath('/exam-hub');revalidatePath('/exam-hub/review')
+  redirect(resultUrl('review-saved'))
 }
