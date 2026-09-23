@@ -70,7 +70,18 @@ export async function confirmMinutesItem(formData:FormData){
  const{data:source}=await supabase.from('ceo_documents').select('processing_status').eq('id',item.source_document_id).eq('organization_id',organizationId).single();if(source?.processing_status!=='ready')throw new Error('The source document is unavailable for confirmation.')
  const assignee=clean(formData.get('assignee_id'))||null,due=clean(formData.get('due_at'))||null
  if(item.record_type==='proposed_action'&&(!assignee||!due))throw new Error('Assign an accountable officer and due date before confirming an action.')
- const{error}=await supabase.rpc('ceo_confirm_minutes_item',{p_item_id:id,p_responsible_user_id:assignee,p_due_at:due});if(error)throw new Error(error.message);revalidatePath('/ceo/minutes')
+ if(assignee){const{data:member}=await supabase.from('organization_members').select('user_id').eq('organization_id',organizationId).eq('user_id',assignee).eq('status','active').maybeSingle();if(!member)throw new Error('Choose an active organization member as the responsible officer.')}
+ const{error}=await supabase.rpc('ceo_confirm_minutes_item',{p_item_id:id,p_responsible_user_id:assignee,p_due_at:due});if(error)throw new Error(error.message);revalidatePath('/ceo/minutes');revalidatePath('/ceo')
+}
+export async function rejectMinutesItem(formData:FormData){
+ const{supabase,user,organizationId}=await txContext(['ceo','executive'])
+ const id=clean(formData.get('item_id')),reason=clean(formData.get('reason'))
+ if(!id||reason.length<10||reason.length>500)throw new Error('Give a reason of 10 to 500 characters for rejecting the proposal.')
+ const{data:item,error:readError}=await supabase.from('ceo_decisions').select('id,context').eq('id',id).eq('organization_id',organizationId).eq('workflow_state','ai_generated').maybeSingle()
+ if(readError||!item)throw new Error('This proposal is no longer awaiting review.')
+ const{data:updated,error}=await supabase.from('ceo_decisions').update({workflow_state:'rejected',context:`${item.context||''}\nExecutive rejection: ${reason}`,reviewed_by:user.id,reviewed_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',id).eq('organization_id',organizationId).eq('workflow_state','ai_generated').select('id').maybeSingle()
+ if(error||!updated)throw new Error('The proposal could not be rejected. Refresh and try again.')
+ revalidatePath('/ceo/minutes');revalidatePath('/ceo')
 }
 export async function delegateAction(formData:FormData){
  const{supabase}=await txContext(['ceo','executive','manager']);const action=clean(formData.get('action_id')),user=clean(formData.get('user_id')),due=clean(formData.get('due_at'))||null,note=clean(formData.get('note'))||null
@@ -80,15 +91,22 @@ export async function delegateAction(formData:FormData){
 export async function submitActionEvidence(formData:FormData){
  const{supabase,user,organizationId}=await txContext(['ceo','executive','manager','analyst','viewer']);const action=clean(formData.get('action_id')),summary=clean(formData.get('summary')),url=clean(formData.get('external_url'))||null
  if(!action||summary.length<10)throw new Error('Provide an action and evidence summary.')
- const{data:a}=await supabase.from('ceo_actions').select('id,assigned_to').eq('id',action).eq('organization_id',organizationId).single();if(!a||a.assigned_to!==user.id)throw new Error('Only the assigned officer may submit evidence.')
+ if(url){try{const parsed=new URL(url);if(!['https:','http:'].includes(parsed.protocol))throw new Error('Invalid URL')}catch{throw new Error('Use a valid HTTP or HTTPS evidence link.')}}
+ const{data:a}=await supabase.from('ceo_actions').select('id,assigned_to,status').eq('id',action).eq('organization_id',organizationId).single();if(!a||a.assigned_to!==user.id)throw new Error('Only the assigned officer may submit evidence.')
+ if(['cancelled','approved','closed'].includes(a.status))throw new Error('This action is no longer accepting evidence.')
  const{error}=await supabase.from('ceo_action_evidence').insert({organization_id:organizationId,action_id:action,submitted_by:user.id,evidence_type:url?'link':'note',summary,external_url:url});if(error)throw new Error(error.message)
- await supabase.from('ceo_actions').update({status:'submitted',submitted_at:new Date().toISOString()}).eq('id',action);await supabase.from('ceo_action_updates').insert({organization_id:organizationId,action_id:action,actor_user_id:user.id,update_type:'evidence_submitted',note:summary,new_status:'submitted'});revalidatePath('/ceo/minutes')
+ const{error:statusError}=await supabase.from('ceo_actions').update({status:'submitted',submitted_at:new Date().toISOString()}).eq('id',action).eq('organization_id',organizationId);if(statusError)throw new Error('Evidence was saved, but the action status could not be updated. Contact an executive before resubmitting.')
+ const{error:logError}=await supabase.from('ceo_action_updates').insert({organization_id:organizationId,action_id:action,actor_user_id:user.id,update_type:'evidence_submitted',note:summary,new_status:'submitted'});if(logError)throw new Error('Evidence was saved, but the activity log could not be updated. Contact an executive before resubmitting.')
+ revalidatePath('/ceo/minutes');revalidatePath('/ceo')
 }
 export async function reviewEvidence(formData:FormData){
- const{supabase}=await txContext(['ceo','executive','manager']);const evidence=clean(formData.get('evidence_id')),action=clean(formData.get('action_id')),verdict=clean(formData.get('verdict'))
- if(!['accepted','returned'].includes(verdict))throw new Error('Invalid review verdict.')
- const{data:{user}}=await supabase.auth.getUser();const now=new Date().toISOString()
- const{error}=await supabase.from('ceo_action_evidence').update({review_status:verdict,reviewed_by:user!.id,reviewed_at:now}).eq('id',evidence);if(error)throw new Error(error.message)
- await supabase.from('ceo_actions').update({status:verdict==='accepted'?'approved':'returned',reviewed_by:user!.id,reviewed_at:now,completed_at:verdict==='accepted'?now:null}).eq('id',action)
- revalidatePath('/ceo/minutes')
+ const{supabase,user,organizationId}=await txContext(['ceo','executive','manager']);const evidence=clean(formData.get('evidence_id')),action=clean(formData.get('action_id')),verdict=clean(formData.get('verdict'))
+ if(!evidence||!action||!['accepted','returned'].includes(verdict))throw new Error('Invalid evidence review.')
+ const{data:record}=await supabase.from('ceo_action_evidence').select('id,action_id,review_status').eq('id',evidence).eq('organization_id',organizationId).maybeSingle()
+ const{data:linkedAction}=await supabase.from('ceo_actions').select('id,status').eq('id',action).eq('organization_id',organizationId).maybeSingle()
+ if(!record||record.action_id!==action||record.review_status!=='submitted'||!linkedAction||['cancelled','closed'].includes(linkedAction.status))throw new Error('This evidence is not awaiting review for the selected action.')
+ const now=new Date().toISOString()
+ const{data:updated,error}=await supabase.from('ceo_action_evidence').update({review_status:verdict,reviewed_by:user.id,reviewed_at:now}).eq('id',evidence).eq('action_id',action).eq('organization_id',organizationId).eq('review_status','submitted').select('id').maybeSingle();if(error||!updated)throw new Error('Evidence review could not be saved. Refresh and try again.')
+ const{error:actionError}=await supabase.from('ceo_actions').update({status:verdict==='accepted'?'approved':'returned',reviewed_by:user.id,reviewed_at:now,completed_at:verdict==='accepted'?now:null}).eq('id',action).eq('organization_id',organizationId);if(actionError)throw new Error('The evidence review was saved, but the action status needs an executive check.')
+ revalidatePath('/ceo/minutes');revalidatePath('/ceo')
 }
