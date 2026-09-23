@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
       execution_id: accepted.executionId, user_id: identity.userId, request_id: accepted.requestId,
     })
     if (custodyError) {
-      await getExecutionProvider().cancel(accepted.executionId).catch(() => undefined)
+      if (custodyError.code !== '23505') await getExecutionProvider().cancel(accepted.executionId).catch(() => undefined)
       throw new Error('Execution custody could not be recorded.')
     }
 
