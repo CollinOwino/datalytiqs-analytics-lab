@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { createAdminClient } from '../../lib/supabase/admin'
 import { createClient } from '../../lib/supabase/server'
 import { setTargetExamDate, startCa35p } from './actions'
+import { MobileExamNav } from './mobile-nav'
 import './exam-hub.css'
 import './topic-workspace.css'
 
@@ -91,7 +92,7 @@ export default async function ExamHubPage({ searchParams }: { searchParams: Prom
     <header className="exam-header">
       <a className="exam-brand" href="/"><span>D</span><b>DatalytIQs</b><small>Exam Competency Hub</small></a>
       <nav aria-label="Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a>{isReviewer && <a href="/exam-hub/review">Review queue</a>}<a href="/">Analytics Lab</a></nav>
-      <details className="exam-mobile-nav"><summary>Menu</summary><nav aria-label="Mobile Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a>{isReviewer && <a href="/exam-hub/review">Review queue</a>}<a href="/">Analytics Lab</a></nav></details>
+      <MobileExamNav isReviewer={isReviewer} signedIn={Boolean(user)} />
       {user ? <span className="account-chip">Signed in</span> : <a className="nav-cta" href="/login?next=/exam-hub">Sign in</a>}
     </header>
 
