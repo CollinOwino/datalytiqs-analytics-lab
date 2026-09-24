@@ -39,3 +39,12 @@ Four original learner capstones and a separate instructor key are prepared. Tuto
 - School Bursars: existing published course 1045 includes the original Karibu Valley case brief; original product and pricing were left unchanged.
 - Assessment files: four learner workbooks and four separate instructor solution workbooks. In each instructor workbook, five calculated controls matched independently recorded expected values, then recalculated after a synthetic source-cell change and returned to the baseline after restoration. Native Excel PivotTable, Goal Seek, desktop cross-version, Tutor download authorization and end-to-end learner journey remain unverified.
 - No learner or instructor workbook has been placed in a public WordPress media location. Course-resource delivery requires a confirmed Tutor LMS access-controlled route and role testing.
+
+## Commercial preparation — 24 September 2026
+
+| Tutor course | WooCommerce product | Proposed price | State |
+|---|---:|---:|---|
+| Accountants 1688 | 1707, SKU `DATALYTIQS-EXCEL-ACCOUNTANTS-1688` | KES 6,500 | Course and product drafts; bidirectional binding reported by the integration bridge and product meta `_datalytiqs_tutor_course_id=1688`. |
+| Auditors 1651 | 1708, SKU `DATALYTIQS-EXCEL-AUDITORS-1651` | KES 6,500 | Course and product drafts; bidirectional binding reported by the integration bridge and product meta `_datalytiqs_tutor_course_id=1651`. |
+
+The paid-commerce activation ability rejects draft courses; neither course was converted to paid or published. The core Tutor LMS 4.0.9 plugin is active without Tutor Pro Course Attachments. The available WordPress media upload path exposes a direct public URL and therefore cannot safely distribute the instructor keys. The custom Tutor–Lab bridge 0.5.2 has course creation, commerce binding, quiz and event capabilities but no protected resource upload or workbook submission capability. A verified protected delivery and learner/instructor isolation test are required before public sale.
