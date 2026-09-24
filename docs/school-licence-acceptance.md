@@ -34,3 +34,21 @@ All plans run for one paid year, renew via manual invoice, and grant existing le
 - NOT RUN: Synthetic school A/B isolation, concurrent seat cap, failed/partial/refunded order, manual invoice renewal, post-grace expiry, HumHub non-member access and authentic mobile-device tests.
 
 Publication gate: all integration and denial-path tests must pass using synthetic schools/learners; no real learner data may be used for acceptance.
+
+## Phase 3 independent recheck · 24 September 2026
+
+- The four WooCommerce products were read again by ID: all four remain draft, virtual, KES-priced at the approved amounts. WooCommerce still reports zero webhooks. Checkout and payment confirmation cannot be acceptance-tested without a configured non-charging test path and a school-order activation handler. No real order was initiated.
+- Supabase live counts: zero `ya_institutions`, `ya_clubs`, `ya_cohorts`, and `ya_cohort_memberships`. There is no synthetic school or learner cohort to validate. The existing school tables lack a transactional school licence and paid-order binding.
+- The authenticated HumHub administrator rechecked the synthetic pilot Space: `Private (Invisible)`, `Only by invite`, private default content, one administrator member, zero posts and zero followers. The defaults for member invitations and public posts remain a safeguarding blocker. No learner was invited.
+- The public production URL `https://datalytiqs-analytics-lab.vercel.app/schools` returned HTTP 404 in a browser. PR #52 remains open and draft, not merged. The school page and synthetic library exercise are staged code, not deployed features.
+- Full 25-learner acceptance, checkout/payment, cross-school denial, instructor feedback, renewal/expiry and Community learner participation: **not run / not passed**. Offline rule tests alone do not constitute a production acceptance pass.
+
+## Pilot operator handoff (draft; do not publish yet)
+
+1. School administrator: submit institutional details, adult contact and desired tier through an approved registration flow; wait for a verified invoice and payment confirmation before inviting learners. Never enter a learner's private information into an enquiry form.
+2. Coordinator: after paid activation, verify the school-specific private Space, assign adult instructors, create a cohort and invite only consent-verified learners. Monitor the single school-wide seat count; at 25 seats the Starter Club rejects a 26th admission. Do not use public join links.
+3. Instructor: assign Python for Kids and, where appropriate, the Young Data Scientists synthetic library challenge; check each learner's access and feedback visibility within the school's cohort. Assess narrative answers personally and label automated checks as automated.
+4. Renewal: issue a manual invoice before the paid-through date; during the following 30 days existing learners retain access but new admissions stop. Verify paid renewal before extending the licence. At the exclusive end of grace, paid modules close while Python for Kids Modules 1–3 remain free.
+5. Acceptance evidence: use two synthetic schools and 25 synthetic learners in the first to demonstrate both seat rejection at 26 and denial of a second school's roster; use a payment gateway test mode or authorised zero-charge invoice workflow. Preserve order IDs, event IDs, permission screenshots and test timestamps without copying secrets or minors' records.
+
+The handoff describes the intended procedure, **not an operational workflow**. It must be updated after end-to-end verification.
