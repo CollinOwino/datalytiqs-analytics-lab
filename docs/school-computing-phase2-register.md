@@ -48,3 +48,21 @@ Coverage criterion: every assessed item must reference an active syllabus-versio
 - Map each Cambridge cohort to a specific syllabus code (0478 or 0417) and examination year; CE is an umbrella label, not a standalone assessment.
 - Review rights before storing any authentic examination text or marking scheme.
 - Build the cohort curriculum selector and objective-linked data model, then create draft Tutor modules, lessons and original assessments. Publish only after coverage and end-to-end instructor review passes.
+
+## Expanded qualification intake · 24 September 2026
+
+This intake records official qualification pages and separates source discovery from syllabus-level approval. No new course or examination question is published from this table.
+
+| Candidate | Official qualification evidence | Intake decision and next verification |
+| --- | --- | --- |
+| Cambridge IGCSE Computer Science 0478 (2029–2031) | [Cambridge qualification page](https://www.cambridgeinternational.org/programmes-and-qualifications/view/cambridge-igcse-computer-science-0478/) lists a separate 2029–2031 syllabus | Register a distinct exam-year version; extract all outcomes and assessment changes before authoring. |
+| Cambridge IGCSE digital examination route “0265” | [Cambridge digital assessment availability](https://www.cambridgeinternational.org/programmes-and-qualifications/developing-digital-exams/digital-assessment-availability) | **UNVERIFIED:** an official 0265 Computer Science qualification was not established. Do not create a 0265 course or attribute a paper structure to this code. Verify the actual route/code directly with Cambridge. |
+| Cambridge International AS & A Level Computer Science 9618 | [Cambridge qualification directory](https://www.cambridgeinternational.org/programmes-and-qualifications/) | Source and year-specific PDF still to be retrieved and mapped; HOLD. |
+| Pearson Edexcel International GCSE ICT | [Official qualification page](https://qualifications.pearson.com/en/qualifications/edexcel-international-gcses/international-gcse-information-and-communication-technology-2017.html) identifies teaching from 2017 and assessment from 2019 | Separate board/course; inspect current specification and updates before outcome mapping. |
+| Pearson Edexcel International GCSE Computer Science | [Official qualification page](https://qualifications.pearson.com/en/qualifications/edexcel-international-gcses/international-gcse-computer-science-2017.html) identifies teaching from 2017 and assessment from 2019 | Qualification exists; inspect current availability, amendments and specification before content. |
+| OCR GCSE Computer Science J277 | [Official OCR qualification page](https://www.ocr.org.uk/qualifications/gcse/computer-science-j277-from-2020/) | Separate UK GCSE route; verify current amended specification and examination year. |
+| AQA GCSE Computer Science 8525 | [Official AQA overview](https://www.aqa.org.uk/subjects/computer-science/gcse/computer-science-8525); [2027 changes](https://www.aqa.org.uk/gcse-computer-science-specification-changes-for-summer-2027) | Split 2026 examination cohort from first exams in summer 2027 after September 2025 teaching update; do not mix specifications. |
+| IB DP Computer Science SL/HL | [Official IB subject page](https://ibo.org/programmes/diploma-programme/curriculum/sciences/computer-science/) | Separate last assessment 2026 and first assessment 2027 versions; obtain full authorised guides before lessons. |
+| IB DP Digital Society SL/HL | [IB Diploma curriculum](https://ibo.org/programmes/diploma-programme/curriculum/) | Exact current guide and assessment structure pending; HOLD. |
+
+Commercial inclusion and examination rights remain undetermined. Link to authorised public source pages; do not import official question text or assume a school licence covers third-party content.
