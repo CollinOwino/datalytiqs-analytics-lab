@@ -86,11 +86,11 @@ export const topicOneLessons = [
 ] as const
 
 export const topicOneQuiz = [
-  { code: 'q1', question: 'Which workbook design provides the strongest audit trail?', options: [['a', 'Inputs, calculations and outputs mixed on one sheet'], ['b', 'Separate source, assumptions, calculations and output sheets'], ['c', 'Values pasted over all formulas'], ['d', 'Hidden sheets without documentation']] },
-  { code: 'q2', question: 'Which function is most appropriate for summing revenue for one region?', options: [['a', 'SUMIFS'], ['b', 'COUNTBLANK'], ['c', 'LEFT'], ['d', 'ROUNDUP']] },
-  { code: 'q3', question: 'Why should a PivotTable total be reconciled independently?', options: [['a', 'To make the workbook larger'], ['b', 'To confirm the source and aggregation are complete'], ['c', 'To remove structured references'], ['d', 'To avoid refreshing the PivotTable']] },
-  { code: 'q4', question: 'In a driver-based model, where should the tax rate normally be stored?', options: [['a', 'Hard-coded in every formula'], ['b', 'In a controlled assumptions cell'], ['c', 'Inside a chart title'], ['d', 'In an unrelated workbook']] },
-  { code: 'q5', question: 'What is the break-even formula used in the worked example?', options: [['a', 'Fixed cost ÷ contribution per unit'], ['b', 'Revenue ÷ fixed cost'], ['c', 'Variable cost × price'], ['d', 'Profit ÷ volume']] },
+  { code: 'q1', question: 'The 12-row sales file will feed a management report. Which workbook design keeps its source, rate assumptions and final output traceable?', options: [['a', 'Inputs, calculations and outputs mixed on one sheet'], ['b', 'Separate source, assumptions, calculations and output sheets'], ['c', 'Values pasted over all formulas'], ['d', 'Hidden sheets without documentation']] },
+  { code: 'q2', question: 'You must independently reproduce the Western revenue PivotTable total. Which Excel function sums Revenue where Region equals Western?', options: [['a', 'SUMIFS'], ['b', 'COUNTBLANK'], ['c', 'LEFT'], ['d', 'ROUNDUP']] },
+  { code: 'q3', question: 'The PivotTable total is lower than the 12-row source total. Why run an independent SUMIFS check before presenting it?', options: [['a', 'To make the workbook larger'], ['b', 'To confirm the source and aggregation are complete'], ['c', 'To remove structured references'], ['d', 'To avoid refreshing the PivotTable']] },
+  { code: 'q4', question: 'A reviewer changes a tax-rate assumption in the financial model. Where should this rate live to keep the calculation auditable?', options: [['a', 'Hard-coded in every formula'], ['b', 'In a controlled assumptions cell'], ['c', 'Inside a chart title'], ['d', 'In an unrelated workbook']] },
+  { code: 'q5', question: 'The model shows KES 820,000 fixed cost and KES 1,050 contribution per unit. Which formula gives break-even units before rounding up?', options: [['a', 'Fixed cost ÷ contribution per unit'], ['b', 'Revenue ÷ fixed cost'], ['c', 'Variable cost × price'], ['d', 'Profit ÷ volume']] },
 ] as const
 
 export const topicOneDownloads = [
