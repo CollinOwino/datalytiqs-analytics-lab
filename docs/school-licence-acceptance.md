@@ -52,3 +52,21 @@ Publication gate: all integration and denial-path tests must pass using syntheti
 5. Acceptance evidence: use two synthetic schools and 25 synthetic learners in the first to demonstrate both seat rejection at 26 and denial of a second school's roster; use a payment gateway test mode or authorised zero-charge invoice workflow. Preserve order IDs, event IDs, permission screenshots and test timestamps without copying secrets or minors' records.
 
 The handoff describes the intended procedure, **not an operational workflow**. It must be updated after end-to-end verification.
+
+## Final execution recheck and production readiness checklist
+
+The authenticated HumHub permission view returned `502 Bad Gateway` (`Connection refused`) on initial navigation and one reload. Do not infer a saved role override or invite users while the member permissions cannot be inspected. The Space's previously observed private/invite-only settings and one administrator member remain the last successful browser observation, not a new post-error verification.
+
+The production deployment check for the draft school branch reports one Vercel project check failed with a build-rate-limit URL and another succeeded. Neither establishes that `/schools` is deployed to the public production domain; the latest browser visit there returned 404. Supabase still has zero institution, club, cohort and cohort-membership rows. PR #52 and the phase-2 syllabus register PR #53 remain draft.
+
+| Gate | Evidence required | Current result |
+| --- | --- | --- |
+| Non-charging checkout and paid activation | Gateway test-mode or authorised zero-charge order, signed event, trusted order lookup, idempotent entitlement write | Not run; no school-order webhook |
+| Manual renewal, grace and expiry | Paid renewal order and frozen-clock entitlement checks at boundaries | Pure rule tests pass; integration not run |
+| 25 learner cap | Atomic admission of 25, rejection of 26th and concurrent attempts | Pure boundary test passes; live transaction not run |
+| School isolation | Synthetic A and B staff and learners, cross-school denial for roster, submissions and feedback | Not run; no school rows |
+| Safeguarding and Community | Restricted member permissions, private projects, non-member denial, moderator review | Blocked by permission state and current 502 |
+| Academy and Lab journey | Registration, Python for Kids free Modules 1–3 and paid access, progress sync, exercise, instructor feedback | Not run end to end; public Lab school route 404 |
+| Mobile and accessibility | Real mobile viewport and keyboard/screen-reader checks across live journey | Not run |
+
+**Release decision: HOLD.** Keep products, Academy programme material and PRs unpublished/draft; do not activate paid school enrolment or populate 25 synthetic learner accounts until these gates pass. The synthetic HumHub pilot Space remains separate from real learner analytics.
