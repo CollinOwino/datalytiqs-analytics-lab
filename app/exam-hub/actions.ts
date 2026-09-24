@@ -22,6 +22,9 @@ export async function setSubtopicProgress(formData: FormData) {
   if (!subtopicId || !/^[1-5]\.0$/.test(topicCode) || !['in_progress', 'completed'].includes(status)) {
     redirect('/exam-hub?state=action-error')
   }
+  if (status === 'completed' && formData.get('mission_checked') !== 'yes') {
+    redirect(`/exam-hub/${topicCode}?state=mission-incomplete#learning-sequence`)
+  }
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/login?next=${encodeURIComponent(`/exam-hub/${topicCode}`)}`)
