@@ -16,7 +16,7 @@ Status: curriculum and downloadable practice resources prepared; Tutor LMS publi
 | Existing record | Curriculum extension | Integrated capstone |
 |---|---|---|
 | Advanced Excel: prior broad course 997 is in Trash; do not restore without enrolment/product audit. Existing published DTQ-105, DTQ-106 and DTQ-107 are complementary short courses. | Formulas and references, tables, exact-match lookups, PivotTables, Scenario Manager, Goal Seek, formula tracing and Power Query refresh | Mwangaza County service performance dashboard |
-| Excel for Accountants: no exact-title course in published catalog; reconcile drafts before creating a course. | Chart-of-accounts mapping, common-size statements, SLN depreciation, PMT loans, statement and cash-flow reconciliation | Tulia Cooperative integrated financial model |
+| Excel for Accountants: draft course 1688 created after confirming no existing published or draft exact-title course; no product or price set. | Chart-of-accounts mapping, common-size statements, SLN depreciation, PMT loans, statement and cash-flow reconciliation | Tulia Cooperative integrated financial model |
 | Excel for School Bursars: published course 1045; preserve product 1555 and KES 4,500 binding. | Fee registers, bank and receipt reconciliation, payroll checks, budget variance, board reports | Karibu Valley School year-end reconciliation |
 | Excel for Auditors: draft course 1651, 12 topics and 24 scaffold lessons; retain draft until lessons and assessment are verified. | Transaction testing, exception investigation, statements, formula integrity and evidence trace | Lakeview Institute risk-based audit |
 
@@ -31,3 +31,11 @@ Status: curriculum and downloadable practice resources prepared; Tutor LMS publi
 
 ## Assessment inventory
 Four original learner capstones and a separate instructor key are prepared. Tutor LMS resource permissions and learner submission remain release gates.
+
+## Verified implementation update — 24 September 2026
+
+- Accountant pathway: draft Tutor LMS course 1688, six topics and 12 lesson scaffolds. The course is unpublished.
+- Auditor pathway: draft Tutor LMS course 1651 now describes a specific original transaction investigation. The course is unpublished.
+- School Bursars: existing published course 1045 includes the original Karibu Valley case brief; original product and pricing were left unchanged.
+- Assessment files: four learner workbooks and four separate instructor solution workbooks. In each instructor workbook, five calculated controls matched independently recorded expected values, then recalculated after a synthetic source-cell change and returned to the baseline after restoration. Native Excel PivotTable, Goal Seek, desktop cross-version, Tutor download authorization and end-to-end learner journey remain unverified.
+- No learner or instructor workbook has been placed in a public WordPress media location. Course-resource delivery requires a confirmed Tutor LMS access-controlled route and role testing.
