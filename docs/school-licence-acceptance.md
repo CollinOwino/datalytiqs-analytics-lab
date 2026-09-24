@@ -24,6 +24,8 @@ All plans run for one paid year, renew via manual invoice, and grant existing le
 
 - PASS: Four distinct draft products re-read as KES 30,000/50,000/85,000/175,000 and capacities stated in descriptions.
 - PASS: Pure licence rules cover cap boundaries, the 30-day grace boundary, revoked state, early and late renewal dates; production build passes.
+- PASS: Analytics Lab school page lists the four approved tiers from the same source-controlled mapping; it links to institutional enquiry without opening checkout.
+- AUDIT: WooCommerce currently lists zero webhooks. The existing Tutor LMS event bridge handles course enrolment/completion only; it cannot securely activate an institutional licence or infer a school from an email match.
 - BLOCKED: No signed WooCommerce school-order bridge, atomic school subscription transaction, guardian verification flow or synthetic payment transaction exists yet. These four products remain drafts.
 - BLOCKED: Cloud browser reached HumHub public dashboard, but secure administrator sign-in returned “User or Password incorrect”; a subsequent `/spaces` request returned 502 Connection refused. Existing Spaces and users were left untouched.
 - NOT RUN: Synthetic school A/B isolation, concurrent seat cap, failed/partial/refunded order, manual invoice renewal, post-grace expiry, HumHub private-space access and authentic mobile-device tests.
