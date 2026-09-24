@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '../../lib/supabase/server'
+import { runFoundationCode } from './runner'
 
 export async function startPythonKidsPilot() {
   const supabase=await createClient(); const {data:{user}}=await supabase.auth.getUser()
@@ -12,10 +13,12 @@ export async function startPythonKidsPilot() {
   revalidatePath('/python-for-kids'); redirect('/python-for-kids?state=started')
 }
 
-export async function savePythonKidsAttempt(input:{lessonCode:string;challengeCode:string;code:string;passed:boolean;feedback:string;errorCategory?:string}) {
+export async function savePythonKidsAttempt(input:{lessonCode:string;code:string}) {
   const supabase=await createClient(); const {data:{user}}=await supabase.auth.getUser()
   if(!user) return {saved:false,reason:'Sign in to save your progress.'}
-  const {error}=await supabase.rpc('record_python_kids_attempt',{p_lesson_code:input.lessonCode,p_challenge_code:input.challengeCode,p_code:input.code,p_passed:input.passed,p_feedback:input.feedback,p_error_category:input.errorCategory??null})
+  const result=runFoundationCode(input.lessonCode,input.code)
+  if(result.errorCategory==='lesson'||result.errorCategory==='limit'||result.errorCategory==='safety') return {saved:false,reason:result.feedback}
+  const {error}=await supabase.rpc('record_python_kids_attempt',{p_lesson_code:input.lessonCode,p_challenge_code:`lesson-${input.lessonCode}`,p_code:input.code,p_passed:result.ok,p_feedback:result.feedback,p_error_category:result.errorCategory??null})
   if(error) return {saved:false,reason:'Start the free pathway before saving progress.'}
   revalidatePath('/python-for-kids'); revalidatePath(`/python-for-kids/${input.lessonCode}`)
   return {saved:true}
