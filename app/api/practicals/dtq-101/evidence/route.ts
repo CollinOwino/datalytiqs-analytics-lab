@@ -24,12 +24,13 @@ export async function GET(request: NextRequest) {
 
   const admin = createAdminClient()
   let query = admin.from('practical_submissions')
-    .select('id,user_id,questionnaire_path,codebook_path,pilot_note_path')
+    .select('id,user_id,status,questionnaire_path,codebook_path,pilot_note_path')
     .eq('course_code', DTQ_COURSE)
   if (requestedId) query = query.eq('id', requestedId)
   else query = query.eq('user_id', user.id)
   const { data: submission, error } = await query.maybeSingle()
   if (error || !submission || (!reviewer && submission.user_id !== user.id)) return failure(404)
+  if (requestedId && !['submitted', 'graded', 'revision_requested'].includes(submission.status)) return failure(404)
   const path = submission[columns[kind] as keyof typeof submission]
   if (typeof path !== 'string' || !path.startsWith(`${submission.user_id}/${submission.id}/${kind}/`))
     return failure(404)
