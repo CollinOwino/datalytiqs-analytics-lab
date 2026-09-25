@@ -6,8 +6,8 @@ create table if not exists public.practical_course_catalog (
  created_at timestamptz not null default now(),
  constraint practical_course_code_check check (course_code ~ '^[A-Z0-9-]{3,32}$')
 );
-insert into public.practical_course_catalog(course_code,enabled) values ('DTQ-101',true)
-on conflict (course_code) do nothing;
+insert into public.practical_course_catalog(course_code,tutor_course_id,enabled) values ('DTQ-101',1049,true)
+on conflict (course_code) do update set tutor_course_id=excluded.tutor_course_id,enabled=true;
 
 create table if not exists public.practical_course_access (
  user_id uuid not null references auth.users(id) on delete cascade,
