@@ -82,6 +82,7 @@ begin
  end if;
  return new;
 end $dtqaudit$;
+revoke all on function public.dtq_audit_submission() from public, anon, authenticated;
 drop trigger if exists dtq_submission_audit on public.practical_submissions;
 create trigger dtq_submission_audit after insert or update on public.practical_submissions
 for each row execute function public.dtq_audit_submission();
