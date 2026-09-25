@@ -65,7 +65,7 @@ create policy "reviewer reads assigned submission history"
  );
 create or replace function public.dtq_audit_submission()
 returns trigger language plpgsql security definer set search_path = public
-as $
+as $dtqaudit$
 begin
  if tg_op='INSERT' or new.status is distinct from old.status or new.updated_at is distinct from old.updated_at then
    insert into public.practical_submission_events
@@ -81,7 +81,7 @@ begin
      case when new.status in ('graded','revision_requested') then new.reviewer_id else new.user_id end);
  end if;
  return new;
-end $;
+end $dtqaudit$;
 drop trigger if exists dtq_submission_audit on public.practical_submissions;
 create trigger dtq_submission_audit after insert or update on public.practical_submissions
 for each row execute function public.dtq_audit_submission();
