@@ -1,5 +1,10 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import type { ReactNode } from 'react'
+import { createClient } from '../../../lib/supabase/server'
+import { createAdminClient } from '../../../lib/supabase/admin'
+import { dtqAccess, DTQ_COURSE } from '../../../lib/practicals/dtq101'
+import { DTQSubmissionForm } from '../dtq-101/submission-form'
 
 type Practical = {
   code: string
@@ -46,6 +51,38 @@ export default async function PracticalCheckpointPage({ params }: { params: Prom
   const { courseCode } = await params
   const course = practicals[courseCode]
   if (!course) notFound()
+  let dtqSection: ReactNode = null
+  if (courseCode === 'dtq-101') {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      dtqSection = <section style={{ marginTop: 28, padding: 24, background: 'white' }}>
+        <h2>Submission requires learner sign-in</h2>
+        <a href="/login?next=%2Fpracticals%2Fdtq-101">Sign in to submit your work</a>
+      </section>
+    } else {
+      const { entitled, reviewer } = await dtqAccess(user.id)
+      if (!entitled) {
+        dtqSection = <section style={{ marginTop: 28, padding: 24, background: 'white' }}>
+          <h2>Enrolment required</h2><p>DTQ-101 evidence submission is available only after verified course enrolment.</p>
+          <a href="https://datalytiqsacademy.com/courses/">Check your Academy enrolment</a>
+          {reviewer && <p><a href="/practicals/dtq-101/review">Instructor review queue →</a></p>}
+        </section>
+      } else {
+        const admin = createAdminClient()
+        const { data: submission, error } = await admin.from('practical_submissions')
+          .select('status,summary,score,reviewer_feedback,questionnaire_path,codebook_path,pilot_note_path,rubric_scores')
+          .eq('user_id', user.id).eq('course_code', DTQ_COURSE).maybeSingle()
+        if (error) throw error
+        const initial = submission ? {
+          ...submission,
+          rubric_scores: submission.rubric_scores as Record<string, number> | null,
+        } : null
+        dtqSection = <>{reviewer && <p><a href="/practicals/dtq-101/review">Instructor review queue →</a></p>}
+          <DTQSubmissionForm initial={initial} /></>
+      }
+    }
+  }
 
   return (
     <main style={{ minHeight: '100vh', background: '#f6f8fb', color: '#0b2c4d', fontFamily: 'Arial, sans-serif' }}>
@@ -67,6 +104,7 @@ export default async function PracticalCheckpointPage({ params }: { params: Prom
           <ol style={{ lineHeight: 1.8, paddingLeft: 22 }}><li>Complete the related Academy theory and protected quiz.</li><li>Perform this practical task using approved or workplace-safe materials.</li><li>Record the work and submit the specified evidence when enrolment is active.</li></ol>
           <p style={{ marginBottom: 0, color: '#dce8f2' }}>Practical recording is protected behind learner sign-in. No duplicate assignment is created here.</p>
         </section>
+        {dtqSection}
       </section>
     </main>
   )
