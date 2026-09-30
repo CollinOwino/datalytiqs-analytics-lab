@@ -20,6 +20,9 @@ create unique index if not exists learner_identity_links_email_uidx
 
 alter table public.learner_identity_links enable row level security;
 
+revoke all on table public.learner_identity_links from public, anon;
+grant select on table public.learner_identity_links to authenticated;
+
 drop policy if exists learner_identity_links_own_read on public.learner_identity_links;
 create policy learner_identity_links_own_read on public.learner_identity_links
 for select to authenticated
