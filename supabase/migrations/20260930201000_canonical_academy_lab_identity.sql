@@ -74,6 +74,16 @@ begin
   where learner_id = v_learner_id;
 
   if v_existing is not null then
+    -- A pre-verified Lab identity may claim its first stable Tutor ID when the verified email matches.
+    update public.learner_identity_links
+      set tutor_user_id = p_tutor_user_id,
+          academy_email = lower(trim(p_user_email)),
+          last_verified_at = now()
+    where learner_id = v_learner_id
+      and tutor_user_id is null;
+    if found then
+      return v_learner_id;
+    end if;
     -- Never silently attach a second Tutor identity to an already-linked Lab principal.
     return null;
   end if;
