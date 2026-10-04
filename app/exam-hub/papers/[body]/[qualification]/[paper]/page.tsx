@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '../../../../../../lib/supabase/admin'
+import { createClient } from '../../../../../../lib/supabase/server'
 import '../../../../exam-hub.css'
 
 const normalise=(value:string)=>value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')
@@ -22,6 +23,31 @@ export default async function ProfessionalPaperPage({params}:{params:Promise<{bo
   if(normalise(examBody?.code||'')!==body||normalise(String(meta.qualification||''))!==qualification) notFound()
   const {data:syllabus}=await admin.from('exam_syllabus_versions').select('id,version_label,effective_from,source_url,status').eq('programme_id',programme.id).order('effective_from',{ascending:false}).limit(1).maybeSingle()
   const {data:topics}=syllabus?await admin.from('exam_topics').select('id,code,title,description,sequence_no').eq('syllabus_version_id',syllabus.id).eq('active',true).order('sequence_no'):{data:[]}
+  const {data:activities}=await admin.from('exam_practical_activities').select('id,topic_id,code,title,activity_type,instructions,dataset_key,expected_outputs,execution_mode,sequence_no').eq('programme_id',programme.id).eq('active',true).order('sequence_no')
+  const {data:competencies}=await admin.from('exam_competencies').select('id,code,title,description,domain').eq('programme_id',programme.id).eq('active',true).order('code')
+  const supabase=await createClient()
+  const {data:{user}}=await supabase.auth.getUser()
+  let enrollment:any=null, submissions:any[]=[], evidence:any[]=[]
+  if(user){
+    const {data:e}=await supabase.from('exam_enrollments').select('id,status').eq('programme_id',programme.id).eq('user_id',user.id).eq('status','active').maybeSingle()
+    enrollment=e
+    if(e){
+      const [s,evidenceRows]=await Promise.all([
+        supabase.from('exam_topic_practical_submissions').select('id,topic_id,status,score,determination,reviewed_at').eq('enrollment_id',e.id),
+        supabase.from('exam_competency_evidence').select('competency_id,score,recorded_at').eq('enrollment_id',e.id)
+      ])
+      submissions=s.data||[]; evidence=evidenceRows.data||[]
+    }
+  }
+  const reviewed=submissions.filter(x=>x.reviewed_at&&x.score!==null)
+  const practicalAverage=reviewed.length?Math.round(reviewed.reduce((sum,x)=>sum+Number(x.score||0),0)/reviewed.length):null
+  const evidenceByCompetency=new Map<string,number[]>()
+  evidence.forEach((row:any)=>evidenceByCompetency.set(row.competency_id,[...(evidenceByCompetency.get(row.competency_id)||[]),Number(row.score)]))
+  const competencyScores=(competencies||[]).map((x:any)=>({ ...x, score:evidenceByCompetency.has(x.id)?Math.round((evidenceByCompetency.get(x.id)||[]).reduce((a,b)=>a+b,0)/(evidenceByCompetency.get(x.id)||[]).length):null }))
+  const evidenced=competencyScores.filter((x:any)=>x.score!==null)
+  const readiness=evidenced.length&&reviewed.length?Math.round((evidenced.reduce((s:number,x:any)=>s+x.score,0)/evidenced.length+Number(practicalAverage))/2):null
+  const activitiesByTopic=new Map<string,any[]>()
+  ;(activities||[]).forEach((a:any)=>activitiesByTopic.set(a.topic_id,[...(activitiesByTopic.get(a.topic_id)||[]),a]))
   const verified=meta.verification_status==='verified'
   const implementation=String(meta.implementation_status||'PLANNED').replaceAll('_',' ')
   const officialStructure=verified?String(meta.exam_structure||'See official source'):'Official examination structure verification pending.'
@@ -41,11 +67,20 @@ export default async function ProfessionalPaperPage({params}:{params:Promise<{bo
       {topics?.length?<div className="topic-list">{topics.map((t:any)=><article className="topic-card" key={t.id}><div className="topic-number">{String(t.sequence_no).padStart(2,'0')}</div><div className="topic-content"><h3>{t.code} · {t.title}</h3><p>{t.description}</p></div></article>)}</div>:<div className="exam-notice">Official examination structure verification pending. No syllabus topics have been fabricated.</div>}
     </section>
 
-    <section className="assessment-band" id="study-path"><div className="exam-section-head inverse"><div><span className="exam-kicker">PREPARATION PATH</span><h2>Learn → Practise → Demonstrate → Review</h2></div><p>This paper uses the shared Exam Hub architecture; capabilities activate only as verified content and assessments become available.</p></div><div className="assessment-grid">
+    <section className="assessment-band" id="study-path"><div className="exam-section-head inverse"><div><span className="exam-kicker">PREPARATION PATH</span><h2>Learn → Practise → Demonstrate → Review</h2></div><p>Tutor LMS carries the theory layer. Analytics Lab carries practical activity, evidence and readiness. Python/R execution remains fail-closed until an isolated runner is available.</p></div><div className="assessment-grid">
       <article><span>THEORY</span><h3>Academy Course</h3><p>{meta.academy_course_id?'Linked to the Academy preparation course.':'Course mapping pending; no duplicate course has been created.'}</p></article>
-      <article><span>PRACTICE</span><h3>Exam Workspace</h3><p>{meta.practical_workspace?'Practical workspace available.':'Practice architecture reserved; substantive activities are still in development.'}</p></article>
-      <article><span>ASSESSMENT</span><h3>Mocks & Readiness</h3><p>{meta.mock_available?'Mock assessment available.':'Mocks and readiness remain unavailable until question-bank and evidence gates are satisfied.'}</p></article>
+      <article><span>PRACTICE</span><h3>Exam Workspace</h3><p>{activities?.length?`${activities.length} practical activities mapped to the paper.`:'Practice architecture reserved; substantive activities are still in development.'}</p></article>
+      <article><span>READINESS</span><h3>{readiness===null?'Evidence pending':`${readiness}% evidence readiness`}</h3><p>{readiness===null?'Readiness appears only after reviewed practical evidence and competency evidence exist.':`${reviewed.length} reviewed practical submission(s); ${evidenced.length}/${competencyScores.length} competencies evidenced.`}</p></article>
     </div></section>
+
+    <section className="exam-section" id="practical-activities"><div className="exam-section-head"><div><span className="exam-kicker">ANALYTICS LAB PRACTICALS</span><h2>Evidence-generating activities</h2></div><p>Each activity is DatalytIQs-developed preparation work mapped to the syllabus source. It is not an official KASNEB examination question.</p></div>
+      {topics?.length?<div className="topic-list">{topics.map((t:any)=><article className="topic-card" key={t.id}><div className="topic-number">{String(t.sequence_no).padStart(2,'0')}</div><div className="topic-content"><h3>{t.code} · {t.title}</h3>{(activitiesByTopic.get(t.id)||[]).length?(activitiesByTopic.get(t.id)||[]).map((a:any)=><div key={a.id}><b>{a.code} · {a.title}</b><p>{a.instructions}</p><p><strong>Evidence:</strong> {(a.expected_outputs||[]).join(' · ')}</p><small>Mode: {a.execution_mode.replaceAll('_',' ')}{a.dataset_key?` · dataset ${a.dataset_key}`:''}</small></div>):<p>Theory-linked topic; no separate practical evidence activity is required in this release.</p>}</div></article>)}</div>:<div className="exam-notice">Practical mapping is still in draft.</div>}
+    </section>
+
+    <section className="exam-section" id="readiness"><div className="exam-section-head"><div><span className="exam-kicker">EVIDENCE & READINESS</span><h2>{user?'Your practical evidence profile':'Sign in to build an evidence profile'}</h2></div><p>Readiness is evidence-derived, not a completion badge. Reviewed practical scores and competency evidence feed this dashboard.</p></div>
+      <div className="competency-grid">{competencyScores.map((x:any)=><article key={x.id}><span>{x.code}</span><h3>{x.title}</h3><p>{x.description}</p><b>{x.score===null?'No reviewed evidence yet':`${x.score}% evidence score`}</b></article>)}</div>
+      {user&&enrollment?<div className="exam-notice">Reviewed practicals: {reviewed.length} · Practical average: {practicalAverage===null?'pending':`${practicalAverage}%`} · Overall evidence readiness: {readiness===null?'pending':`${readiness}%`}</div>:<div className="exam-notice">An active paper enrolment is required before learner evidence is recorded.</div>}
+    </section>
 
     <section className="unlock-panel"><div><span className="exam-kicker">STATUS CONTROL</span><h2>{implementation}</h2><p>Catalogue inclusion is not a claim of official endorsement or production readiness. DatalytIQs is an independent professional learning and examination-preparation platform.</p></div>{programme.code==='CA35P'?<a className="exam-button primary" href="/exam-hub/ca35p">Open full CA35P workspace</a>:<a className="exam-button primary" href="/exam-hub">Back to catalogue</a>}</section>
   </main>
