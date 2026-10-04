@@ -1,143 +1,78 @@
 import type { Metadata } from 'next'
 import { createAdminClient } from '../../lib/supabase/admin'
-import { createClient } from '../../lib/supabase/server'
-import { setTargetExamDate, startCa35p } from './actions'
-import { MobileExamNav } from './mobile-nav'
 import './exam-hub.css'
-import './topic-workspace.css'
 
 export const metadata: Metadata = {
-  title: 'CA35P Business Data Analytics Practice | DatalytIQs Exam Hub',
-  description: 'Prepare for KASNEB CA35P with Excel and analytics lessons, original case questions, scored topic quizzes and practical assignments.',
+  title: 'Professional Exam Preparation | DatalytIQs Exam Hub',
+  description: 'Professional examination preparation with structured study, practical analytics, mocks and measurable readiness.',
   alternates: { canonical: 'https://datalytiqs-analytics-lab.vercel.app/exam-hub' },
-  openGraph: {
-    title: 'CA35P Business Data Analytics Practice | DatalytIQs',
-    description: 'Study five CA35P topics with guided lessons, original practice cases and practical assignments.',
-    url: 'https://datalytiqs-analytics-lab.vercel.app/exam-hub',
-    type: 'website',
-  },
 }
 
-type Topic = {
-  id: string
-  code: string
-  title: string
-  description: string | null
-  sequence_no: number
-  learning_outcomes: string[]
-  exam_subtopics: Array<{ id: string; code: string; title: string; description: string | null; sequence_no: number }>
+type Programme = {
+  id:string; code:string; title:string; description:string|null; status:string; metadata:Record<string,any>;
+  exam_bodies:{code:string;name:string}|Array<{code:string;name:string}>
 }
 
-export default async function ExamHubPage({ searchParams }: { searchParams: Promise<{ state?: string }> }) {
-  const query = await searchParams
-  const admin = createAdminClient()
-  const { data: programme, error: programmeError } = await admin
-    .from('exam_programmes')
-    .select('id,code,title,description,free_topic_limit,status,metadata,exam_bodies!inner(code,name)')
-    .eq('code', 'CA35P').eq('status', 'published').single()
-  if (programmeError || !programme) throw new Error('The published CA35P programme could not be loaded.')
+const slug=(value:string)=>value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')
+const bodyOf=(p:Programme)=>Array.isArray(p.exam_bodies)?p.exam_bodies[0]:p.exam_bodies
 
-  const { data: syllabus } = await admin.from('exam_syllabus_versions')
-    .select('id,version_label,effective_from,status').eq('programme_id', programme.id).eq('status', 'published')
-    .order('effective_from', { ascending: false }).limit(1).single()
-  if (!syllabus) throw new Error('The published CA35P syllabus could not be loaded.')
-
-  const [{ data: topicRows }, { data: competencies }, { data: assessments }] = await Promise.all([
-    admin.from('exam_topics').select('id,code,title,description,sequence_no,learning_outcomes,exam_subtopics(id,code,title,description,sequence_no)').eq('syllabus_version_id', syllabus.id).eq('active', true).order('sequence_no'),
-    admin.from('exam_competencies').select('id,code,title,description,domain').eq('programme_id', programme.id).eq('active', true).order('code'),
-    admin.from('exam_assessments').select('id,title,assessment_type,time_limit_minutes,pass_mark,max_attempts,status,metadata').eq('programme_id', programme.id).eq('status', 'published'),
-  ])
-  const topics = (topicRows || []).map((topic: any) => ({ ...topic, exam_subtopics: [...(topic.exam_subtopics || [])].sort((a: any, b: any) => a.sequence_no - b.sequence_no) })) as Topic[]
-
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  let enrollment: any = null
-  let progress: any[] = []
-  let subtopicProgress: any[] = []
-  let grants: any[] = []
-  let isReviewer = false
-  if (user) {
-    const [{ data: enrollmentRow }, { data: grantRows }, { data: staffRows }] = await Promise.all([
-      supabase.from('exam_enrollments').select('id,status,target_exam_date,enrolled_at').eq('programme_id', programme.id).eq('user_id', user.id).maybeSingle(),
-      supabase.from('exam_access_grants').select('id,access_level,topic_id,starts_at,expires_at').eq('programme_id', programme.id).eq('user_id', user.id).is('revoked_at', null),
-      supabase.from('exam_programme_staff').select('role').eq('programme_id', programme.id).eq('user_id', user.id).eq('active', true).in('role', ['reviewer', 'instructor', 'administrator']).limit(1),
-    ])
-    enrollment = enrollmentRow?.status === 'active' ? enrollmentRow : null
-    grants = grantRows || []
-    isReviewer = Boolean(staffRows?.length)
-    if (enrollment) {
-      const [{data:topicData},{data:subtopicData}]=await Promise.all([
-        supabase.from('exam_topic_progress').select('topic_id,status,completed_at').eq('enrollment_id',enrollment.id),
-        supabase.from('exam_subtopic_progress').select('subtopic_id,status,completed_at').eq('enrollment_id',enrollment.id),
-      ])
-      progress=topicData||[];subtopicProgress=subtopicData||[]
-    }
-  }
-
-  const grantIsActive = (grant: any) => (!grant.starts_at || new Date(grant.starts_at) <= new Date()) && (!grant.expires_at || new Date(grant.expires_at) > new Date())
-  const hasFullAccess = grants.some(grant => grant.access_level === 'full' && grantIsActive(grant))
-  const accessibleTopics=topics.filter(topic=>topic.sequence_no<=programme.free_topic_limit||hasFullAccess||grants.some(grant=>grant.access_level==='topic'&&grant.topic_id===topic.id&&grantIsActive(grant)))
-  const accessibleSubtopicIds=new Set(accessibleTopics.flatMap(topic=>topic.exam_subtopics.map(subtopic=>subtopic.id)))
-  const progressByTopic = new Map(progress.map(row => [row.topic_id, row]))
-  const completed = accessibleTopics.filter(topic=>progressByTopic.get(topic.id)?.status==='completed').length
-  const totalSubtopics=accessibleSubtopicIds.size
-  const completedSubtopics=subtopicProgress.filter(row=>row.status==='completed'&&accessibleSubtopicIds.has(row.subtopic_id)).length
-  const progressPercent=totalSubtopics?Math.round(completedSubtopics/totalSubtopics*100):0
-  const nextTopic=topics.find(topic=>{const row=progressByTopic.get(topic.id);const free=topic.sequence_no<=programme.free_topic_limit;const grant=grants.some(g=>(g.access_level==='full'||(g.access_level==='topic'&&g.topic_id===topic.id))&&grantIsActive(g));return (free||grant)&&row?.status!=='completed'})
-  const firstAccessibleTopic = nextTopic || accessibleTopics[0]
-  const targetDays=enrollment?.target_exam_date?Math.max(0,Math.ceil((new Date(enrollment.target_exam_date+'T00:00:00').getTime()-Date.now())/86400000)):null
-  const bodyName = Array.isArray(programme.exam_bodies) ? programme.exam_bodies[0]?.name : (programme.exam_bodies as any)?.name
-  const unlockUrl = `https://datalytiqsacademy.com/contact/?subject=${encodeURIComponent('Unlock CA35P Exam Competency Hub')}`
+export default async function ExamHubPage({searchParams}:{searchParams:Promise<{q?:string;body?:string;qualification?:string;status?:string}>}){
+  const query=await searchParams
+  const admin=createAdminClient()
+  const {data,error}=await admin.from('exam_programmes')
+    .select('id,code,title,description,status,metadata,exam_bodies!inner(code,name)')
+    .order('code')
+  if(error) throw new Error('The professional examination catalogue could not be loaded.')
+  let programmes=(data||[]) as Programme[]
+  const q=(query.q||'').trim().toLowerCase()
+  if(q) programmes=programmes.filter(p=>[p.code,p.title,p.metadata?.qualification,bodyOf(p)?.name].some(v=>String(v||'').toLowerCase().includes(q)))
+  if(query.body) programmes=programmes.filter(p=>bodyOf(p)?.code===query.body)
+  if(query.qualification) programmes=programmes.filter(p=>p.metadata?.qualification===query.qualification)
+  if(query.status) programmes=programmes.filter(p=>p.metadata?.implementation_status===query.status)
+  const qualifications=[...new Set(((data||[]) as Programme[]).map(p=>String(p.metadata?.qualification||'')).filter(Boolean))].sort()
+  const statuses=[...new Set(((data||[]) as Programme[]).map(p=>String(p.metadata?.implementation_status||'')).filter(Boolean))].sort()
+  const bodies=[...new Map(((data||[]) as Programme[]).map(p=>[bodyOf(p)?.code,bodyOf(p)])).values()].filter(Boolean)
 
   return <main className="exam-hub">
-    <a className="skip-link" href="#syllabus">Skip to CA35P syllabus</a>
     <header className="exam-header">
-      <a className="exam-brand" href="/"><span>D</span><b>DatalytIQs</b><small>Exam Competency Hub</small></a>
-      <nav aria-label="Exam Hub navigation"><a href="#overview">Overview</a><a href="#syllabus">Syllabus</a><a href="#assessments">Assessments</a><a href="#competencies">Competencies</a>{isReviewer && <a href="/exam-hub/review">Review queue</a>}<a href="/">Analytics Lab</a></nav>
-      <MobileExamNav isReviewer={isReviewer} signedIn={Boolean(user)} />
-      {user ? <span className="account-chip">Signed in</span> : <a className="nav-cta" href="/login?next=/exam-hub">Sign in</a>}
+      <a className="exam-brand" href="/"><span>D</span><b>DatalytIQs</b><small>Professional Exam Hub</small></a>
+      <nav aria-label="Exam Hub navigation"><a href="/exam-hub">Catalogue</a><a href="/exam-hub/ca35p">CA35P</a><a href="/">Analytics Lab</a><a href="https://datalytiqsacademy.com/">Academy</a></nav>
     </header>
 
     <section className="exam-hero" id="overview">
-      <div><span className="exam-kicker">KASNEB · CPA PRACTICAL PAPER</span><h1><em>CA35P</em> Business Data Analytics</h1><p>Move systematically through the syllabus, practise computer-based analytical work and track your competency development.</p><div className="exam-actions">{enrollment && firstAccessibleTopic ? <a className="exam-button primary" href={`/exam-hub/${firstAccessibleTopic.code}`}>Continue Topic {firstAccessibleTopic.code} →</a> : user ? <form action={startCa35p}><button className="exam-button primary" type="submit">Start free access</button></form> : <a className="exam-button primary" href="/login?next=/exam-hub">Create learner account</a>}<a className="exam-button outline" href="#syllabus">Explore the syllabus</a></div><p className="exam-hero-note">Topics 1–3 are free. Each topic includes guided lessons, practice questions, a scored quiz and a practical assignment.</p></div>
-      <aside aria-label="Programme facts"><div><b>5</b><span>syllabus topics</span></div><div><b>15</b><span>dataset missions</span></div><div><b>3</b><span>topics free</span></div><div><b>30</b><span>practice checks and cases</span></div></aside>
+      <div><span className="exam-kicker">DATALYTIQS EXAM HUB</span><h1>Prepare. Practise. Analyse. <em>Pass with Evidence.</em></h1><p>Structured professional examination preparation combining theory, practical analytics, examination-style exercises, timed mocks and measurable readiness.</p><div className="exam-actions"><a className="exam-button primary" href="#catalogue">Explore professional papers</a><a className="exam-button outline" href="/exam-hub/ca35p">Open CA35P workspace</a></div></div>
+      <aside aria-label="Catalogue facts"><div><b>{(data||[]).length}</b><span>catalogued papers</span></div><div><b>{bodies.length}</b><span>examining bodies</span></div><div><b>1</b><span>reference implementation</span></div><div><b>Evidence</b><span>readiness model</span></div></aside>
     </section>
 
-    <section className="exam-status" aria-label="Learner status">
-      <article><span>PROGRAMME</span><b>{programme.code}</b><small>{bodyName}</small></article>
-      <article><span>ACCESS</span><b>{hasFullAccess ? 'Full' : 'Free tier'}</b><small>{hasFullAccess ? 'All syllabus topics available' : 'Topics 1–3 available'}</small></article>
-      <article><span>ACCESSIBLE PROGRESS</span><b>{enrollment ? `${progressPercent}%` : '—'}</b><small>{enrollment ? `${completedSubtopics}/${totalSubtopics} subtopics · ${completed}/${accessibleTopics.length} topics` : 'Sign in and enrol to track progress'}</small></article>
-      <article><span>REFERENCE</span><b>CA35P</b><small>{syllabus.version_label} · confirm current examination requirements with KASNEB</small></article>
+    <section className="exam-section" id="catalogue">
+      <div className="exam-section-head"><div><span className="exam-kicker">PROFESSIONAL EXAMINATION CATALOGUE</span><h2>Find a paper</h2></div><p>Catalogue presence does not mean a preparation pathway is complete. Each card shows its current implementation status.</p></div>
+      <form method="get" className="study-plan-bar" aria-label="Filter professional papers">
+        <label>Search<input name="q" defaultValue={query.q||''} placeholder="Search professional papers..." /></label>
+        <label>Examining body<select name="body" defaultValue={query.body||''}><option value="">All</option>{bodies.map((b:any)=><option key={b.code} value={b.code}>{b.name}</option>)}</select></label>
+        <label>Qualification<select name="qualification" defaultValue={query.qualification||''}><option value="">All</option>{qualifications.map(v=><option key={v} value={v}>{v}</option>)}</select></label>
+        <label>Status<select name="status" defaultValue={query.status||''}><option value="">All</option>{statuses.map(v=><option key={v} value={v}>{v.replaceAll('_',' ')}</option>)}</select></label>
+        <button type="submit">Apply filters</button>
+      </form>
+
+      <div className="competency-grid">
+        {programmes.map(p=>{
+          const body=bodyOf(p)
+          const qualification=String(p.metadata?.qualification||'Professional examination')
+          const implementation=String(p.metadata?.implementation_status||'PLANNED')
+          const route=p.code==='CA35P'?'/exam-hub/ca35p':`/exam-hub/papers/${slug(body?.code||'body')}/${slug(qualification)}/${p.code.toLowerCase()}`
+          return <article key={p.id}>
+            <span>{body?.code} · {qualification}</span>
+            <h3>{p.code} — {p.title}</h3>
+            <p>{p.description||'Structured examination preparation pathway.'}</p>
+            <p><b>{implementation.replaceAll('_',' ')}</b> · {String(p.metadata?.assessment_mode||'Assessment format pending official verification')}</p>
+            <a href={route}>{p.code==='CA35P'?'Continue Preparation':'Explore Paper'} →</a>
+          </article>
+        })}
+      </div>
+      {!programmes.length&&<div className="exam-notice">No papers match the current filters.</div>}
     </section>
 
-    {user&&enrollment&&<section className="learner-command" aria-label="Study command centre"><div><span className="exam-kicker">YOUR NEXT BEST ACTION</span><h2>{nextTopic?`Continue ${nextTopic.code} · ${nextTopic.title}`:'Accessible topics complete'}</h2><p>{nextTopic?'Resume the next accessible topic, complete its dataset mission and then attempt the topic assessment.':'Review your topic evidence and practical feedback. The full online mock is available as a timed, assessor-reviewed assignment.'}</p>{nextTopic?<a className="exam-button primary" href={`/exam-hub/${nextTopic.code}`}>Resume learning</a>:<a className="exam-button primary" href="#assessments">Review assessments</a>}</div><aside><span>ACCESSIBLE COVERAGE</span><b>{progressPercent}%</b><small>{completedSubtopics}/{totalSubtopics} accessible subtopics complete</small>{targetDays!==null?<><span>EXAM COUNTDOWN</span><b>{targetDays}</b><small>days to target examination date</small></>:null}</aside></section>}
-
-    {user&&enrollment&&query.state&&['enrolled','progress-saved','study-plan-saved'].includes(query.state)&&<div className="exam-notice" role="status">{{enrolled:'Your free CA35P learning plan is active.','progress-saved':'Topic progress saved.','study-plan-saved':'Target exam date saved.'}[query.state]}</div>}
-    {query.state==='action-error'&&<div className="exam-notice error" role="alert">The requested update could not be completed.</div>}
-    {user&&enrollment&&<section className="study-plan-bar" aria-labelledby="study-plan-title"><div><span className="exam-kicker">PERSONAL STUDY PLAN</span><h2 id="study-plan-title">Set your target examination date</h2><p>{enrollment.target_exam_date?`Current target: ${new Date(`${enrollment.target_exam_date}T00:00:00`).toLocaleDateString('en-KE',{dateStyle:'long'})}`:'Add a target date to pace the remaining syllabus and practical work.'}</p></div><form action={setTargetExamDate}><label htmlFor="target-exam-date">Target date</label><input id="target-exam-date" name="target_exam_date" type="date" min={new Date(Date.now()+86400000).toISOString().slice(0,10)} defaultValue={enrollment.target_exam_date||''} required/><button type="submit">Save study target</button></form></section>}
-
-    <section className="exam-section" id="syllabus" aria-labelledby="syllabus-title">
-      <div className="exam-section-head"><div><span className="exam-kicker">STRUCTURED COVERAGE</span><h2 id="syllabus-title">Syllabus and learner progress</h2></div><p>The first three topics are included in free membership. Premium topics remain visible for planning but require an active entitlement.</p></div>
-      <div className="topic-list">{topics.map(topic => {
-        const free = topic.sequence_no <= programme.free_topic_limit
-        const topicGrant = grants.some(grant => grant.access_level === 'topic' && grant.topic_id === topic.id && grantIsActive(grant))
-        const accessible = free || hasFullAccess || topicGrant
-        const topicProgress = progressByTopic.get(topic.id)
-        return <article className={`topic-card ${accessible ? '' : 'locked'}`} key={topic.id}>
-          <div className="topic-number">{String(topic.sequence_no).padStart(2, '0')}</div>
-          <div className="topic-content"><div className="topic-title"><div><span>{topic.code} · {free ? 'FREE ACCESS' : 'PREMIUM'}</span><h3>{topic.title}</h3></div><b className={`topic-badge ${topicProgress?.status || (accessible ? 'available' : 'locked')}`}>{topicProgress?.status?.replace('_', ' ') || (accessible ? 'available' : 'locked')}</b></div><p>{topic.description}</p>
-            <details><summary>{topic.exam_subtopics.length} subtopics and learning outcomes</summary><ol>{topic.exam_subtopics.map(subtopic => <li key={subtopic.id}><b>{subtopic.code} {subtopic.title}</b><span>{subtopic.description}</span></li>)}</ol>{topic.learning_outcomes?.length > 0 && <div className="outcomes"><b>Learning outcomes</b><ul>{topic.learning_outcomes.map(outcome => <li key={outcome}>{outcome}</li>)}</ul></div>}</details>
-            <div className="topic-action">{!accessible ? <><span>Subscription required for this topic.</span><a href={unlockUrl}>Unlock programme →</a></> : <><span>{topicProgress?.status==='completed'?'All subtopics completed.':'Open the guided workspace and record each evidence gate.'}</span><a href={`/exam-hub/${topic.code}`}>{topicProgress?.status==='completed'?'Review topic':'Open topic workspace'} →</a></>}</div>
-          </div>
-        </article>
-      })}</div>
-    </section>
-
-    <section className="assessment-band" id="assessments" aria-labelledby="assessment-title"><div className="exam-section-head inverse"><div><span className="exam-kicker">ASSESSMENT CENTRE</span><h2 id="assessment-title">Practise, submit and receive feedback</h2></div><p>Each accessible topic contains dataset missions, self-check calculations, case questions, a scored quiz and an assessor-reviewed practical. The full online mock is available to learners with full programme access.</p></div><div className="assessment-grid"><article><span>TOPIC PRACTICE</span><h3>Work from source data</h3><p>Complete 15 dataset missions, check 10 calculations immediately and work through 20 original cases across five topics.</p><b>30 self-checks and cases · 25 scored quiz items</b><a href={`/exam-hub/${firstAccessibleTopic?.code || '1.0'}#calculation-practice-title`}>Try a calculation →</a></article><article><span>PRACTICAL WORK</span><h3>Spreadsheet competency tasks</h3><p>Prepare models, analyses and decision outputs against a clear assignment checklist and 20-mark rubric.</p><b>Assessor reviewed</b><a href={`/exam-hub/${firstAccessibleTopic?.code || '1.0'}#practical-submission`}>Open an assignment →</a></article>{(assessments || []).map((assessment: any) => <article key={assessment.id}><span>FULL ONLINE MOCK · ASSIGNMENT</span><h3>{assessment.title}</h3><p>{assessment.time_limit_minutes} minutes · {assessment.metadata?.total_marks || 100} marks · pass mark {assessment.pass_mark}% · two attempts available with full access.</p><b>20 decisions · 4 practicals · 100 marks</b><a href="/exam-hub/mock">Open mock assignment →</a></article>)}</div></section>
-
-    <section className="exam-section" id="competencies" aria-labelledby="competencies-title"><div className="exam-section-head"><div><span className="exam-kicker">PERFORMANCE PROFILE</span><h2 id="competencies-title">Six assessable competencies</h2></div><p>Your evidence profile will consolidate topic practice, practical submissions and mock-assessment performance.</p></div><div className="competency-grid">{(competencies || []).map((competency: any) => <article key={competency.id}><span>{competency.code}</span><h3>{competency.title}</h3><p>{competency.description}</p></article>)}</div></section>
-
-    <section className="unlock-panel"><div><span className="exam-kicker">FULL PROGRAMME ACCESS</span><h2>Complete the entire CA35P preparation pathway</h2><p>Unlock specialised analytics, emerging issues, all practical activities and the complete assessment pathway.</p></div><a className="exam-button primary" href={unlockUrl}>Request full access</a></section>
-    <footer><span>DatalytIQs Academy · Exam Competency Hub</span><a href="https://datalytiqsacademy.com/">Academy</a><a href="https://community.datalytiqsacademy.com/">Community</a><a href="/">Analytics Lab</a></footer>
+    <section className="unlock-panel"><div><span className="exam-kicker">INDEPENDENT PREPARATION PLATFORM</span><h2>Official requirements remain authoritative</h2><p>DatalytIQs is an independent professional learning and examination-preparation platform. Examination trademarks and qualification names belong to their respective owners.</p></div><a className="exam-button primary" href="/exam-hub/ca35p">Open reference implementation</a></section>
+    <footer><span>DatalytIQs Academy · Professional Exam Hub</span><a href="https://datalytiqsacademy.com/">Academy</a><a href="https://community.datalytiqsacademy.com/">Community</a><a href="/">Analytics Lab</a></footer>
   </main>
 }
