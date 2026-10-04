@@ -1,4 +1,4 @@
-import '../../exam-hub.css'
+import '../../exam-hub/exam-hub.css'
 const domains=[
 ['01','Prepare the data','Connect and profile analytical data; clean, transform and load with Power Query.'],
 ['02','Model the data','Design a semantic model; create DAX calculations and optimise the model.'],
