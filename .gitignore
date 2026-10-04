@@ -33,6 +33,7 @@ outputs/
 # Logs
 *.log
 .vercel
+supabase/.temp/
 .env*
 *.before-structured-output
 *.bak
