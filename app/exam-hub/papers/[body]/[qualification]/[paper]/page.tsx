@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { createAdminClient } from '../../../../../lib/supabase/admin'
-import '../../../exam-hub.css'
+import { createAdminClient } from '../../../../../../lib/supabase/admin'
+import '../../../../exam-hub.css'
 
 const normalise=(value:string)=>value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')
 
