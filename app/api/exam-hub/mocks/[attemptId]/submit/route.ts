@@ -10,7 +10,7 @@ export async function POST(request:Request,{params}:{params:Promise<{attemptId:s
   const admin=createAdminClient()
   const {data:attempt}=await admin.from('exam_mock_attempts').select('id,assessment_id,enrollment_id,user_id,expires_at,status').eq('id',attemptId).eq('user_id',user.id).maybeSingle()
   if(!attempt||attempt.status!=='in_progress') return NextResponse.json({error:'Live attempt not found'},{status:404})
-  if(Date.now()>new Date(attempt.expires_at).getTime()) {await admin.from('exam_mock_attempts').update({status:'expired',submitted_at:new Date().toISOString()}).eq('id',attempt.id); return NextResponse.json({error:'Time expired'},{status:409})}
+  const timedOut=Date.now()>new Date(attempt.expires_at).getTime()
   const {data:mapped}=await admin.from('exam_assessment_questions').select('question_id,points,exam_questions!inner(id,topic_id)').eq('assessment_id',attempt.assessment_id).order('sequence_no')
   const qids=(mapped||[]).map((m:any)=>m.question_id)
   const {data:keys}=qids.length?await admin.schema('private').from('exam_question_keys').select('question_id,answer_key').in('question_id',qids):{data:[]}
@@ -26,5 +26,5 @@ export async function POST(request:Request,{params}:{params:Promise<{attemptId:s
   for(const tc of topicCompetencies||[]){const score=domainScores[tc.topic_id]; if(score===undefined)continue; await admin.from('exam_competency_evidence').insert({enrollment_id:attempt.enrollment_id,user_id:user.id,competency_id:tc.competency_id,source_type:'mock',source_id:attempt.id,score})}
   await admin.from('exam_recommendations').delete().eq('enrollment_id',attempt.enrollment_id).eq('user_id',user.id).eq('status','open')
   for(const [topicId,score] of Object.entries(domainScores)){if(Number(score)>=70)continue; const tc=(topicCompetencies||[]).find((x:any)=>x.topic_id===topicId); await admin.from('exam_recommendations').insert({enrollment_id:attempt.enrollment_id,user_id:user.id,topic_id:topicId,competency_id:tc?.competency_id||null,reason:`Mock domain score ${score}% is below the 70% DatalytIQs readiness threshold. Revisit theory, repeat the topic quiz and complete/review the mapped practical assignment before the next mock.`,priority:Number(score)<50?1:2,status:'open'})}
-  return NextResponse.json({attempt_id:attempt.id,score:earned,max_score:total,percentage:pct,passed,domain_scores:domainScores})
+  return NextResponse.json({attempt_id:attempt.id,score:earned,max_score:total,percentage:pct,passed,domain_scores:domainScores,timed_out:timedOut})
 }
