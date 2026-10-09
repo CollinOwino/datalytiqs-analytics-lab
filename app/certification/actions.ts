@@ -165,6 +165,13 @@ export async function reviewMealLevel2Request(_prevState: MealLevel2ReviewResult
   const decision = String(formData.get('decision') || '')
   const notes = String(formData.get('review_notes') || '').trim() || null
 
+  if (!['approved','changes_requested','rejected'].includes(decision)) {
+    return { ok: false, message: 'Select a valid review decision.' }
+  }
+  if ((decision==='changes_requested'||decision==='rejected') && !notes) {
+    return { ok: false, message: 'Reviewer notes are required for revision or rejection.' }
+  }
+
   const { data: request, error: requestError } = await supabase
     .from('meal_level2_review_requests')
     .select('user_id,status')
@@ -185,6 +192,10 @@ export async function reviewMealLevel2Request(_prevState: MealLevel2ReviewResult
     const raw = String(formData.get(key) ?? '')
     if (!/^[0-3]$/.test(raw)) return { ok: false, message: 'Score every MEAL rubric dimension from 0 to 3.' }
     scores[key] = Number(raw)
+  }
+  const total = Object.values(scores).reduce((sum,score)=>sum+score,0)
+  if (decision==='approved' && (total<16 || scores.integrity===0 || scores.accountability===0)) {
+    return { ok: false, message: 'Approval requires 16/24 and non-zero Integrity/Protection and Accountability scores.' }
   }
   const { error } = await supabase.rpc('review_meal_level2_request', {
     p_request_id: requestId,
