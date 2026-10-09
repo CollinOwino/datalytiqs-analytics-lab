@@ -39,10 +39,32 @@ export default async function CertificationAdminPage() {
         <a href="/certification">← Certification Centre</a>
         <p>DATALYTIQS ACADEMY · CREDENTIAL GOVERNANCE</p>
         <h1>Certification Administration</h1>
-        <span>Edit authorized signatories, review eligible learners and issue immutable MERL Foundations credentials.</span>
+        <span>Manage programme-specific certification pathways, review eligible learners and govern verifiable credential issuance across DatalytIQs Academy.</span>
       </div>
       <span>ADMIN ROLE: {admin.role.toUpperCase()}</span>
     </header>
+
+    <section className="cert-panel" aria-labelledby="academy-cert-pathways">
+      <small>ACADEMY-WIDE CERTIFICATION GOVERNANCE</small>
+      <h2 id="academy-cert-pathways">Programme certification register</h2>
+      <p>This register distinguishes published learning areas from credential pathways that are operational. A course listing does not authorize certificate issuance. Each new pathway requires its own approved template, assessment rubric, reviewer permissions, issuance policy and verification tests.</p>
+      <div className="cert-admin-grid">
+        {[
+          {name:'MERL / MEAL',detail:'Foundations credential review and MEAL Level 2 professional assessment',state:'Implemented workflows; issuance subject to approval'},
+          {name:'Data Analytics & Statistics',detail:'Statistical analysis, modelling and evidence portfolios',state:'Credential configuration pending'},
+          {name:'Research Methods & Field Data',detail:'Research design, sampling, ethics and reporting',state:'Credential configuration pending'},
+          {name:'Excel, Accounting & Auditing',detail:'Spreadsheet modelling, financial reporting and audit evidence',state:'Credential configuration pending'},
+          {name:'Python, R & Business Intelligence',detail:'Reproducible code, analytics and dashboard projects',state:'Credential configuration pending'},
+          {name:'AI & Digital Transformation',detail:'Responsible AI and automation projects',state:'Credential configuration pending'},
+          {name:'Young Data Scientists',detail:'Age-appropriate projects and safeguarding controls',state:'Credential configuration pending'}
+        ].map(pathway=><article className="cert-admin-card" key={pathway.name}>
+          <h3>{pathway.name}</h3>
+          <p>{pathway.detail}</p>
+          <small>{pathway.state}</small>
+        </article>)}
+      </div>
+      <p><a href="https://datalytiqsacademy.com/academy/#professional-certification">View Academy certification catalogue</a></p>
+    </section>
 
     <section className="cert-panel">
       <small>MASTER TEMPLATE · {template?.code} · v{template?.version}</small>
