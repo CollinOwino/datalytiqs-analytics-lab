@@ -25,9 +25,9 @@ export default async function CertificatePage({ params }: { params: Promise<{ cr
   return <main className="credential-page">
     <div className="credential-toolbar">
       <a href={`/verify/${credential.credential_id}`}>Verify credential</a>
-      <button type="button" onClick={undefined} className="print-hint">Use browser Print → Save as PDF</button>
+      <span className="print-hint">Print certificate: Ctrl+P / Cmd+P → Save as PDF</span>
     </div>
-    <section className="credential-paper" aria-label="DatalytIQs Academy Certificate of Competence">
+    <section className="credential-paper" aria-label={`DatalytIQs Academy ${credential.credential_type === "completion" ? "Certificate of Completion" : "Certificate of Competence"}`}>
       <div className="corner corner-left"></div><div className="corner corner-right"></div>
       <header className="credential-brand">
         <div className="brand-side">Data<br/>People<br/>Insights<br/>Impact</div>
@@ -40,7 +40,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ cr
       </header>
 
       <section className="credential-body">
-        <h2>{template.certificate_title || 'CERTIFICATE OF COMPETENCE'}</h2>
+        <h2>{template.certificate_title || (credential.credential_type === 'completion' ? 'CERTIFICATE OF COMPLETION' : 'CERTIFICATE OF COMPETENCE')}</h2>
         <div className="rule-title"><span></span><b>THIS IS TO CERTIFY THAT</b><span></span></div>
         <h3>{credential.learner_name}</h3>
         <p>{template.achievement_statement || 'has successfully demonstrated the required competencies in'}</p>
