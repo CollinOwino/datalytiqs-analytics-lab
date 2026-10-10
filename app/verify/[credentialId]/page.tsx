@@ -20,7 +20,7 @@ export default async function VerifyCredentialPage({ params }: { params: Promise
         <dl style={{display:'grid',gridTemplateColumns:'170px 1fr',gap:10,marginTop:24}}>
           <dt style={{color:'#657384'}}>Learner</dt><dd style={{margin:0,fontWeight:700}}>{credential.learner_name}</dd>
           <dt style={{color:'#657384'}}>Programme</dt><dd style={{margin:0,fontWeight:700}}>{credential.programme_title}</dd>
-          <dt style={{color:'#657384'}}>Credential</dt><dd style={{margin:0,fontWeight:700}}>Certificate of Competence</dd>
+          <dt style={{color:'#657384'}}>Credential</dt><dd style={{margin:0,fontWeight:700}}>{credential.credential_type === 'completion' ? 'Certificate of Completion' : credential.credential_type === 'professional' ? 'Professional Certificate' : 'Certificate of Competence'}</dd>
           <dt style={{color:'#657384'}}>Certificate No.</dt><dd style={{margin:0,fontWeight:700}}>{credential.certificate_number}</dd>
           <dt style={{color:'#657384'}}>Credential ID</dt><dd style={{margin:0,fontWeight:700}}>{credential.credential_id}</dd>
           <dt style={{color:'#657384'}}>Result</dt><dd style={{margin:0,fontWeight:700}}>{credential.result}</dd>

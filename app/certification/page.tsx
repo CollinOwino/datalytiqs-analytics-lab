@@ -31,6 +31,8 @@ export default async function CertificationPage() {
       {admin && <a className="cert-admin-link" href="/certification/admin">Certification administration →</a>}
     </header>
 
+    <section className="cert-panel"><h2>Academy course completions</h2><p>Check verified Tutor LMS course-completion records linked to your account. Completion certificates are separate from professional competence credentials and remain subject to course-specific issuance controls.</p><a className="cert-button" style={{display:'inline-block',textDecoration:'none'}} href="/certification/completions">View my completed courses →</a></section>
+
     <section className="cert-grid">
       <article className="cert-card">
         <small>MASTER CREDENTIAL</small>
