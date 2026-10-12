@@ -3,7 +3,7 @@
   "paper_code": "DD31",
   "qualification": "Diploma in Data Management and Analytics",
   "title": "Python syntax, indentation and reliable analytical scripts",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "publication_date": "2026-10-12",
   "author": "DatalytIQs Academy content authoring",
   "status": "draft",
@@ -373,7 +373,7 @@
         },
         {
           "type": "paragraph",
-          "text": "© 2026 DatalytIQs Academy. Original educational content. Version 1.0.0, 12 October 2026. Independent study preparation; no KASNEB endorsement, qualification award or guaranteed examination result is implied."
+          "text": "© 2026 DatalytIQs Academy. Original educational content. Version 1.1.1, 12 October 2026. Independent study preparation; no KASNEB endorsement, qualification award or guaranteed examination result is implied."
         }
       ]
     }
@@ -398,7 +398,7 @@
       "type": "numeric",
       "prompt": "Calculate the mean of [8, 14, 11, 7, 10].",
       "answer": 10,
-      "tolerance": 0.000001,
+      "tolerance": 1e-06,
       "marks": 2,
       "explanation": "The total is 50 and count is 5, so mean = 10."
     },
@@ -407,7 +407,7 @@
       "type": "numeric",
       "prompt": "What percentage of [1, 3, 3, 5, 8, 2, 4, 0] is at or below 3?",
       "answer": 62.5,
-      "tolerance": 0.000001,
+      "tolerance": 1e-06,
       "marks": 3,
       "explanation": "Five of eight values qualify; 100 × 5/8 = 62.5%."
     },
@@ -428,5 +428,13 @@
       ],
       "explanation": "An empty list has no mean; a list containing zero has a defined mean of zero."
     }
-  ]
+  ],
+  "renderer_note": "PDF rendering now includes tagged headings, bookmarks, contents links and clickable HTTPS references; full PDF/UA conformance review remains pending.",
+  "wordpress_mapping": {
+    "course_id": 1835,
+    "existing_lesson_ids": [
+      1887
+    ],
+    "mapping_status": "existing_lesson_match; official_topic_syllabus_pending"
+  }
 }
