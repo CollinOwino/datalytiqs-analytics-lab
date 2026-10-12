@@ -1,0 +1,420 @@
+{
+  "id": "CA15-descriptive-statistics",
+  "paper_code": "CA15",
+  "qualification": "Certified Public Accountants",
+  "title": "Descriptive statistics: centre, dispersion and professional interpretation",
+  "version": "1.0.0",
+  "publication_date": "2026-10-12",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 180,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/cpa",
+    "version": null,
+    "reference": null,
+    "reason": "Paper identity verified; current full topic syllabus not obtained."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false
+  },
+  "wordpress_mapping": {
+    "course_id": 1874,
+    "existing_lesson_ids": [
+      1954,
+      1955
+    ],
+    "mapping_status": "suggested_by_title_not_official_syllabus_verified"
+  },
+  "outcomes": [
+    "Choose a measure of centre that fits a variable and analytical purpose.",
+    "Calculate means, medians, modes, weighted means and dispersion correctly.",
+    "Distinguish population from sample variance.",
+    "Explain the sensitivity of statistics to extreme values and missing data.",
+    "Report units, denominators, limitations and reproducible evidence."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Topic overview",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Descriptive statistics reduce a collection of observations to quantities that reveal its centre, spread and distributional features. They describe the data supplied; they do not by themselves establish causation or justify conclusions about a wider population. This original DatalytIQs draft supports quantitative study and applies methods to fictional Kenyan institutional contexts."
+        },
+        {
+          "type": "paragraph",
+          "text": "CA15 is verified as Quantitative Analysis on the official CPA page and in KASNEB's August 2026 timetable. The present topic reference, subtopic hierarchy and syllabus edition remain unverified. The timetable specifies three hours for that sitting's CPA papers; it does not establish future examination arrangements or the weighting of this topic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisites: arithmetic, percentages, squared differences and square roots. Plan about three hours for notes, hand calculations, software checks and an unseen exercise. The time allocation is an internal study estimate. Use a calculator or a permitted spreadsheet; the accompanying Python calculations are optional reproducibility checks, not a statement about official examination software."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Foundations and method selection",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Begin by identifying the observational unit and variable. Five completion times in days describe five cases, not five offices. A weekly total describes the office-week. A frequency table records how often values occur. Confusing a value with its frequency changes the denominator and can invalidate every subsequent statistic."
+        },
+        {
+          "type": "paragraph",
+          "text": "The arithmetic mean of n observations is their total divided by n: mean = sum(x_i)/n. It uses every observed value and supports additive quantities such as amounts, counts and durations. Its unit matches the original variable. The sum of processing times has units of days across cases; the mean is days per case."
+        },
+        {
+          "type": "paragraph",
+          "text": "The median is the middle ordered observation when n is odd. When n is even, it is the arithmetic mean of the two middle ordered observations. Sorting is required before identifying positions. The median is less sensitive than the mean to one unusually large observation. It does not use every observation's numerical magnitude in the same way the mean does."
+        },
+        {
+          "type": "paragraph",
+          "text": "The mode is the most frequent observed value. A dataset can have one mode, multiple modes or no uniquely most frequent value. The mode can describe categories, such as the most common submission channel, for which an arithmetic mean has no meaningful interpretation. Do not assign arbitrary numeric channel codes and average them as though the codes were measured quantities."
+        },
+        {
+          "type": "paragraph",
+          "text": "A weighted mean gives observations weights appropriate to the analytical question: weighted mean = sum(w_i × x_i)/sum(w_i). Weights can represent frequencies or the number of eligible cases behind an office average. Averaging two office means equally is inappropriate when the goal is the average across all cases and the office workloads differ. The weight definition and denominator must be reported."
+        },
+        {
+          "type": "paragraph",
+          "text": "The range is maximum minus minimum. It is easy to calculate but depends only on two observations and is sensitive to extremes. The interquartile range, Q3 - Q1, describes the spread of the middle part of the distribution. Quartiles have multiple accepted computational conventions. Record the convention; do not treat a difference between spreadsheet methods as proof that one calculation is wrong."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sum of squared deviations is SSD = sum((x_i - mean)^2). Squaring prevents positive and negative deviations from cancelling. SSD has squared units: if the variable is measured in days, SSD and variance use days squared. Standard deviation is the square root of variance and therefore returns to the original unit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Population variance uses the denominator n when the observed values constitute the population being described: variance = SSD/n. Sample variance uses n - 1 when estimating population variance from a sample: s^2 = SSD/(n - 1). The sample mean is estimated from the same observations, leaving n - 1 independent deviations. This denominator correction does not make an unrepresentative sample representative."
+        },
+        {
+          "type": "paragraph",
+          "text": "A sample standard deviation requires at least two observations. A population standard deviation for one observed value is zero when that one value is the complete population under description. An empty dataset has no defined mean or standard deviation. State how the analysis handles these boundary cases."
+        },
+        {
+          "type": "paragraph",
+          "text": "The coefficient of variation is standard deviation divided by the mean, multiplied by 100%. It can compare relative dispersion for suitable ratio-scale positive variables. Its interpretation becomes unstable when the mean is close to zero and is generally inappropriate for scales with arbitrary zeros, such as Celsius temperature. State whether the standard deviation used is sample or population."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skewness describes asymmetry. A right tail often pulls the mean above the median, but a small dataset's ordering of mean and median alone does not establish a reliable distributional claim. Inspect the observations or a suitable plot. Kurtosis describes a distributional feature related to tails and concentration; it should not be reduced to a universal 'peakedness score'. Different software may report raw or excess kurtosis."
+        },
+        {
+          "type": "paragraph",
+          "text": "Extreme values may be errors, unusual genuine cases or observations from a different process. Do not delete a value merely because it changes the average. Check its provenance and definition, document any exclusion, and report a sensitivity comparison. Missing data require the same discipline: zero is an observed value, not a universal substitute for unavailable information."
+        },
+        {
+          "type": "paragraph",
+          "text": "Alternative means answer different questions. A geometric mean is suitable for multiplicative growth factors that are positive. A harmonic mean can be appropriate for rates over equal denominators, such as speeds across equal distances. They are not interchangeable with the arithmetic mean. The method follows the aggregation problem."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Worked calculations and checks",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Example 1 - complete case durations. A fictional office records completed-case durations [4, 6, 6, 8, 11] days. There are five observations, total duration 35 days, mean 35/5 = 7 days, median 6 days and unique mode 6 days. The range is 11 - 4 = 7 days. Because the highest duration exceeds the others, the mean is higher than the median; the result is descriptive and should not be overinterpreted."
+        },
+        {
+          "type": "table",
+          "caption": "Squared deviations from the mean",
+          "rows": [
+            [
+              "Duration x",
+              "x - 7",
+              "(x - 7)^2"
+            ],
+            [
+              "4",
+              "-3",
+              "9"
+            ],
+            [
+              "6",
+              "-1",
+              "1"
+            ],
+            [
+              "6",
+              "-1",
+              "1"
+            ],
+            [
+              "8",
+              "1",
+              "1"
+            ],
+            [
+              "11",
+              "4",
+              "16"
+            ],
+            [
+              "Total",
+              "",
+              "28"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "SSD = 28. Population variance = 28/5 = 5.6 days squared; population standard deviation = square root(5.6) = 2.3664 days. Sample variance = 28/4 = 7 days squared; sample standard deviation = square root(7) = 2.6458 days. If these five cases are the sample used to estimate a wider process, label the sample measures appropriately. If they are all five cases in a precisely defined complete batch, the population description may be the intended quantity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Independent check: sum(x_i^2) = 16 + 36 + 36 + 64 + 121 = 273. Therefore SSD = sum(x_i^2) - (sum(x_i))^2/n = 273 - 35^2/5 = 273 - 245 = 28. This identity verifies the small hand calculation. For large nearly equal floating-point values, software should use numerically stable variance algorithms rather than relying blindly on this subtraction."
+        },
+        {
+          "type": "code",
+          "text": "from statistics import mean, median, mode, pvariance, variance\nfrom statistics import pstdev, stdev\n\nvalues = [4, 6, 6, 8, 11]\nprint(mean(values), median(values), mode(values))\nprint(pvariance(values), variance(values))\nprint(round(pstdev(values), 4), round(stdev(values), 4))\n# Expected: 7 6 6; 5.6 7; 2.3664 2.6458"
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 2 - workload-weighted office average. A fictional Office A completed ten cases with a mean of two days; Office B completed twenty cases with a mean of five days. Across the thirty cases, total implied duration is 10 × 2 + 20 × 5 = 120 days. The combined mean is 120/30 = 4 days. The unweighted average (2 + 5)/2 = 3.5 days gives each office equal weight and answers a different question."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 3 - sensitivity to a long case. Replace the final duration 11 by 31. The new list is [4, 6, 6, 8, 31]; total 55 and mean 11 days, while the median remains 6. SSD = 508, sample variance = 127 and sample standard deviation approximately 11.2694 days. The comparison shows sensitivity to an extreme observation, but it does not justify excluding the case without investigation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 4 - explicit quartile convention. Using the median-of-halves convention that excludes the overall median from each half for odd n, [4, 6, 6, 8, 11] has lower half [4, 6] and upper half [8, 11]. Q1 = 5, Q3 = 9.5 and IQR = 4.5 days. Tukey fences are 5 - 1.5 × 4.5 = -1.75 and 9.5 + 1.5 × 4.5 = 16.25. No observation lies beyond those fences. Another quartile convention can give different numerical fences."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 5 - multiplicative growth. A fictional revenue index increases 10% and then decreases 10%. Starting from 100, it becomes 110 and then 99. The two-period net change is -1%, although the arithmetic average of +10% and -10% is 0%. The constant compound rate per period is square root(1.1 × 0.9) - 1, approximately -0.5013%. This demonstrates the effect of multiplicative compounding."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 6 - rates over equal distances. A fictional courier travels two equal 60 km legs at 30 and 60 km/h. Travel times are two hours and one hour; total distance 120 km divided by total time three hours gives 40 km/h. The arithmetic mean of the two speeds, 45 km/h, would be appropriate for equal time durations, not these equal distances."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Professional interpretation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A fictional service-performance report might state: 'Among five synthetic completed cases, the mean processing time was seven days and the median was six. The sample standard deviation was approximately 2.65 days. Pending cases and unrecorded durations were not included.' This report identifies the number of observations, units, definition of dispersion and coverage limitation."
+        },
+        {
+          "type": "paragraph",
+          "text": "An average can conceal operational variation. A board or manager may need the number of cases, median, upper-tail summary and percentage meeting a defined target alongside the mean. None of these measures establishes why delays occur. To investigate causes, additional process information and an appropriate study design are needed."
+        },
+        {
+          "type": "paragraph",
+          "text": "For institutional reports, check consistent definitions across offices and periods. A calendar-day measure differs from a working-day measure. Completed cases differ from all received cases. Pooling incompatible definitions can produce a precise-looking statistic with no coherent interpretation. Use synthetic examples for training; process real records only in an authorised environment."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Define the unit of observation and period.",
+            "Record complete versus sample coverage.",
+            "Keep missing and observed zero values distinct.",
+            "State weighting and exclusion rules.",
+            "Label variance and standard deviation units.",
+            "Retain original inputs, formulas and independent checks."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Guided and independent exercises",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A: use values [2, 3, 5, 5, 10]. Calculate total, arithmetic mean, median, mode, range, SSD, population variance and sample variance. Verify SSD using both the deviation table and the sum-of-squares identity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B: two fictional offices have mean durations 3 and 7 days based on 12 and 8 cases respectively. Calculate the overall case-weighted mean and compare it with the equal-office mean. Explain the population each result describes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C: calculate a sample coefficient of variation for [4, 6, 6, 8, 11]. Explain why the standard deviation and mean must use compatible units. Evaluate whether CV would be suitable for signed account balances averaging close to zero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D: apply the stated median-of-halves quartile convention to [2, 3, 5, 5, 10]. Calculate Q1, Q3, IQR and Tukey fences. Then compare with a spreadsheet's quartile function, recording its method rather than simply labelling a different result incorrect."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise E: produce a short comparison of [4, 6, 6, 8, 11] and [4, 6, 6, 8, 31]. Include mean, median and one dispersion measure. State why an extreme value must be investigated before exclusion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Suggested evidence submission: unchanged data, hand-worked deviation table, software verification, stated conventions and a 150-word interpretation. A future practical reviewer can use the rubric below. This draft does not assert an operational upload or grading endpoint."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original examination-style questions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Q1 (4 marks): distinguish mean, median and mode, and give one suitable use of each.",
+            "Q2 (6 marks): for [2, 3, 5, 5, 10], calculate mean, sample variance and sample standard deviation with working.",
+            "Q3 (4 marks): calculate the case-weighted mean for offices with 12 cases averaging three days and eight cases averaging seven days; explain why averaging the office means gives a different answer.",
+            "Q4 (3 marks): explain when n and n - 1 are appropriate variance denominators.",
+            "Q5 (3 marks): explain why deleting an extreme duration solely to improve the average is analytically unsound.",
+            "Q6 (5 marks): write a professional result statement that includes sample size, units, dispersion definition, exclusions and a limitation."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Suggested internal practical rubric: calculation accuracy 8 marks; method selection and conventions 4; independent verification 4; interpretation and limitations 4. Total 20. Subjective explanations require reviewer judgement. These are original DatalytIQs practice marks, not official KASNEB weighting or pass criteria."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Solutions and explanatory marking",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A: total 25, mean 5, median 5, mode 5 and range 8. Deviations from five are -3, -2, 0, 0 and 5; squares are 9, 4, 0, 0 and 25; SSD = 38. Population variance = 38/5 = 7.6; sample variance = 38/4 = 9.5. Sample standard deviation = square root(9.5), approximately 3.0822."
+        },
+        {
+          "type": "paragraph",
+          "text": "The independent check is sum(x_i^2) = 4 + 9 + 25 + 25 + 100 = 163, and SSD = 163 - 25^2/5 = 163 - 125 = 38. Award credit for correct intermediate working even if a final rounding error occurs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B: case-weighted mean = (12 × 3 + 8 × 7)/20 = 92/20 = 4.6 days. The equal-office mean is (3 + 7)/2 = 5 days. The former describes the aggregate twenty cases; the latter describes an equally weighted pair of office averages."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C: CV = square root(7)/7 × 100 ≈ 37.7964%. A mean close to zero makes the ratio unstable and can obscure interpretation. It is not a suitable universal measure for every numerical variable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D: lower half [2, 3] gives Q1 = 2.5; upper half [5, 10] gives Q3 = 7.5; IQR = 5. Fences are -5 and 15, with no observation beyond them. Report the convention and compare with the specific spreadsheet calculation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise E: original mean 7, median 6 and sample standard deviation approximately 2.6458; altered mean 11, median 6 and sample standard deviation approximately 11.2694. A valid interpretation identifies the sensitivity and records that no exclusion decision has been justified."
+        },
+        {
+          "type": "paragraph",
+          "text": "For Q1, award marks for accurate definitions and applications. For Q2, award working marks for total 25, mean 5, SSD 38, denominator 4, variance 9.5 and standard deviation 3.0822. For Q3, credit the weighted numerator, denominator, result and interpretation. For Q4, distinguish complete-population description from sample estimation and explain the estimated mean. For Q5 and Q6, assess reasoning using the stated criteria rather than keyword matching."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I identify the unit of observation before selecting a statistic.",
+            "I calculate the median from ordered observations.",
+            "I state the meaning of every weight.",
+            "I can reproduce SSD by an independent method.",
+            "I distinguish population and sample dispersion.",
+            "I report variance in squared units and standard deviation in original units.",
+            "I record quartile and software conventions.",
+            "I investigate missing and extreme values without silently changing data.",
+            "I separate a descriptive result from a causal or population claim."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Common errors include dividing a weighted total by the number of groups, forgetting to sort before finding a median, rounding the mean too early, confusing standard deviation with variance, and treating a frequency as an observation value. Formula recall is useful, but examination competence also requires selecting the correct method and explaining the answer."
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. Sources and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Official CPA paper identity: https://www.kasneb.or.ke/cpa . Official August 2026 timetable: https://www.kasneb.or.ke/examination-resources . Consulted 12 October 2026. Topic-level syllabus verification remains pending."
+        },
+        {
+          "type": "paragraph",
+          "text": "Authoritative computational reference: https://docs.python.org/3/library/statistics.html . It documents the distinction between sample and population variance and standard deviation. Match software documentation to the installed version."
+        },
+        {
+          "type": "paragraph",
+          "text": "All numerical inputs, cases, questions, explanations and model solutions in these notes were authored specifically for DatalytIQs Academy. Academic and originality review are pending. No KASNEB past paper or proprietary textbook has been reproduced."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Original educational content. Draft version 1.0.0. Obtain the current official syllabus, complete independent review, verify PDF accessibility and test LMS association before publication."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "CA15-centre-q1",
+      "type": "numeric",
+      "prompt": "Mean of [2,3,5,5,10]?",
+      "answer": 5,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "Total 25 across five observations gives five."
+    },
+    {
+      "id": "CA15-centre-q2",
+      "type": "numeric",
+      "prompt": "Sample variance of [2,3,5,5,10]?",
+      "answer": 9.5,
+      "tolerance": 1e-06,
+      "marks": 3,
+      "explanation": "SSD 38 divided by n-1=4 gives 9.5."
+    },
+    {
+      "id": "CA15-centre-q3",
+      "type": "numeric",
+      "prompt": "Mean across 12 cases averaging 3 days and 8 averaging 7 days?",
+      "answer": 4.6,
+      "tolerance": 1e-06,
+      "marks": 3,
+      "explanation": "(12×3+8×7)/20=4.6."
+    },
+    {
+      "id": "CA15-centre-q4",
+      "type": "single_choice",
+      "prompt": "Which measure retains the original unit of a duration variable?",
+      "choices": {
+        "A": "Variance",
+        "B": "Standard deviation",
+        "C": "Sum of squared deviations",
+        "D": "Coefficient of variation"
+      },
+      "answer": "B",
+      "marks": 1,
+      "explanation": "Taking the square root of variance restores the original unit."
+    },
+    {
+      "id": "CA15-centre-q5",
+      "type": "rubric",
+      "prompt": "Interpret sensitivity to an extreme value and justify an investigation.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Correct mean/median comparison",
+          "marks": 2
+        },
+        {
+          "criterion": "Does not exclude without evidence and states limitation",
+          "marks": 2
+        }
+      ],
+      "explanation": "An extreme value can change mean and SD sharply but does not justify automatic deletion."
+    }
+  ]
+}
