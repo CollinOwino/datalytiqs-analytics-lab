@@ -1,7 +1,7 @@
 {
   "date": "2026-10-12",
   "project_complete": false,
-  "tests_passed": 25,
+  "tests_passed": 31,
   "academic_review": "independent_review_pending",
   "production_repairs": {
     "ca35p_reparented_lesson_ids": [
@@ -73,10 +73,10 @@
   "tutor_rest_blocker": "Dedicated Tutor API authentication required; no credential or security changes made",
   "syllabus_status": "current_full_topic_syllabuses_pending",
   "learner_acceptance": "authenticated_end_to_end_test_pending",
-  "substantive_drafts": 4,
-  "draft_pdf_pages": 33,
-  "latest_original_topic": "DD24-monte-carlo-inventory",
-  "latest_operation": "DD24 topic authoring, exact-model checks and draft PDF generation",
+  "substantive_drafts": 5,
+  "draft_pdf_pages": 40,
+  "latest_original_topic": "DD32-mapreduce-aggregation",
+  "latest_operation": "DD32 original MapReduce topic, local implementation, six new tests and draft PDF",
   "dd24_simulation": {
     "replications": 10000,
     "seed": 20261012,
@@ -87,5 +87,15 @@
     },
     "synthetic_only": true,
     "topic_syllabus_verified": false
+  },
+  "dd32_mapreduce": {
+    "raw_rows": 10,
+    "admitted_rows": 8,
+    "rejected_rows": 2,
+    "sum_days": 36,
+    "global_mean_days": 4.5,
+    "population_variance_days_squared": 14,
+    "execution_scope": "local_teaching_model",
+    "syllabus_verified": false
   }
 }
