@@ -1,0 +1,432 @@
+{
+  "id": "DD31-python-syntax",
+  "paper_code": "DD31",
+  "qualification": "Diploma in Data Management and Analytics",
+  "title": "Python syntax, indentation and reliable analytical scripts",
+  "version": "1.0.0",
+  "publication_date": "2026-10-12",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 150,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/ddma",
+    "version": null,
+    "reference": null,
+    "reason": "Paper identity verified; current topic-level syllabus edition not retrieved."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false,
+    "claim": "Independently authored examples and synthetic inputs; formal review pending."
+  },
+  "outcomes": [
+    "Explain how expressions, names and statements form a Python script.",
+    "Use indentation, conditional selection and iteration correctly.",
+    "Distinguish assignment, equality comparison and identity.",
+    "Validate inputs and handle empty or invalid data deliberately.",
+    "Write a reproducible analytical function with independently checked results.",
+    "Explain results with units, assumptions and an evidence record."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Topic overview and study method",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This original study resource strengthens the Python foundations needed for practical data analysis. Its paper association is DD31, whose identity is listed on the official KASNEB DDMA page. The current full syllabus, topic reference, examination duration and approved software requirements have not yet been verified. Consequently this document is a draft supplementary resource, not a declaration that an official syllabus topic has been fully covered."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisites are basic arithmetic, recognition of a list of observations, and access to a permitted Python environment. Allocate about 150 minutes: 35 minutes for the conceptual notes, 35 for the worked scripts, 40 for independent exercises and 40 for checking and correcting your work. These are DatalytIQs study estimates, not official KASNEB learning hours."
+        },
+        {
+          "type": "paragraph",
+          "text": "Work in three passes. First predict each result on paper. Next execute the script without changing its inputs. Finally test a different input and explain what changes. Keep a record of mistakes: syntax, logic, data validation, numerical calculation or interpretation. Reproducing a demonstrated answer is useful practice; independent transfer requires solving an unseen variation."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Conceptual foundations",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A script is a sequence of instructions saved as text. Python evaluates expressions to obtain values and executes statements to perform actions. In total = 4 + 6, the expression 4 + 6 evaluates to 10 and the assignment statement binds the name total to that value. Names are labels for objects, not physical spreadsheet cells. A meaningful name such as completed_requests communicates more than a name such as x when the business purpose is known."
+        },
+        {
+          "type": "paragraph",
+          "text": "A value has a type that determines which operations are meaningful. An integer represents a whole number; a float represents a floating-point approximation; a string represents text; a Boolean represents True or False. A list stores an ordered collection. The values 12 and '12' look similar when printed but have different types. The expression 12 + 3 gives 15, whereas '12' + '3' gives the string '123'. A data import that leaves amounts as strings can therefore produce misleading behaviour."
+        },
+        {
+          "type": "table",
+          "caption": "Core syntax and analytical implications",
+          "rows": [
+            [
+              "Expression",
+              "Meaning",
+              "Example implication"
+            ],
+            [
+              "amount = 12",
+              "Assign a value to a name",
+              "Stores an amount"
+            ],
+            [
+              "amount == 12",
+              "Compare values for equality",
+              "Returns True or False"
+            ],
+            [
+              "amount != 12",
+              "Test unequal values",
+              "Useful for exceptions"
+            ],
+            [
+              "value is None",
+              "Test whether value is None",
+              "Use for an explicit missing marker"
+            ],
+            [
+              "a and b",
+              "Both conditions must hold",
+              "Validate combined rules"
+            ],
+            [
+              "a or b",
+              "Either condition may hold",
+              "Accept alternative criteria"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Assignment uses =; equality comparison uses ==. Identity uses is and asks whether two names refer to the same object. Use == for ordinary numeric or text comparisons, and is None when checking for the singleton None. Do not rely on object identity to compare imported values."
+        },
+        {
+          "type": "paragraph",
+          "text": "Python uses indentation to identify the statements belonging to a block. A colon ends the header of a conditional statement, loop or function definition. The following block is indented consistently. Four spaces per level are the convention used throughout this resource. Mixing tabs and spaces can cause an indentation error or obscure structure. A statement at the outer indentation level executes outside the block."
+        },
+        {
+          "type": "code",
+          "text": "completed = [10, 12, 9, 15]\nfor weekly_total in completed:\n    print(weekly_total)\nprint('All weeks processed')"
+        },
+        {
+          "type": "paragraph",
+          "text": "The first print runs once for each observation. The final print runs once after the loop. Moving it into the indented block changes both the frequency and the meaning of the message. Indentation is therefore a logical part of the programme, not merely visual formatting."
+        },
+        {
+          "type": "paragraph",
+          "text": "An if statement selects an action based on a condition. Use elif to test another condition and else for the remaining cases. Avoid silently treating every non-positive amount as zero: it might represent a legitimate refund or a data error. The decision belongs in a documented validation policy. A code comment should explain a decision or assumption rather than narrate an obvious operation."
+        },
+        {
+          "type": "code",
+          "text": "balance = 2500\nif balance > 0:\n    status = 'amount outstanding'\nelif balance == 0:\n    status = 'settled'\nelse:\n    status = 'credit balance'\nprint(status)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Iteration repeats an operation. A for loop is appropriate when processing a known collection. A while loop repeats while a condition remains true and requires a clear stopping rule. In data-analysis scripts, a for loop over rows or observations is easier to inspect than an uncontrolled loop. Accumulation begins with a defined starting value, such as total = 0, and adds each observation exactly once."
+        },
+        {
+          "type": "paragraph",
+          "text": "A function packages an operation that has a defined input and output. Parameters receive inputs; return sends a result back to the caller. Printing makes a value visible but does not return it as an analytical result. Prefer a function that returns a result and a separate reporting statement that displays it. This separation makes the calculation reusable and testable."
+        },
+        {
+          "type": "paragraph",
+          "text": "A reliable analytical script has four layers: inputs, validation, calculation and reporting. Validation checks whether the inputs meet the declared requirements. Calculation implements the method. Reporting explains what the result means. Preserve original data, create derived values separately, and avoid quietly changing the input to make a calculation succeed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Missing values, zero and empty collections have different meanings. A recorded zero service count can be a valid observation. None can indicate that a value is unavailable. An empty list means that no observations were supplied. A mean cannot be calculated from an empty list because its denominator is zero. Decide whether to return None or raise an error, and communicate the decision to the caller."
+        },
+        {
+          "type": "paragraph",
+          "text": "Floating-point calculations approximate many decimal fractions. If exact financial rounding is necessary, select an appropriate representation and rounding policy rather than assuming every float operation is exact. For this topic, the count-based inputs are small integers and the reported means can be checked directly. This statement is a computational principle, not a prescription for statutory accounting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Errors have different causes. A SyntaxError prevents Python from parsing invalid syntax. A NameError can indicate a misspelled or unbound name. A TypeError can indicate incompatible types. A ZeroDivisionError occurs when division is attempted with a zero denominator. A logical error can produce a plausible but incorrect answer without raising an exception. Independent arithmetic and edge-case checks are needed to detect that last class."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Worked examples with independent checks",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Example 1 - weekly completion totals. A fictional service desk completed 10, 12, 9 and 15 requests over four consecutive weeks. The required outputs are total completions, mean weekly completions and the difference between the final and preceding week. The total is 10 + 12 + 9 + 15 = 46. The mean is 46 / 4 = 11.5 requests per week. The final-week difference is 15 - 9 = 6 requests. No conclusion about long-term productivity follows from four weeks alone."
+        },
+        {
+          "type": "code",
+          "text": "weekly_counts = [10, 12, 9, 15]\ntotal = 0\nfor count in weekly_counts:\n    total += count\nmean_count = total / len(weekly_counts)\nlast_change = weekly_counts[-1] - weekly_counts[-2]\nprint(total, mean_count, last_change)\n# Expected: 46 11.5 6"
+        },
+        {
+          "type": "paragraph",
+          "text": "The accumulator starts at zero. Each item is added once, and len returns the number of supplied observations. Index -1 selects the final observation and -2 the preceding observation. The difference expression requires at least two observations. A production function must check this prerequisite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 2 - distinguish a mean from a total. Six fictional processing times, measured in days, are 2, 5, 3, 4, 6 and 1. Their total is 21 days across six completed cases. The mean is 21 / 6 = 3.5 days per case. The sum alone is not an average turnaround time. State the unit and the denominator in the interpretation."
+        },
+        {
+          "type": "code",
+          "text": "processing_days = [2, 5, 3, 4, 6, 1]\nmean_days = sum(processing_days) / len(processing_days)\nprint(f'Mean processing time: {mean_days:.1f} days')\n# Expected: Mean processing time: 3.5 days"
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 3 - a guarded mean function. The following function accepts finite, non-negative numerical durations. It rejects text, Boolean values and invalid numerical values, and returns None when no observations are supplied. Boolean values need an explicit exclusion because bool is a subclass of int in Python. Returning None is an explicit 'no data' result, not a zero-day processing time."
+        },
+        {
+          "type": "code",
+          "text": "import math\n\ndef mean_duration(values):\n    if not values:\n        return None\n    for value in values:\n        if isinstance(value, bool):\n            raise ValueError('Boolean duration is invalid')\n        if not isinstance(value, (int, float)):\n            raise ValueError('Duration must be numeric')\n        if not math.isfinite(value) or value < 0:\n            raise ValueError('Duration must be finite and non-negative')\n    return sum(values) / len(values)\n\nprint(mean_duration([2, 5, 3, 4, 6, 1]))\nprint(mean_duration([]))\n# Expected: 3.5, then None"
+        },
+        {
+          "type": "paragraph",
+          "text": "This function assumes a list or tuple, rather than a lazy iterator. Its validation policy is appropriate for elapsed processing durations; it would need adjustment for an account balance, where a negative value may be meaningful. Validation rules follow the variable's meaning."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 4 - conditional counting. A fictional internal service target is completion within three days. It is a DatalytIQs exercise threshold, not a legal or official service standard. Of the six durations, 2, 3 and 1 meet the threshold, so 3 of 6 cases, or 50%, meet it. Equality matters: a case taking exactly three days belongs in the qualifying group."
+        },
+        {
+          "type": "code",
+          "text": "processing_days = [2, 5, 3, 4, 6, 1]\nwithin_target = 0\nfor days in processing_days:\n    if days <= 3:\n        within_target += 1\nrate = 100 * within_target / len(processing_days)\nprint(within_target, len(processing_days), rate)\n# Expected: 3 6 50.0"
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 5 - reproduce a bug and correct it. If the rate calculation divides by sum(processing_days) rather than len(processing_days), it returns about 14.29%. The programme runs, but the denominator is measured in days instead of cases. Unit checking reveals the logical error. A valid completion rate is qualifying cases divided by eligible cases."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Kenyan professional application and evidence",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Consider a fictional county service-improvement team comparing weekly completion counts and case durations. The weekly list supports a volume summary; the case-duration list supports turnaround analysis. They have different units of observation. Combining them as though each number described the same thing would distort the interpretation."
+        },
+        {
+          "type": "paragraph",
+          "text": "A defensible analytical note states the question, observation period, variable meaning, input values, exclusions, calculation and limitation. For the six supplied durations: 'The mean recorded processing time was 3.5 days among six synthetic completed cases; three met the exercise target of three days. Pending cases were not represented.' That final limitation prevents the result from being interpreted as a full service-performance assessment."
+        },
+        {
+          "type": "paragraph",
+          "text": "The dataset is deliberately synthetic and contains no learner, client, citizen or institution identifiers. Do not substitute personal records into a public practice environment. For a real authorised analysis, follow the institution's data-handling procedures and approved workspace."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Retain an unchanged input list and a short variable dictionary.",
+            "Save the script with an identifiable version and the Python version used.",
+            "Record predicted and actual outputs, including an empty-input test.",
+            "Explain the denominator and units of each statistic.",
+            "Keep an error log and a corrected interpretation.",
+            "Use a unique evidence filename; do not overwrite the original dataset."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Guided and independent practice",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A - independent weekly summary. Use synthetic weekly counts [8, 14, 11, 7, 10]. Before executing, calculate the total, mean and change from week four to week five. Then write a script using both an explicit accumulator and the built-in sum function. Explain why the two totals should agree."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B - conditional target performance. Use synthetic processing durations [1, 3, 3, 5, 8, 2, 4, 0]. Define an exercise target of at most three days. Calculate the mean, qualifying count and percentage. State why the zero is retained. Repeat with a strict 'less than three days' rule and explain the change."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C - input validation. Call mean_duration with [], [0], [2, '3'], [2, -1], [True, 2] and [float('nan'), 2]. For each input, predict a valid result, no-data result or exception. Record the observed outcome. Do not 'repair' the test inputs by editing them before execution."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D - a reporting function. Write a function that returns a dictionary containing count, total and mean for a valid numerical list. Return count 0, total 0 and mean None for an empty input. Add a separate function or reporting block to format these outputs into a short professional sentence. Explain why a no-data mean is not zero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise E - unseen application. A fictional training provider records completed sessions [3, 5, 4, 6]. Write a result statement containing total sessions, weekly average and the final-week change. Add one limitation. Retain the original input and the complete script as your evidence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Submission specification for a future integrated practical: script file, inputs, predicted outputs, actual outputs, edge-case log and a 100- to 150-word interpretation. This draft defines the evidence task; it does not claim that an upload endpoint or instructor assessment is currently operational."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original examination-style assessment",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "These are independently authored practice questions. They are not copied past examination questions and are not official KASNEB assessments. The suggested marks are internal DatalytIQs practice marks."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Q1 (2 marks): Explain the difference between = and ==, using an example of each.",
+            "Q2 (3 marks): Predict the output of a loop that adds [8, 14, 11, 7, 10] to an accumulator starting at 0, then divides by the list length.",
+            "Q3 (3 marks): For durations [1, 3, 3, 5, 8, 2, 4, 0], calculate the percentage at or below three days.",
+            "Q4 (4 marks): Explain why [] and [0] require different interpretations when estimating a mean duration.",
+            "Q5 (4 marks): Diagnose a target-rate script that divides the qualifying count by the sum of case durations.",
+            "Q6 (4 marks): Propose four evidence items that allow another analyst to reproduce a reported result."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Suggested practical rubric: correct calculation 4 marks; appropriate validation 4; reproducibility 4; interpretation and units 4; limitations and evidence organisation 4. Total 20. Subjective interpretation requires reviewer judgement and must not be represented as fully automated marking. An internal mastery recommendation can be configured later; no official pass mark is asserted."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Solutions and marking guidance",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A: total = 8 + 14 + 11 + 7 + 10 = 50; count = 5; mean = 50 / 5 = 10; final-week change = 10 - 7 = 3. Both accumulation methods should produce 50 because each supplied observation is added exactly once."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B: total duration = 26; count = 8; mean = 26 / 8 = 3.25 days. At or below three days, qualifying values are 1, 3, 3, 2 and 0: five cases. Rate = 5 / 8 × 100 = 62.5%. Under a strict rule, qualifying values are 1, 2 and 0: three cases, or 37.5%. A zero-day duration is valid under the stated policy; its substantive meaning should still be documented."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C: [] returns None; [0] returns 0.0. Text, negative duration, Boolean and NaN inputs each raise ValueError under the supplied validation policy. If your function gives a different result, identify whether you changed the validation rule or introduced a bug."
+        },
+        {
+          "type": "code",
+          "text": "def summary(values):\n    mean = mean_duration(values)\n    return {'count': len(values), 'total': sum(values),\n            'mean': mean}\n\nprint(summary([]))\n# {'count': 0, 'total': 0, 'mean': None}\nprint(summary([0]))\n# {'count': 1, 'total': 0, 'mean': 0.0}"
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D uses mean_duration before summing, so invalid values are rejected by the same policy. For an empty collection, count and total are mathematical bookkeeping values, while mean remains unavailable. In reporting, print 'No observations supplied' rather than 'Mean duration zero days'."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise E: total sessions = 18; count = 4; weekly average = 4.5; final-week change = 6 - 4 = 2. An acceptable limitation is that four synthetic weeks cannot establish a sustained trend or the causes of change."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assessment Q1: award one mark for assignment and one for equality comparison with correct examples. Q2: total 50, length 5 and mean 10, one mark each. Q3: five qualifying cases, denominator eight and rate 62.5%, one mark each. Q4: no observations versus one observed zero, undefined mean versus zero mean, and appropriate reporting, four marks for a coherent explanation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q5: identify the wrong denominator, explain the unit mismatch, give qualifying-count / eligible-count and describe an independent check, one mark each. Q6: award one mark each for four appropriate distinct evidence items, such as original inputs, executable script, environment version and checked output with assumptions. Do not award duplicate items twice."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist and common misconceptions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I can distinguish an expression, statement, name and value.",
+            "I can predict the effect of indentation before running a script.",
+            "I use = for assignment, == for value comparison and is None for missing markers.",
+            "I can distinguish a valid zero from no observations.",
+            "I can defend the numerator, denominator and units of a statistic.",
+            "I can detect a logical error using an independent calculation.",
+            "I can reproduce the calculation from unchanged synthetic inputs.",
+            "I can report a result without claiming causation or complete examination readiness."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Common misconception: 'If a script runs, the analysis is correct.' A programme can run with the wrong denominator or an invalid data assumption. Common misconception: 'Missing is the same as zero.' Substituting zero changes the meaning and can bias a mean. Common misconception: 'The printed output is the evidence.' A reviewer needs the inputs and method as well. Common misconception: 'A package import proves competence.' Competence involves method selection, validation, interpretation and reproducibility."
+        },
+        {
+          "type": "paragraph",
+          "text": "Flashcards: assignment → name binding; comparison → Boolean result; indentation → block membership; loop → repeated execution; function → defined input/output operation; None → explicit absence marker; reproducibility → another analyst can recreate the result from recorded inputs and method."
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. References and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "KASNEB official DDMA qualification page: https://www.kasneb.or.ke/ddma . Consulted 12 October 2026 for qualification and paper identity. It does not supply the current full topic syllabus used to certify this draft."
+        },
+        {
+          "type": "paragraph",
+          "text": "Python official tutorial: https://docs.python.org/3/tutorial/ . Consulted for authoritative language concepts. The explanations and exercises in this resource are original DatalytIQs material."
+        },
+        {
+          "type": "paragraph",
+          "text": "Python control-flow documentation: https://docs.python.org/3/tutorial/controlflow.html . Python built-in types: https://docs.python.org/3/library/stdtypes.html . Python math library: https://docs.python.org/3/library/math.html . Review the documentation matching your installed interpreter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Publication gates outstanding: obtain the current official full syllabus and topic reference; independently review the academic explanations and question bank; verify originality; inspect final PDF pages and accessible structure; import and test the LMS resource association; verify authenticated free access and practical evidence persistence."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Original educational content. Version 1.0.0, 12 October 2026. Independent study preparation; no KASNEB endorsement, qualification award or guaranteed examination result is implied."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "DD31-syntax-q1",
+      "type": "single_choice",
+      "prompt": "Which operator compares two values for equality?",
+      "choices": {
+        "A": "=",
+        "B": "==",
+        "C": "is",
+        "D": ":"
+      },
+      "answer": "B",
+      "marks": 1,
+      "explanation": "== compares values; = assigns; is compares object identity; : introduces a block."
+    },
+    {
+      "id": "DD31-syntax-q2",
+      "type": "numeric",
+      "prompt": "Calculate the mean of [8, 14, 11, 7, 10].",
+      "answer": 10,
+      "tolerance": 0.000001,
+      "marks": 2,
+      "explanation": "The total is 50 and count is 5, so mean = 10."
+    },
+    {
+      "id": "DD31-syntax-q3",
+      "type": "numeric",
+      "prompt": "What percentage of [1, 3, 3, 5, 8, 2, 4, 0] is at or below 3?",
+      "answer": 62.5,
+      "tolerance": 0.000001,
+      "marks": 3,
+      "explanation": "Five of eight values qualify; 100 × 5/8 = 62.5%."
+    },
+    {
+      "id": "DD31-syntax-q4",
+      "type": "rubric",
+      "prompt": "Explain why [] and [0] have different meanings.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Distinguishes no observations from one observed zero",
+          "marks": 2
+        },
+        {
+          "criterion": "Reports no-data mean versus zero mean correctly",
+          "marks": 2
+        }
+      ],
+      "explanation": "An empty list has no mean; a list containing zero has a defined mean of zero."
+    }
+  ]
+}
