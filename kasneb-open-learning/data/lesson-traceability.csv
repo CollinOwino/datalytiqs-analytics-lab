@@ -1,0 +1,144 @@
+course_id,module_id,module_title,lesson_id,lesson_title,content_bytes,menu_order,syllabus_mapping_status,topic_pdf_status,academic_review_status
+1522,1523,Module 1 — CA35P Orientation and Analytical Workflow,1532,CA35P examination structure and competency expectations,1384,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1523,Module 1 — CA35P Orientation and Analytical Workflow,1533,Frame business questions and plan the analytical workflow,1342,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1524,Module 2 — Data Preparation and Spreadsheet Controls,1534,"Data types, validation and spreadsheet-ready structures",1258,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1524,Module 2 — Data Preparation and Spreadsheet Controls,1535,"Clean, reconcile and document transformations",1305,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1525,"Module 3 — Analytical Tables, PivotTables and Decision Functions",1536,Conditional aggregation and lookup functions,1310,6,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1525,"Module 3 — Analytical Tables, PivotTables and Decision Functions",1537,"PivotTables, calculated fields and decision interpretation",1290,7,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1526,Module 4 — Descriptive Statistics and Data Visualisation,1538,"Measures of centre, spread and position",1320,8,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1526,Module 4 — Descriptive Statistics and Data Visualisation,1539,Select and critique evidence-led visualisations,1287,9,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1527,"Module 5 — Sampling, Probability and Statistical Inference",1540,"Sampling designs, bias and probability logic",1302,10,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1527,"Module 5 — Sampling, Probability and Statistical Inference",1541,Confidence intervals and practical hypothesis testing,1307,11,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1528,"Module 6 — Relationships, Regression and Forecasting",1542,"Correlation, regression and responsible interpretation",1362,12,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1528,"Module 6 — Relationships, Regression and Forecasting",1543,Time patterns and transparent forecasting,1259,13,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1529,"Module 7 — Dashboards, Reporting and Data Governance",1544,KPI architecture and accessible dashboard design,1255,14,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1529,"Module 7 — Dashboards, Reporting and Data Governance",1545,"Decision-ready reporting, ethics and data governance",1322,15,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1530,Module 8 — Integrated CA35P Revision and Mock Practical,1796,Original Practice — Digital Services Business Analytics,2687,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1530,Module 8 — Integrated CA35P Revision and Mock Practical,1531,Integrated mock-practical strategy and time management,1123,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1530,Module 8 — Integrated CA35P Revision and Mock Practical,1546,Mock practical quality review and Analytics Lab submission,1384,16,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1522,1808,Original Integrated Mock and Exam Practice,1809,Integrated Mock Practical: Digital Services Enterprise,1653,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1836,01 — Foundations and Syllabus Verification,1837,How the DD31 theory companion works,1277,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1836,01 — Foundations and Syllabus Verification,1838,Official-requirements register and verification status,1470,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1836,01 — Foundations and Syllabus Verification,1839,Theory-to-Analytics-Lab learning journey,1301,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1836,01 — Foundations and Syllabus Verification,1887,"Python syntax, indentation, script structure and coding style",1356,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1836,01 — Foundations and Syllabus Verification,1888,"Data-science libraries: NumPy, SciPy, pandas, scikit-learn and visualisation libraries",1514,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1840,02 — Python Data Visualisation Theory Framework,1841,Concept vocabulary and interpretation framework,1163,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1840,02 — Python Data Visualisation Theory Framework,1842,From data questions to visual representations,1333,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1840,02 — Python Data Visualisation Theory Framework,1843,Reading and explaining analytical outputs,1182,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1840,02 — Python Data Visualisation Theory Framework,1889,Installing and understanding scientific Python packages,1512,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1844,03 — Applied Methods and Practice,1845,Theory checkpoint and revision guide,1201,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1844,03 — Applied Methods and Practice,1846,Preparing for guided practical work,1183,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1844,03 — Applied Methods and Practice,1847,Analytics Lab evidence and mock-readiness handoff,1405,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1844,03 — Applied Methods and Practice,1890,Data cleansing and CSV/XLS processing,1357,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1844,03 — Applied Methods and Practice,1891,"Wrangling: merging, grouping, concatenation and aggregation",1424,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1844,03 — Applied Methods and Practice,1892,HTML and unstructured-data processing concepts,1426,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1893,DD31 LO4 — Data Visualisation Using Python,1894,"Chart construction, axes, line formatting, annotations and legends",1392,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1893,DD31 LO4 — Data Visualisation Using Python,1895,"Box plots, heat maps and scatter plots",1290,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1893,DD31 LO4 — Data Visualisation Using Python,1896,"Bubble, 3D and time-series visualisation",1324,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1893,DD31 LO4 — Data Visualisation Using Python,1897,Geographical and graph-data visualisation,1355,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1893,DD31 LO4 — Data Visualisation Using Python,1898,Choosing and interpreting appropriate visualisations,1278,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1899,DD31 LO5 — Statistical Data Analysis,1900,Central tendency and variation in Python,1215,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1899,DD31 LO5 — Statistical Data Analysis,1901,"Normal, binomial, Poisson and Bernoulli distributions",1397,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1899,DD31 LO5 — Statistical Data Analysis,1902,P-values and statistical inference concepts,1282,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1899,DD31 LO5 — Statistical Data Analysis,1903,Correlation and chi-square analysis,1422,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1899,DD31 LO5 — Statistical Data Analysis,1904,Linear regression and interpretation,1333,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1905,DD31 — Theory Consolidation and Analytics Lab Handoff,1906,Integrated DD31 theory revision,1343,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1905,DD31 — Theory Consolidation and Analytics Lab Handoff,1907,From syllabus knowledge to executable Python tasks,1309,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1835,1905,DD31 — Theory Consolidation and Analytics Lab Handoff,1908,"Analytics Lab evidence, practical and mock-readiness checkpoint",1424,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1849,01 — Foundations and Syllabus Verification,1850,How the DD32 theory companion works,1348,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1849,01 — Foundations and Syllabus Verification,1851,Official-requirements register and verification status,1448,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1849,01 — Foundations and Syllabus Verification,1852,Theory-to-Analytics-Lab learning journey,1372,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1849,01 — Foundations and Syllabus Verification,1909,Big-data lifecycle and analytical techniques,1401,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1849,01 — Foundations and Syllabus Verification,1910,"Business uses, benefits and challenges of big-data analytics",1376,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1853,02 — Data Management and Analytics Theory Framework,1854,Data management concepts and terminology,1207,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1853,02 — Data Management and Analytics Theory Framework,1855,Analytical reasoning and interpretation framework,1408,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1853,02 — Data Management and Analytics Theory Framework,1856,From managed data to analytical decisions,1206,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1853,02 — Data Management and Analytics Theory Framework,1911,Big-data visualisation tools and use cases,1332,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1853,02 — Data Management and Analytics Theory Framework,1912,"Excel charts, sparklines and PivotCharts",1320,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1857,03 — Applied Methods and Practice,1858,Theory checkpoint and revision guide,1265,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1857,03 — Applied Methods and Practice,1859,Preparing for guided analytical practice,1263,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1857,03 — Applied Methods and Practice,1860,Analytics Lab evidence and mock-readiness handoff,1487,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1857,03 — Applied Methods and Practice,1913,Dataset types and analytical purpose,1268,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1857,03 — Applied Methods and Practice,1914,"Centre, spread, skewness, outliers, correlation and distribution properties",1322,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1915,DD32 LO4 — Manage Big Data Using R,1916,R and RStudio environment,1225,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1915,DD32 LO4 — Manage Big Data Using R,1917,"Console, script editor, packages and help",1289,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1915,DD32 LO4 — Manage Big Data Using R,1918,"R syntax, operators and variables",1112,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1915,DD32 LO4 — Manage Big Data Using R,1919,"Vectors, matrices, arrays, data frames and lists",1271,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1915,DD32 LO4 — Manage Big Data Using R,1920,"Reading, manipulating and exporting data",1306,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1915,DD32 LO4 — Manage Big Data Using R,1921,Descriptive statistics in R,1207,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1922,DD32 LO5 — Perform Data Analytics Using R,1923,Hadoop ecosystem and HDFS concepts,1292,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1922,DD32 LO5 — Perform Data Analytics Using R,1924,MapReduce architecture and programming model,1194,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1922,DD32 LO5 — Perform Data Analytics Using R,1925,"Hive, Pig, Sqoop, Spark, HBase, Zookeeper and Oozie",1490,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1922,DD32 LO5 — Perform Data Analytics Using R,1926,"Text, in-memory, graph, statistical and social-media analytics",1372,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1922,DD32 LO5 — Perform Data Analytics Using R,1927,"Data mining, machine learning and predictive analytics",1359,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1922,DD32 LO5 — Perform Data Analytics Using R,1928,Big-data analytics lifecycle and Spark environment concepts,1408,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1929,DD32 — Theory Consolidation and Analytics Lab Handoff,1930,Integrated DD32 theory revision,1261,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1929,DD32 — Theory Consolidation and Analytics Lab Handoff,1931,From big-data theory to R analytical practice,1268,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1848,1929,DD32 — Theory Consolidation and Analytics Lab Handoff,1932,"Analytics Lab evidence, practical and mock-readiness checkpoint",1338,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1862,01 — Foundations and Syllabus Verification,1863,How the DD24 theory companion works,1320,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1862,01 — Foundations and Syllabus Verification,1864,Official-requirements register and verification status,1438,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1862,01 — Foundations and Syllabus Verification,1865,Theory-to-Analytics-Lab learning journey,1344,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1862,01 — Foundations and Syllabus Verification,1933,"Linear, stochastic, regression and multiple-regression models",1361,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1862,01 — Foundations and Syllabus Verification,1934,Mathematical modelling paradigms and quantitative modelling types,1367,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1862,01 — Foundations and Syllabus Verification,1935,"Advantages, limitations and appropriate use of models",1316,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1866,02 — Quantitative Modelling Theory Framework,1867,"Models, variables and assumptions",1176,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1866,02 — Quantitative Modelling Theory Framework,1868,Quantitative reasoning and interpretation,1372,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1866,02 — Quantitative Modelling Theory Framework,1869,"Model results, limitations and decision meaning",1194,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1866,02 — Quantitative Modelling Theory Framework,1936,Dataset selection and model choice,1288,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1866,02 — Quantitative Modelling Theory Framework,1937,Spreadsheet regression workflow concepts,1279,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1866,02 — Quantitative Modelling Theory Framework,1938,"Interpreting p-values, coefficients and regression results",1359,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1870,03 — Applied Methods and Practice,1871,Theory checkpoint and revision guide,1223,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1870,03 — Applied Methods and Practice,1872,Preparing for worked modelling practice,1220,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1870,03 — Applied Methods and Practice,1873,Analytics Lab evidence and mock-readiness handoff,1459,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1870,03 — Applied Methods and Practice,1939,"Assumptions, advantages and limitations",1342,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1870,03 — Applied Methods and Practice,1940,Graphical solution method,1149,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1870,03 — Applied Methods and Practice,1941,R and Excel solution workflows,1351,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1942,DD24 LO4 — Simulation Modelling,1943,"Simulation concepts, models, events and state variables",1265,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1942,DD24 LO4 — Simulation Modelling,1944,Principles and modelling process,1298,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1942,DD24 LO4 — Simulation Modelling,1945,Monte Carlo and risk-analysis simulation,1364,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1942,DD24 LO4 — Simulation Modelling,1946,"Agent-based, discrete-event and system-dynamics simulation",1359,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1942,DD24 LO4 — Simulation Modelling,1947,"Simulation components, inputs, performance measures and relationships",1281,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1942,DD24 LO4 — Simulation Modelling,1948,"Verification, validation and interpretation of simulation results",1422,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1949,DD24 — Theory Consolidation and Analytics Lab Handoff,1950,Integrated DD24 theory revision,1277,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1949,DD24 — Theory Consolidation and Analytics Lab Handoff,1951,From model formulation to practical computation,1249,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1861,1949,DD24 — Theory Consolidation and Analytics Lab Handoff,1952,"Analytics Lab evidence, practical and mock-readiness checkpoint",1346,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1875,01 — Foundations and Syllabus Verification,1876,How the CA15 theory companion works,1327,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1875,01 — Foundations and Syllabus Verification,1877,Official-requirements register and verification status,1451,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1875,01 — Foundations and Syllabus Verification,1878,Theory-to-Analytics-Lab learning journey,1351,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1875,01 — Foundations and Syllabus Verification,1953,Integration and business applications,1029,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1875,01 — Foundations and Syllabus Verification,1954,Descriptive statistics: central tendency,1107,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1875,01 — Foundations and Syllabus Verification,1955,"Dispersion, skewness and kurtosis",1050,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1879,02 — Quantitative Analysis Theory Framework,1880,"Quantitative concepts, notation and method selection",1210,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1879,02 — Quantitative Analysis Theory Framework,1881,Assumptions and analytical reasoning,1374,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1879,02 — Quantitative Analysis Theory Framework,1882,Interpreting quantitative results for decisions,1187,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1879,02 — Quantitative Analysis Theory Framework,1956,"Expected value, variance and standard deviation",1033,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1879,02 — Quantitative Analysis Theory Framework,1957,Discrete and continuous probability distributions,1040,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1879,02 — Quantitative Analysis Theory Framework,1958,Business applications of probability distributions,1099,5,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1883,03 — Applied Methods and Practice,1884,Theory checkpoint and revision guide,1240,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1883,03 — Applied Methods and Practice,1885,Preparing for calculations and spreadsheet practice,1240,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1883,03 — Applied Methods and Practice,1886,Analytics Lab evidence and mock-readiness handoff,1444,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1883,03 — Applied Methods and Practice,1959,Chi-square goodness-of-fit and independence,1138,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1883,03 — Applied Methods and Practice,1960,Hypothesis testing using R: interpretation framework,1059,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1961,CA15 4–5 — Correlation and Regression,1962,Scatter diagrams and correlation concepts,1004,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1961,CA15 4–5 — Correlation and Regression,1963,Pearson and Spearman correlation,1022,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1961,CA15 4–5 — Correlation and Regression,1964,Simple and multiple linear regression,1032,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1961,CA15 4–5 — Correlation and Regression,1965,Regression assumptions and goodness of fit,1159,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1961,CA15 4–5 — Correlation and Regression,1966,"Coefficient of determination, standard errors, t and F statistics",1178,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1967,CA15 6 — Time Series,1968,Time-series concepts and components,1075,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1967,CA15 6 — Time Series,1969,"Trend fitting: freehand, semi-averages, moving averages and least squares",1074,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1967,CA15 6 — Time Series,1970,Additive and multiplicative models,1077,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1967,CA15 6 — Time Series,1971,Seasonal variation,1008,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1967,CA15 6 — Time Series,1972,"Forecasting with moving averages, least squares and exponential smoothing",1082,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1973,CA15 7 — Linear Programming,1974,"Decision variables, objective functions and constraints",1058,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1973,CA15 7 — Linear Programming,1975,Linear-programming assumptions,1129,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1973,CA15 7 — Linear Programming,1976,Graphical solution method,1003,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1973,CA15 7 — Linear Programming,1977,Basic simplex method concepts,1126,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1973,CA15 7 — Linear Programming,1978,Interpreting optimal business decisions,1081,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1979,CA15 8 — Decision Theory,1980,Decision-making process and environments,1085,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1979,CA15 8 — Decision Theory,1981,Decision making under risk: EMV and EOL,942,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1979,CA15 8 — Decision Theory,1982,"Risk, coefficient of variation and perfect information",1151,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1979,CA15 8 — Decision Theory,1983,Decision trees and sample information,1191,3,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1979,CA15 8 — Decision Theory,1984,"Decision making under uncertainty: maximin, maximax, minimax regret, Hurwicz and Laplace",1096,4,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1985,CA15 — Theory Consolidation and Analytics Lab Handoff,1986,Integrated CA15 theory revision,1109,0,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1985,CA15 — Theory Consolidation and Analytics Lab Handoff,1987,Method-selection strategy for examination problems,1186,1,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
+1874,1985,CA15 — Theory Consolidation and Analytics Lab Handoff,1988,"Analytics Lab calculations, evidence and mock-readiness checkpoint",1137,2,pending_current_official_topic_syllabus,not_validated,not_independently_reviewed
