@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-12",
+  "project_complete": false,
+  "tests_passed": 19,
+  "academic_review": "independent_review_pending",
+  "production_repairs": {
+    "ca35p_reparented_lesson_ids": [1532,1533,1534,1535,1536,1537,1538,1539,1540,1541,1542,1543,1544,1545],
+    "modules_1_to_7_published_lesson_counts": [2,2,2,2,2,2,2],
+    "course_total_lessons_preserved": 18,
+    "free_courses": [1522,1835,1848,1861,1874],
+    "corrected_topic_label_ids": [1836,1849,1862,1875,1844,1857,1870,1883],
+    "backup_options": ["datalytiqs_kasneb_structure_snapshot_20261012", "datalytiqs_kasneb_topic_labels_snapshot_20261012"]
+  },
+  "synthetic_practical": {
+    "raw_rows": 9,
+    "duplicate_rows": 1,
+    "quarantined_rows": 2,
+    "admitted_rows": 6,
+    "net_amount_kes": 7500,
+    "office_totals_kes": {"A":5200,"B":2300},
+    "dataset_status": "synthetic_only"
+  },
+  "pdf_checks": {
+    "tagged_structure": true,
+    "language_metadata": "en-KE",
+    "bookmarks_and_links": true,
+    "full_pdf_ua_conformance": "not_independently_verified"
+  },
+  "tutor_rest_blocker": "Dedicated Tutor API authentication required; no credential or security changes made",
+  "syllabus_status": "current_full_topic_syllabuses_pending",
+  "learner_acceptance": "authenticated_end_to_end_test_pending"
+}
