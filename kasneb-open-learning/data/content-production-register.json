@@ -133,5 +133,49 @@
       "status": "author_technical_layout_checked",
       "independent_academic_review": false
     }
+  },
+  {
+    "id": "DD24-monte-carlo-inventory",
+    "version": "1.0.0",
+    "content_sha256": "5da11e098a262e121b8b099b5d532045693b3032ff626e6a68b98a9b039cc4f1",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "DD24-monte-carlo-inventory.v1.0.0.html",
+        "sha256": "4dff44683be1a8e056bf09b14648e8d8350398bf1ccf37cfc57de07fd73fcb74"
+      },
+      "pdf": {
+        "filename": "DD24-monte-carlo-inventory.v1.0.0.pdf",
+        "sha256": "8663444c0bcfa037134ae94ca0a5bd3cda4bfa4d8a6c03dc7c9f90f29eec2c90",
+        "library_file_id": "libfile_552b9f59baec81919fd1ccf1a306cf02",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 8,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 29,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
   }
 ]
