@@ -16,7 +16,7 @@ import sqlite3
 import tempfile
 from datetime import datetime, timezone
 
-PIPELINE_VERSION = '1.0.1'
+PIPELINE_VERSION = '1.1.5'
 REQUIRED_SECTIONS = ('overview', 'foundations', 'worked_examples', 'professional_application',
                      'guided_practice', 'assessment', 'solutions', 'revision', 'references')
 
@@ -34,8 +34,14 @@ def validate_structure(topic: dict) -> list[str]:
         if not topic.get(key): errors.append(f'Missing {key}')
     if not re.fullmatch(r'[A-Za-z0-9_.-]+', topic.get('id', '')):
         errors.append('Unsafe or absent topic id')
+    if not re.fullmatch(r'\d+\.\d+\.\d+', str(topic.get('version',''))):
+        errors.append('Version must be a semantic version without path characters')
+    if topic.get('status') != 'draft':
+        errors.append('This compiler accepts draft content only')
     sections = topic.get('sections', [])
     types = [s.get('kind') for s in sections]
+    if len(types) != len(set(types)):
+        errors.append('Duplicate section kind')
     for kind in REQUIRED_SECTIONS:
         if kind not in types: errors.append(f'Missing section {kind}')
     for section in sections:
@@ -46,6 +52,10 @@ def validate_structure(topic: dict) -> list[str]:
                 errors.append('Unsupported block type')
             if not block.get('text') and not block.get('items') and not block.get('rows'):
                 errors.append('Empty content block')
+            if block.get('type') == 'table':
+                rows=block.get('rows',[])
+                if len(rows)<2 or not rows[0] or any(len(row)!=len(rows[0]) for row in rows):
+                    errors.append('Invalid table shape')
     if not topic.get('questions'): errors.append('Missing assessment questions')
     seen = set()
     for question in topic.get('questions', []):
@@ -99,82 +109,100 @@ def review_errors(topic: dict) -> list[str]:
         errors.append('Originality review missing')
     return errors
 
+def linkify(text: str) -> str:
+    """Escape authored text and link its explicit HTTPS references."""
+    parts = []; position = 0
+    for match in re.finditer(r'https://[^\s<>]+', text):
+        url = match.group().rstrip('.,)')
+        end = match.start() + len(url)
+        parts.append(html.escape(text[position:match.start()]))
+        parts.append(f'<a href="{html.escape(url, quote=True)}">{html.escape(url)}</a>')
+        position = end
+    parts.append(html.escape(text[position:]))
+    return ''.join(parts)
+
 def render_html(topic: dict) -> str:
     esc = html.escape
-    parts = [f'<article lang="en"><h1>{esc(topic["title"])}</h1>',
-             f'<p>{esc(topic["paper_code"])} | Version {esc(topic["version"])} | {esc(topic["status"])}</p>',
-             '<h2>Learning outcomes</h2><ul>']
+    parts = ['<!doctype html><html lang="en-KE"><head><meta charset="utf-8">',
+             f'<title>{esc(topic["title"])}</title>',
+             '<meta name="author" content="DatalytIQs Academy">',
+             f'<meta name="description" content="{esc(topic["paper_code"])} original study notes">',
+             '</head><body><article>',
+             '<section class="cover"><p class="brand">DATALYTIQS ACADEMY | OPEN LEARNING</p>',
+             f'<h1>{esc(topic["title"])}</h1>',
+             f'<p>{esc(topic["qualification"])} | {esc(topic["paper_code"])}</p>',
+             f'<p>Topic: {esc(topic["id"])} | Version {esc(topic["version"])}</p>',
+             f'<p>Publication date: {esc(topic["publication_date"])}</p>',
+             '<p class="status">DRAFT - ACADEMIC AND SYLLABUS REVIEW PENDING</p>',
+             '<p>Original independent learning resource. This draft does not establish complete '
+             'KASNEB syllabus coverage or award a qualification.</p>',
+             '<p>Free learning resource. Official registration and examination charges are separate.</p></section>',
+             '<section><h2>Learning outcomes</h2><ul>']
     parts.extend(f'<li>{esc(x)}</li>' for x in topic['outcomes'])
-    parts.append('</ul>')
+    parts.append('</ul></section><nav class="toc" aria-label="Contents"><h2>Contents</h2><ol>')
+    parts.extend(f'<li><a href="#section-{esc(s["kind"])}">{esc(s["title"])}</a></li>' for s in topic['sections'])
+    parts.append('</ol></nav>')
     for section in topic['sections']:
-        parts.append(f'<section><h2>{esc(section["title"])}</h2>')
+        parts.append(f'<section id="section-{esc(section["kind"])}"><h2>{esc(section["title"])}</h2>')
         for block in section['blocks']:
             kind = block['type']
-            if kind == 'paragraph': parts.append(f'<p>{esc(block["text"])}</p>')
+            if kind == 'paragraph': parts.append(f'<p>{linkify(block["text"])}</p>')
             elif kind == 'code': parts.append(f'<pre><code>{esc(block["text"])}</code></pre>')
             elif kind == 'list':
-                parts.append('<ul>' + ''.join(f'<li>{esc(x)}</li>' for x in block['items']) + '</ul>')
+                parts.append('<ul>' + ''.join(f'<li>{linkify(x)}</li>' for x in block['items']) + '</ul>')
             elif kind == 'table':
-                parts.append('<table><caption>'+esc(block.get('caption',section['title']))+'</caption>')
+                parts.append('<div class="table-group"><table><caption>'+esc(block.get('caption',section['title']))+'</caption>')
                 for i,row in enumerate(block['rows']):
-                    tag='th' if i==0 else 'td'
-                    parts.append('<tr>'+''.join(f'<{tag}>{esc(str(x))}</{tag}>' for x in row)+'</tr>')
-                parts.append('</table>')
+                    if i == 0:
+                        parts.append('<thead><tr>'+''.join(f'<th scope="col">{esc(str(x))}</th>' for x in row)+'</tr></thead><tbody>')
+                    else:
+                        parts.append('<tr>'+''.join(f'<td>{esc(str(x))}</td>' for x in row)+'</tr>')
+                parts.append('</tbody></table></div>')
         parts.append('</section>')
-    parts.append('<p>© 2026 DatalytIQs Academy. Original educational content. Independent examination preparation.</p></article>')
+    parts.append('<p class="copyright">© 2026 DatalytIQs Academy. Original educational content. '
+                 'Independent examination preparation.</p></article></body></html>')
     return '\n'.join(parts)
 
+PDF_CSS = """
+@page {
+  size: A4;
+  margin: 18mm 17mm 19mm;
+  @bottom-left { content: "DatalytIQs Academy | Draft study notes"; font-size: 8pt; color: #0B2C4D; }
+  @bottom-right { content: counter(page); font-size: 8pt; color: #0B2C4D; }
+}
+body { font-family: "DejaVu Sans", sans-serif; color: #1F2937; font-size: 10pt; line-height: 1.35; }
+.cover { break-after: page; border-top: 5mm solid #0B2C4D; padding-top: 16mm; }
+.brand { color: #1565C0; font-weight: bold; font-size: 10pt; letter-spacing: .6pt; }
+h1 { color: #0B2C4D; font-size: 25pt; line-height: 1.22; margin: 10mm 0; }
+h2 { color: #1565C0; font-size: 14pt; line-height: 1.4; margin: 7mm 0 3mm; break-after: avoid; }
+p { margin: 0 0 2.2mm; orphans: 3; widows: 3; }
+.status { background: #F6F8FB; border-left: 3mm solid #F4A261; padding: 4mm; font-weight: bold; }
+a { color: #1565C0; overflow-wrap: anywhere; }
+.toc a { text-decoration: none; }
+.toc a::after { content: leader(".") target-counter(attr(href), page); }
+pre { font-family: "DejaVu Sans Mono", monospace; font-size: 8.4pt; line-height: 1.4;
+      background: #F6F8FB; padding: 3mm; white-space: pre-wrap; overflow-wrap: anywhere;
+      break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 4mm 0; break-inside: avoid; }
+.table-group { break-inside: avoid; }
+#section-references { break-inside: avoid; }
+caption { text-align: left; font-weight: bold; color: #0B2C4D; margin-bottom: 2mm; }
+th, td { border: .2mm solid #BAC8D8; padding: 2mm; vertical-align: top; }
+thead { display: table-header-group; background: #F6F8FB; }
+tr { break-inside: avoid; }
+li { margin-bottom: 2mm; }
+.copyright { margin-top: 6mm; font-size: 8pt; }
+"""
+
 def render_pdf(topic: dict, path: Path) -> None:
-    from reportlab.lib import colors
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.enums import TA_LEFT
-    from reportlab.lib.pagesizes import A4
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted, Table, TableStyle
-    from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import TTFont
-    font_root = Path('/usr/share/fonts/truetype/dejavu')
-    if not (font_root/'DejaVuSans.ttf').exists(): raise RuntimeError('DejaVu fonts required for legible PDF text')
-    for name,filename in [('DTQ','DejaVuSans.ttf'),('DTQBold','DejaVuSans-Bold.ttf'),('DTQMono','DejaVuSansMono.ttf')]:
-        if name not in pdfmetrics.getRegisteredFontNames(): pdfmetrics.registerFont(TTFont(name,str(font_root/filename)))
-    styles=getSampleStyleSheet()
-    styles.add(ParagraphStyle(name='DTQBody',fontName='DTQ',fontSize=10,leading=15,spaceAfter=9))
-    styles.add(ParagraphStyle(name='DTQTitle',fontName='DTQBold',fontSize=25,leading=32,textColor=colors.HexColor('#0B2C4D'),spaceAfter=20))
-    styles.add(ParagraphStyle(name='DTQH2',fontName='DTQBold',fontSize=14,leading=19,spaceBefore=16,spaceAfter=9,textColor=colors.HexColor('#1565C0'),keepWithNext=True))
-    styles.add(ParagraphStyle(name='DTQCode',fontName='DTQMono',fontSize=8,leading=11,spaceAfter=12,backColor=colors.HexColor('#F6F8FB')))
-    body=lambda text: Paragraph(html.escape(text).replace('\n','<br/>'),styles['DTQBody'])
-    doc=SimpleDocTemplate(str(path),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=54,bottomMargin=54,
-        title=topic['title'],author='DatalytIQs Academy',subject=f'{topic["paper_code"]} independent study notes',lang='en-KE')
-    story=[Spacer(1,48),body('DATALYTIQS ACADEMY | OPEN LEARNING'),Paragraph(html.escape(topic['title']),styles['DTQTitle']),
-           body(f'{topic["qualification"]} | {topic["paper_code"]}'),body(f'Topic identifier: {topic["id"]}'),
-           body(f'Version {topic["version"]} | {topic["publication_date"]}'),body('DRAFT - ACADEMIC AND SYLLABUS REVIEW PENDING'),
-           body('Original independent learning resource. This document does not establish complete KASNEB syllabus coverage or award a KASNEB qualification.'),
-           body('Free learning resource. Official registration and examination charges are separate.'),PageBreak(),
-           Paragraph('Learning outcomes',styles['DTQH2'])]
-    story.extend(body(f'{i}. {x}') for i,x in enumerate(topic['outcomes'],1))
-    story.append(Paragraph('Contents',styles['DTQH2']))
-    story.extend(body(f'{i}. {s["title"]}') for i,s in enumerate(topic['sections'],1))
-    for section in topic['sections']:
-        story.append(Paragraph(html.escape(section['title']),styles['DTQH2']))
-        for block in section['blocks']:
-            kind=block['type']
-            if kind=='paragraph': story.append(body(block['text']))
-            elif kind=='code':
-                # Fail rather than silently clipping long code lines.
-                if any(len(line)>84 for line in block['text'].splitlines()): raise ValueError('Code line too long for PDF')
-                story.append(Preformatted(block['text'],styles['DTQCode']))
-            elif kind=='list': story.extend(body(f'• {x}') for x in block['items'])
-            elif kind=='table':
-                rows=[[body(str(x)) for x in row] for row in block['rows']]
-                table=Table(rows,colWidths=[(A4[0]-96)/len(rows[0])]*len(rows[0]),repeatRows=1,hAlign='LEFT')
-                table.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#F6F8FB')),
-                  ('VALIGN',(0,0),(-1,-1),'TOP'),('GRID',(0,0),(-1,-1),0.4,colors.HexColor('#BAC8D8')),
-                  ('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7)]))
-                story.extend([table,Spacer(1,10)])
-    def footer(canvas,document):
-        canvas.saveState();canvas.setFont('DTQ',8);canvas.setFillColor(colors.HexColor('#0B2C4D'))
-        canvas.drawString(48,28,'DatalytIQs Academy | Draft study notes | Original content')
-        canvas.drawRightString(A4[0]-48,28,str(document.page));canvas.restoreState()
-    doc.build(story,onFirstPage=footer,onLaterPages=footer)
+    from weasyprint import HTML, CSS
+    def deny_resources(url, *args, **kwargs):
+        # Canonical topics contain text and links only. Never fetch linked pages,
+        # external assets, local files or arbitrary URLs during compilation.
+        raise ValueError('External render resources are disabled')
+    HTML(string=render_html(topic), url_fetcher=deny_resources).write_pdf(
+        path, stylesheets=[CSS(string=PDF_CSS)], pdf_variant='pdf/ua-1',
+        pdf_tags=True, presentational_hints=False)
 
 def pdf_check(topic: dict,path: Path) -> dict:
     from pypdf import PdfReader
@@ -183,18 +211,34 @@ def pdf_check(topic: dict,path: Path) -> dict:
     text=' '.join(texts)
     missing=[s['title'] for s in topic['sections'] if s['title'] not in text]
     if missing or not text.strip(): raise ValueError(f'PDF text integrity failed: {missing}')
+    root=reader.trailer['/Root']
+    tagged=bool(root.get('/StructTreeRoot')) and bool(root.get('/MarkInfo',{}).get('/Marked'))
+    links=sum(1 for page in reader.pages for ref in page.get('/Annots',[])
+              if ref.get_object().get('/Subtype')=='/Link')
+    if not tagged or not root.get('/Lang') or not reader.metadata.title:
+        raise ValueError('PDF structural accessibility check failed')
     return {'pages':len(reader.pages),'searchable_text':True,'section_titles_present':True,
-            'tagged_accessibility_verified':False,'visual_review_required':True}
+            'tagged_structure_present':tagged,'document_language':str(root['/Lang']),
+            'link_annotations':links,'bookmarks_present':bool(reader.outline),
+            'pdf_ua_conformance_verified':False,'visual_review_required':True}
 
-def build(topic_path: Path,output: Path) -> dict:
+def _build_locked(topic_path: Path,output: Path) -> dict:
     topic=json.loads(topic_path.read_text())
     errors=validate_structure(topic)
     if errors: raise ValueError('; '.join(errors))
     output.mkdir(parents=True,exist_ok=True)
     db=sqlite3.connect(output/'jobs.sqlite3',timeout=30)
     db.execute('CREATE TABLE IF NOT EXISTS jobs (job_key TEXT PRIMARY KEY, status TEXT, result TEXT, error TEXT, updated_at TEXT)')
+    db.execute('CREATE TABLE IF NOT EXISTS versions (topic_id TEXT, version TEXT, content_hash TEXT, PRIMARY KEY(topic_id,version))')
     key=digest((canonical_hash(topic)+PIPELINE_VERSION+json.dumps(topic.get('academic_review',{}),sort_keys=True)).encode())
     db.execute('BEGIN IMMEDIATE')
+    previous=db.execute('SELECT content_hash FROM versions WHERE topic_id=? AND version=?',
+                        (topic['id'],topic['version'])).fetchone()
+    if previous and previous[0]!=canonical_hash(topic):
+        db.rollback();db.close()
+        raise ValueError('Content changed without a version increment')
+    db.execute('INSERT OR IGNORE INTO versions VALUES (?,?,?)',
+               (topic['id'],topic['version'],canonical_hash(topic)))
     row=db.execute('SELECT status,result FROM jobs WHERE job_key=?',(key,)).fetchone()
     if row and row[0]=='complete':
         result=json.loads(row[1]);valid=True
@@ -210,7 +254,7 @@ def build(topic_path: Path,output: Path) -> dict:
             html_path=tmp/(name+'.html');pdf_path=tmp/(name+'.pdf')
             html_path.write_text(render_html(topic),encoding='utf-8');render_pdf(topic,pdf_path)
             check=pdf_check(topic,pdf_path);gates=review_errors(topic)
-            gates.extend(['PDF visual review not independently recorded','Tagged PDF accessibility not verified',
+            gates.extend(['PDF visual review not independently recorded','Full PDF/UA accessibility conformance not independently verified',
                           'LMS import and learner acceptance not verified'])
             assets={}
             for kind,path in [('html',html_path),('pdf',pdf_path)]:
@@ -224,6 +268,23 @@ def build(topic_path: Path,output: Path) -> dict:
     except Exception as exc:
         db.execute('UPDATE jobs SET status=?,error=? WHERE job_key=?',('failed',str(exc),key));db.commit();raise
     finally: db.close()
+
+def build(topic_path: Path,output: Path) -> dict:
+    import fcntl
+    import time
+    # One worker per output directory; bounded wait and automatic crash release.
+    output.mkdir(parents=True,exist_ok=True)
+    with (output/'.compiler.lock').open('a') as handle:
+        deadline=time.monotonic()+30
+        while True:
+            try:
+                fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB);break
+            except BlockingIOError:
+                if time.monotonic()>=deadline:
+                    raise TimeoutError('Another compiler worker holds this output directory')
+                time.sleep(.05)
+        try: return _build_locked(topic_path,output)
+        finally: fcntl.flock(handle,fcntl.LOCK_UN)
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
