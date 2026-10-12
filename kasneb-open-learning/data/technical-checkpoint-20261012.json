@@ -1,15 +1,56 @@
 {
   "date": "2026-10-12",
   "project_complete": false,
-  "tests_passed": 19,
+  "tests_passed": 25,
   "academic_review": "independent_review_pending",
   "production_repairs": {
-    "ca35p_reparented_lesson_ids": [1532,1533,1534,1535,1536,1537,1538,1539,1540,1541,1542,1543,1544,1545],
-    "modules_1_to_7_published_lesson_counts": [2,2,2,2,2,2,2],
+    "ca35p_reparented_lesson_ids": [
+      1532,
+      1533,
+      1534,
+      1535,
+      1536,
+      1537,
+      1538,
+      1539,
+      1540,
+      1541,
+      1542,
+      1543,
+      1544,
+      1545
+    ],
+    "modules_1_to_7_published_lesson_counts": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
     "course_total_lessons_preserved": 18,
-    "free_courses": [1522,1835,1848,1861,1874],
-    "corrected_topic_label_ids": [1836,1849,1862,1875,1844,1857,1870,1883],
-    "backup_options": ["datalytiqs_kasneb_structure_snapshot_20261012", "datalytiqs_kasneb_topic_labels_snapshot_20261012"]
+    "free_courses": [
+      1522,
+      1835,
+      1848,
+      1861,
+      1874
+    ],
+    "corrected_topic_label_ids": [
+      1836,
+      1849,
+      1862,
+      1875,
+      1844,
+      1857,
+      1870,
+      1883
+    ],
+    "backup_options": [
+      "datalytiqs_kasneb_structure_snapshot_20261012",
+      "datalytiqs_kasneb_topic_labels_snapshot_20261012"
+    ]
   },
   "synthetic_practical": {
     "raw_rows": 9,
@@ -17,7 +58,10 @@
     "quarantined_rows": 2,
     "admitted_rows": 6,
     "net_amount_kes": 7500,
-    "office_totals_kes": {"A":5200,"B":2300},
+    "office_totals_kes": {
+      "A": 5200,
+      "B": 2300
+    },
     "dataset_status": "synthetic_only"
   },
   "pdf_checks": {
@@ -28,5 +72,20 @@
   },
   "tutor_rest_blocker": "Dedicated Tutor API authentication required; no credential or security changes made",
   "syllabus_status": "current_full_topic_syllabuses_pending",
-  "learner_acceptance": "authenticated_end_to_end_test_pending"
+  "learner_acceptance": "authenticated_end_to_end_test_pending",
+  "substantive_drafts": 4,
+  "draft_pdf_pages": 33,
+  "latest_original_topic": "DD24-monte-carlo-inventory",
+  "latest_operation": "DD24 topic authoring, exact-model checks and draft PDF generation",
+  "dd24_simulation": {
+    "replications": 10000,
+    "seed": 20261012,
+    "exact_expected_costs_kes": {
+      "30": 260,
+      "40": 210,
+      "50": 160
+    },
+    "synthetic_only": true,
+    "topic_syllabus_verified": false
+  }
 }
