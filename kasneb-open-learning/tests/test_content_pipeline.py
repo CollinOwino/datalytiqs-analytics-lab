@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('pipeline', ROOT/'scripts/content_pipeline.py')
@@ -64,5 +66,45 @@ class PipelineTests(unittest.TestCase):
         errors=pipeline.validate_structure(self.topic)
         self.assertIn('Missing section solutions',errors)
         self.assertIn('Unsafe or absent topic id',errors)
+
+    def test_version_traversal_and_duplicate_sections_rejected(self):
+        self.topic['version']='../../bad'
+        self.topic['sections'].append(copy.deepcopy(self.topic['sections'][0]))
+        errors=pipeline.validate_structure(self.topic)
+        self.assertIn('Version must be a semantic version without path characters',errors)
+        self.assertIn('Duplicate section kind',errors)
+
+    def test_pdf_has_structure_language_outline_and_links(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result=pipeline.build(ROOT/'content/DD31-python-syntax.json',Path(directory))
+            checks=result['pdf_checks']
+            self.assertTrue(checks['tagged_structure_present'])
+            self.assertEqual(checks['document_language'],'en-KE')
+            self.assertTrue(checks['bookmarks_present'])
+            self.assertGreater(checks['link_annotations'],9)
+            self.assertFalse(checks['pdf_ua_conformance_verified'])
+
+    def test_content_version_is_immutable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base=Path(directory);source=base/'topic.json';output=base/'build'
+            source.write_text(json.dumps(self.topic))
+            pipeline.build(source,output)
+            self.topic['sections'][0]['blocks'][0]['text']+=' Revised.'
+            source.write_text(json.dumps(self.topic))
+            with self.assertRaisesRegex(ValueError,'version increment'):
+                pipeline.build(source,output)
+
+    def test_parallel_workers_do_not_duplicate_or_overwrite_job(self):
+        with tempfile.TemporaryDirectory() as directory:
+            command=[sys.executable,str(ROOT/'scripts/content_pipeline.py'),'build',
+                     str(ROOT/'content/DD31-python-syntax.json'),'--output',directory]
+            workers=[subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+                     for _ in range(2)]
+            results=[]
+            for worker in workers:
+                stdout,stderr=worker.communicate(timeout=30)
+                self.assertEqual(worker.returncode,0,stderr);results.append(json.loads(stdout))
+            self.assertEqual(sorted(result['reused'] for result in results),[False,True])
+            self.assertEqual(results[0]['assets'],results[1]['assets'])
 
 if __name__=='__main__': unittest.main()
