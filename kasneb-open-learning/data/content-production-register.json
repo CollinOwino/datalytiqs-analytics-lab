@@ -177,5 +177,49 @@
       "status": "author_technical_layout_checked",
       "independent_academic_review": false
     }
+  },
+  {
+    "id": "DD32-mapreduce-aggregation",
+    "version": "1.0.1",
+    "content_sha256": "5ef56bb47c2854bd2ca03710ca71902f94f429d63c3f2d607d1eea06173ed87f",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "DD32-mapreduce-aggregation.v1.0.1.html",
+        "sha256": "7a4a8e8c62c2ef9d4411475951924ba3ffbc31d6792c41adc2d316ce5ddf595a"
+      },
+      "pdf": {
+        "filename": "DD32-mapreduce-aggregation.v1.0.1.pdf",
+        "sha256": "97ebe92ac1ac2daa0b6d8d5af1d91b5b50d9955788fef62f3cea0a7f8342ceda",
+        "library_file_id": "libfile_ed507e9ade0c8191a7bd16e928354a33",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 7,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 30,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
   }
 ]
