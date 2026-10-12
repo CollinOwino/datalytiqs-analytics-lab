@@ -1,0 +1,450 @@
+{
+  "id": "DD32-mapreduce-aggregation",
+  "paper_code": "DD32",
+  "qualification": "Diploma in Data Management and Analytics",
+  "title": "MapReduce aggregation: keys, combiners and trustworthy summaries",
+  "version": "1.0.1",
+  "publication_date": "2026-10-12",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 180,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/ddma",
+    "version": null,
+    "reference": null,
+    "reason": "Paper identity previously verified; current full topic syllabus not obtained."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false
+  },
+  "wordpress_mapping": {
+    "course_id": 1848,
+    "existing_lesson_ids": [
+      1923,
+      1924
+    ],
+    "mapping_status": "suggested_by_title_not_official_syllabus_verified"
+  },
+  "outcomes": [
+    "Explain the map, shuffle and reduce stages.",
+    "Design mergeable count, sum and squared-sum summaries.",
+    "Detect invalid averages and duplicate-key errors.",
+    "Reconcile distributed output to validated input.",
+    "Explain local-model limitations and evidence requirements."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Purpose and study route",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Large datasets often cannot be processed conveniently by one machine. Distributed systems split work, transfer intermediate results and combine answers. MapReduce expresses a class of such computations through key-value transformations and grouped reduction. The central learning task is to design a result that remains correct when input order, partition size and worker count change."
+        },
+        {
+          "type": "paragraph",
+          "text": "These original notes use a small fictional Kenyan service-delivery dataset so every result can be checked by hand. The local Python implementation demonstrates the algebra of aggregation; it does not run Hadoop, provision a cluster or implement production fault recovery. The DD32 paper identity is recorded from the official DDMA listing. Current full syllabus outcomes, required software and examination rules remain unverified."
+        },
+        {
+          "type": "paragraph",
+          "text": "Study the flow and hand calculations before executing the example. Prerequisites are basic dictionaries, loops, means and elementary variance. The estimated three-hour study period is an Academy planning choice. All cases are synthetic; no genuine civil-registration, learner or institutional record is included."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Architecture and aggregation design",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A mapper consumes an input record and emits zero or more key-value pairs. For a valid completed case, our key is office code and our value contains one case, its duration and its squared duration. A record that fails the data contract is recorded as rejected before it reaches the mapper. Filtering must be visible in the evidence rather than silently shrinking the dataset."
+        },
+        {
+          "type": "paragraph",
+          "text": "The shuffle transfers and groups mapper outputs so that values for the same key reach the same reducer. A partition function assigns keys to reducers. Equal keys must receive the same partition for a given configuration. In the teaching implementation, a stable SHA-256 digest of the UTF-8 office code determines the bucket. This avoids relying on process-randomised Python string hashes for a persistent partition rule."
+        },
+        {
+          "type": "paragraph",
+          "text": "A reducer combines the values associated with a key and emits its final summary. The reducer for office A must receive every A contribution, regardless of where the records originated. A reducer can process multiple keys. The number of reducers is therefore not the number of offices, and an empty reducer bucket is not a data error."
+        },
+        {
+          "type": "paragraph",
+          "text": "A combiner optionally reduces mapper output before network transfer. Treat its execution as an optimisation, not a correctness requirement: a system may execute a combiner zero times or more than once. Only a valid merge operation with a compatible intermediate schema should be used. Our tuple (count, sum, sum of squares) can be merged repeatedly by element-wise addition."
+        },
+        {
+          "type": "paragraph",
+          "text": "Associativity means grouping does not change the answer: merge(merge(a,b),c) equals merge(a,merge(b,c)). Commutativity means swapping inputs does not change it. The identity (0,0,0) leaves a valid summary unchanged. Integer addition has these properties in this model, allowing summaries to be combined in different orders. Floating-point addition can produce small order-dependent rounding differences; production numerical work needs an appropriate stable strategy and tolerance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not combine partition means by averaging them equally. A mean loses its denominator unless count is retained. Suppose one partition has three durations totalling 12 and another has one duration of 12. Their means are 4 and 12; their equal average is 8, while the combined mean is (12 + 12)/(3 + 1) = 6. Carry counts and totals, then divide once at the final stage."
+        },
+        {
+          "type": "paragraph",
+          "text": "Variance can also be expressed using count n, sum S and squared sum Q: population variance = Q/n - (S/n)^2. This teaching dataset uses small integers and exact rational arithmetic. For large nearly equal measurements, subtraction of similar floating-point quantities can lose precision. A production implementation may need a numerically stable mergeable variance algorithm instead of this simple identity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Data contracts precede distribution. Define what one row means, which identifier is unique, the units, accepted types and the meaning of missing values. Here days must be a non-negative integer, office must be a non-empty string and case_id must be unique. Zero is a valid duration; a missing duration is not zero. A negative duration is rejected rather than clipped."
+        },
+        {
+          "type": "paragraph",
+          "text": "A repeated case_id is a global integrity problem. The example stops on repeated identifiers rather than making an arbitrary keep-first decision. A real system would need documented deduplication or conflict resolution, often through a separate key-based stage. Checking duplicates within each partition alone misses repetitions in different partitions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Failure recovery is separate from data duplication. A distributed engine may retry tasks and manage committed output to prevent duplicate task results. A local loop demonstrates neither those guarantees nor exactly-once business processing. An application must distinguish physical retries from genuine duplicate source records and verify the owning engine's output semantics."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distribution has overhead: serialisation, disk input/output, scheduling and network transfer. A tiny dataset is usually easier on one machine. More workers do not guarantee proportional acceleration. Data skew can concentrate one popular key on one reducer, creating a bottleneck even when total rows are evenly split among mappers."
+        },
+        {
+          "type": "paragraph",
+          "text": "When a large key causes skew, a two-stage salted aggregation can split that key temporarily, then merge partial summaries under the original key. This works only if the partial summaries retain sufficient information and are merged correctly. It does not justify randomly assigning equal final keys to different reducers and leaving several incomplete answers."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Worked synthetic case and execution",
+      "blocks": [
+        {
+          "type": "table",
+          "caption": "Validated synthetic duration inputs",
+          "rows": [
+            [
+              "Office",
+              "Durations in days",
+              "Count",
+              "Sum",
+              "Squared sum"
+            ],
+            [
+              "A",
+              "2, 4, 6",
+              "3",
+              "12",
+              "56"
+            ],
+            [
+              "B",
+              "1, 3, 8, 12",
+              "4",
+              "24",
+              "218"
+            ],
+            [
+              "C",
+              "0",
+              "1",
+              "0",
+              "0"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "There are ten raw rows. Eight are admitted and two are rejected: one has a missing duration and one has -1 day. Admitted durations total 36 days. The global mean is 36/8 = 4.5 days per completed case. An unweighted average of office means (4 + 6 + 0)/3 = 3.3333 answers a different question and is not the combined-case mean."
+        },
+        {
+          "type": "paragraph",
+          "text": "Office A mean is 12/3 = 4. Population variance is 56/3 - 4 squared = 8/3 days squared. Direct deviations from four are -2, 0 and 2, giving squares 4, 0 and 4; dividing their sum by three confirms the answer. Office B mean is six and population variance is 218/4 - 36 = 18.5. Office C has one observed zero, so its population variance is zero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Map office A durations into tuples (1,2,4), (1,4,16) and (1,6,36). A combiner merges them to (3,12,56). If those records fall in different partitions, separate partial tuples still merge to the same final summary. The reducer calculates the mean only after combining all contributions."
+        },
+        {
+          "type": "code",
+          "text": "from collections import defaultdict\nfrom fractions import Fraction\n\nvalid = [('A',2),('A',4),('A',6),('B',1),\n         ('B',3),('B',8),('B',12),('C',0)]\nmapped = [(office, (1,days,days*days)) for office,days in valid]\ngrouped = defaultdict(list)\nfor key,value in mapped:\n    grouped[key].append(value)\n\nsummaries = {}\nfor key,values in grouped.items():\n    n = sum(v[0] for v in values)\n    total = sum(v[1] for v in values)\n    squares = sum(v[2] for v in values)\n    average = Fraction(total,n)\n    variance = Fraction(squares,n)-average**2\n    summaries[key] = (n,total,squares,average,variance)\nprint(summaries)\nassert sum(v[0] for v in summaries.values()) == 8\nassert sum(v[1] for v in summaries.values()) == 36"
+        },
+        {
+          "type": "paragraph",
+          "text": "The runnable companion extends this example with validation, configurable chunks, deterministic reducer assignment and local combiners. Its tests change chunk size, reducer count and row order. A valid change in execution layout must preserve the numerical result. Testing those invariants is more informative than merely checking that the script does not crash."
+        },
+        {
+          "type": "paragraph",
+          "text": "The global squared sum is 274. Global population variance = 274/8 - 4.5 squared = 14 days squared. This is not obtained by simply averaging office variances, because overall dispersion includes differences between office means. Keep the complete sufficient statistics until the final aggregation."
+        },
+        {
+          "type": "code",
+          "text": "n = sum(v[0] for v in summaries.values())\ntotal = sum(v[1] for v in summaries.values())\nsquares = sum(v[2] for v in summaries.values())\nglobal_mean = Fraction(total,n)\nglobal_variance = Fraction(squares,n)-global_mean**2\nassert global_mean == Fraction(9,2)\nassert global_variance == 14\nprint(global_mean, global_variance)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Reconciliation has two levels. Row accounting requires raw = admitted + rejected, here 10 = 8 + 2. Aggregation accounting requires the sum of reducer counts to equal eight and the sum of reducer duration totals to equal 36. Both can pass while a definition is wrong, so also inspect the contract and benchmark individual office results."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Service-delivery interpretation and evidence",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A fictional county service centre asks whether completion times differ across three offices. The results describe only the eight synthetic completed cases. They cannot establish that Office B is less effective, because workload mix, observation period, pending cases and selection criteria are absent. Means are evidence about supplied observations, not an automatic performance verdict."
+        },
+        {
+          "type": "paragraph",
+          "text": "A real study should define the start and completion events, calendar versus working days, reopened cases and the treatment of unfinished cases. Pending cases omitted from a completed-case average can create a misleading impression of speed. Explain the selected population and denominator before comparing offices."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prepare an evidence bundle containing input schema, synthetic fixture, rejection log, program version, runtime version, summary outputs and reconciliation checks. Retain source rows separately from derived summaries. Do not publish person identifiers, upload authentic civil-registration files to an unsecured demonstration or mislabel synthetic cases as genuine institutional evidence."
+        },
+        {
+          "type": "paragraph",
+          "text": "This practical creates no learner record. Future Lab integration must persist evidence under the authenticated owner and authorised institution, enforce isolation and exclude synthetic users from genuine analytics and certification. A numeric result can be marked objectively; interpreting process suitability and confidentiality requires a rubric and human judgement."
+        },
+        {
+          "type": "paragraph",
+          "text": "The local simulation does not prove scalability, cluster resilience or security. To evaluate an actual deployment, test representative volumes, skew, task failures, authorisation, persistence and recovery using the supported engine. Record throughput alongside resource cost and output correctness rather than using worker count as a proxy for capability."
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Exercises and practical assignment",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A. Two partitions for the same key report (count=2,sum=10) and (count=5,sum=20). Calculate each mean, the combined mean and the incorrect equal average of means. Explain the denominator difference."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B. For durations [1,3,8,12], calculate count, sum, squared sum, mean and population variance. Verify variance independently using squared deviations from the mean."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C. A mapper receives durations 0, missing, -2 and 4 with unique valid IDs. Under this contract, how many rows are admitted and rejected? Calculate the admitted mean. Explain why replacing missing with zero would change the result."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D. A reducer reports A count three total 12, B count four total 24 and C count one total zero. Explain why the mean of office means is unsuitable for the combined-case average. State the global mean and its unit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical assignment. Execute the runnable companion on the supplied ten-row fixture. Repeat with chunk sizes one and four and reducer counts one and five. Reverse the row order. Compare all outputs. Then insert a repeated case_id in a different position and confirm the run stops rather than double-counting. Submit the command, environment, output and a concise explanation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Internal rubric, 20 marks: contract and rejected-row explanation 4; correct mapper/combiner/reducer design 5; exact calculations and reconciliation 5; reproducibility 3; limitations and responsible evidence handling 3. These are Academy practice marks, not official examination weights or pass criteria."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original question bank",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use an optional 30-minute practice timer chosen for self-study; no official DD32 examination timing is asserted. Attempt the following original questions before reading the answers. Numeric responses can use the stated rounding tolerance; written reasoning needs human judgement."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q1. Calculate the combined mean from partition summaries (2,10) and (5,20). Q2. Calculate office B population variance. Q3. State the total admitted case count. Q4. Calculate the global population variance. Q5. State the number of rejected records."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q6. Which intermediate representation safely supports a mean: mean alone, count and sum, key alone, or unweighted office means? Q7. Explain why equal final keys must reach the same reducer. Q8. Distinguish source duplication from task retry. Q9. Recommend two verification checks and one validation question for the fictional service-centre comparison."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Solutions, feedback and remediation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A. Partition means are 10/2 = 5 and 20/5 = 4. Combined mean is 30/7 = 4.285714. Equal averaging gives 4.5 and gives the small partition too much weight. Carry count and sum through every merge. A learner who averages means should reconstruct the underlying seven-case denominator."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B. Count four, sum 24 and squared sum 1 + 9 + 64 + 144 = 218. Mean six. Deviations are -5, -3, 2 and 6; squares 25, 9, 4 and 36 total 74. Population variance = 74/4 = 18.5. If estimating a wider population using sample variance, the denominator would be three, but this question explicitly requests a complete-batch population description."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C. Admit zero and four; reject missing and -2. Admitted mean = 4/2 = 2. Replacing missing by zero would admit an unsupported value and produce 4/3 = 1.333333. Missing and zero have different meanings; the contract determines admissibility."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D. Total 36 divided by eight cases gives 4.5 days per case. The equal-office average is 10/3, approximately 3.333333 days across office means. Neither calculation should be reported without its denominator and analytical purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Question answers: Q1 30/7; Q2 18.5; Q3 eight; Q4 fourteen; Q5 two; Q6 count and sum. For Q7 credit completeness of grouping and avoidance of partial duplicate answers. For Q8 credit different origins and the need for source integrity plus engine output-commit semantics. For Q9 credit row and total reconciliation or layout-invariance tests, and a relevant question about the real measurement definition or representativeness."
+        },
+        {
+          "type": "paragraph",
+          "text": "For the practical, every valid configuration must return identical exact summaries. A duplicate identity must fail explicitly. An empty input yields no office summaries, not a fabricated zero-duration case. Rejected rows remain accounted for. A correct program cannot compensate for an unsuitable measurement definition."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remediation should follow the error: practise key grouping for a shuffle mistake, weighted denominators for a mean mistake, zero-versus-missing classification for a data-contract mistake, and limitation writing for an unsupported performance conclusion. Reattempt with new durations and unequal partition counts. Internal readiness is separate from official examination marks."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I explain map, shuffle, partition, combine and reduce.",
+            "I retain sufficient intermediate statistics.",
+            "I verify associativity and denominator handling.",
+            "I distinguish source duplicates from execution retries.",
+            "I reconcile rows and totals independently.",
+            "I recognise skew and overhead.",
+            "I state the local demonstration limits.",
+            "I separate mathematical correctness from real-system validity."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A strong answer explains both the data movement and the algebra. Naming technologies without explaining why their output is correct is insufficient. Always state the key, value schema, merge rule and final calculation before discussing parallelism."
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. Sources and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Official qualification and paper identity: https://www.kasneb.or.ke/ddma . Identity previously checked 12 October 2026; current topic syllabus edition and exact outcomes remain pending. Existing lesson-title association is provisional."
+        },
+        {
+          "type": "paragraph",
+          "text": "Primary architectural reference: https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html . Apache Hadoop documentation explains the framework stages. Framework details must be checked against the deployed version; this lesson is a local teaching model."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cases, questions, explanatory text and solutions are original DatalytIQs authoring. Independent academic and originality review remain pending. No protected past papers or proprietary textbook material are reproduced. No official endorsement or accreditation is implied."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Draft 1.0.1. Publication requires current syllabus traceability, independent reviews, accessibility conformance and authenticated learner acceptance. Tagged PDF structure alone does not establish full PDF/UA compliance."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "DD32-mr-q1",
+      "type": "numeric",
+      "prompt": "Combined mean from (count=2,sum=10) and (count=5,sum=20)?",
+      "answer": 4.285714285714286,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked calculations and reconciliation."
+    },
+    {
+      "id": "DD32-mr-q2",
+      "type": "numeric",
+      "prompt": "Population variance of [1,3,8,12]?",
+      "answer": 18.5,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked calculations and reconciliation."
+    },
+    {
+      "id": "DD32-mr-q3",
+      "type": "numeric",
+      "prompt": "Admitted case count in the fixture?",
+      "answer": 8,
+      "tolerance": 0,
+      "marks": 2,
+      "explanation": "See worked calculations and reconciliation."
+    },
+    {
+      "id": "DD32-mr-q4",
+      "type": "numeric",
+      "prompt": "Global population variance of the eight admitted durations?",
+      "answer": 14,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked calculations and reconciliation."
+    },
+    {
+      "id": "DD32-mr-q5",
+      "type": "numeric",
+      "prompt": "Rejected row count?",
+      "answer": 2,
+      "tolerance": 0,
+      "marks": 2,
+      "explanation": "See worked calculations and reconciliation."
+    },
+    {
+      "id": "DD32-mr-q6",
+      "type": "single_choice",
+      "prompt": "Which representation safely supports merged means?",
+      "choices": {
+        "A": "Mean alone",
+        "B": "Count and sum",
+        "C": "Key alone",
+        "D": "Equal average of means"
+      },
+      "answer": "B",
+      "marks": 1,
+      "explanation": "Counts preserve the denominator."
+    },
+    {
+      "id": "DD32-mr-q7",
+      "type": "rubric",
+      "prompt": "Explain the same-key reducer requirement.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Accurate technical explanation",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant implication or example",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; consult solutions."
+    },
+    {
+      "id": "DD32-mr-q8",
+      "type": "rubric",
+      "prompt": "Distinguish source duplication from task retry.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Accurate technical explanation",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant implication or example",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; consult solutions."
+    },
+    {
+      "id": "DD32-mr-q9",
+      "type": "rubric",
+      "prompt": "Propose verification and validation checks.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Accurate technical explanation",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant implication or example",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; consult solutions."
+    }
+  ]
+}
