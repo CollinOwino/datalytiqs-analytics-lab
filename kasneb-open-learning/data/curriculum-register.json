@@ -3961,11 +3961,12 @@
     }
   ],
   "metrics": {
-    "existing_course_count": 5,
+    "existing_course_count": 6,
     "existing_published_lessons": 143,
     "fully_verified_topic_denominator": null,
     "complete_courses_verified": 0,
-    "full_programme_complete": false
+    "full_programme_complete": false,
+    "existing_draft_lessons": 1
   },
   "source_status": "Qualification and paper identities only; topic outcomes, subtopics, durations and software requirements are not inferred from directory titles.",
   "inventory_completeness": "Partial requirement inventory; not a complete syllabus or completion denominator",
