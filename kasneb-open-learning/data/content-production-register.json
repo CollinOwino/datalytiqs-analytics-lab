@@ -221,5 +221,49 @@
       "status": "author_technical_layout_checked",
       "independent_academic_review": false
     }
+  },
+  {
+    "id": "CA14-scarcity-opportunity-cost",
+    "version": "1.0.1",
+    "content_sha256": "77659b495af6d3552516d8ab6a4ada8c852a466f2a3035f1aa7bf5617a8f89fc",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "CA14-scarcity-opportunity-cost.v1.0.1.html",
+        "sha256": "d6ce14335b46a68d0408752255f79c670e5a94e4588c2581d9180a3f7f7ea011"
+      },
+      "pdf": {
+        "filename": "CA14-scarcity-opportunity-cost.v1.0.1.pdf",
+        "sha256": "fd2373280a42c3908028a96488f59fc27803b01dc9151c91b781b68e554dde4b",
+        "library_file_id": "libfile_42d275bbd51081918aefb189d0b08aa1",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 7,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 28,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-13",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
   }
 ]
