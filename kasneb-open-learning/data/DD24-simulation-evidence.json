@@ -1,0 +1,40 @@
+{
+  "n": 10000,
+  "seed": 20261012,
+  "demand_counts": {
+    "30": 4957,
+    "20": 1998,
+    "50": 3045
+  },
+  "policies": {
+    "30": {
+      "mean": 263.58,
+      "standard_error": 3.5695423408684097,
+      "approximate_95_interval": [
+        256.5836970118979,
+        270.57630298810204
+      ]
+    },
+    "40": {
+      "mean": 211.33,
+      "standard_error": 1.304236640077763,
+      "approximate_95_interval": [
+        208.7736961854476,
+        213.88630381455243
+      ]
+    },
+    "50": {
+      "mean": 159.08,
+      "standard_error": 1.118248813118442,
+      "approximate_95_interval": [
+        156.88823232628786,
+        161.27176767371216
+      ]
+    }
+  },
+  "environment": {
+    "python": "3.12.14"
+  },
+  "dataset_status": "synthetic_only",
+  "purpose": "model_verification_not_real_system_validation"
+}

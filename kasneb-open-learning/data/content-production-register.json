@@ -1,0 +1,313 @@
+[
+  {
+    "id": "CA15-descriptive-statistics",
+    "version": "1.0.0",
+    "content_sha256": "341c8003857f9add0f422887fa6aa22b477904776db0e6287d80ef51cfde0d06",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "CA15-descriptive-statistics.v1.0.0.html",
+        "sha256": "ebecfaf73f453e6c9f984c36c30b1b097508dfba6aaeeb5aace7593efb548cf3"
+      },
+      "pdf": {
+        "filename": "CA15-descriptive-statistics.v1.0.0.pdf",
+        "sha256": "4e6fdd837c122d17380b84637346bd8a91924d2b6b0884f649c88401767db16a",
+        "library_file_id": "libfile_2b104b74c4948191a0047bd40343df42",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 8,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 30,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "reused": false,
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  },
+  {
+    "id": "DD31-data-quality-joins",
+    "version": "1.0.0",
+    "content_sha256": "ded3286b1817f803393ab7fb388c1a64413f1d5c5d3ba4e6a798937fc1240a77",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "DD31-data-quality-joins.v1.0.0.html",
+        "sha256": "8aeb062a935214966ab803ae1ecd44c878d49b2f1bac1b328f2d65ad301dea91"
+      },
+      "pdf": {
+        "filename": "DD31-data-quality-joins.v1.0.0.pdf",
+        "sha256": "59ef0c51b7570b6d51a4b221adbd2510bbdc3a575a6edafe0523ec90fd438fed",
+        "library_file_id": "libfile_4dbc7382585c81919d388c2a8edc950d",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 8,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 30,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "reused": false,
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  },
+  {
+    "id": "DD31-python-syntax",
+    "version": "1.1.1",
+    "content_sha256": "8cc8bab988455e9f231867ce9d8bc7b4bdd2c66796518ed6673b706e89cfa027",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "DD31-python-syntax.v1.1.1.html",
+        "sha256": "fd01af682d9f04c44c5aa6f36c61713699f2142b30b559afe56da2b1bb802f3c"
+      },
+      "pdf": {
+        "filename": "DD31-python-syntax.v1.1.1.pdf",
+        "sha256": "a561d7137d618cab6e6b72d7e8fb9dc82b6235ec58463d9a2f25c30a2cbf7282",
+        "library_file_id": "libfile_f03d3c2642708191a7cb2075c5fd2ace",
+        "library_version": 1
+      }
+    },
+    "pdf_checks": {
+      "pages": 9,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 33,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "reused": false,
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  },
+  {
+    "id": "DD24-monte-carlo-inventory",
+    "version": "1.0.0",
+    "content_sha256": "5da11e098a262e121b8b099b5d532045693b3032ff626e6a68b98a9b039cc4f1",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "DD24-monte-carlo-inventory.v1.0.0.html",
+        "sha256": "4dff44683be1a8e056bf09b14648e8d8350398bf1ccf37cfc57de07fd73fcb74"
+      },
+      "pdf": {
+        "filename": "DD24-monte-carlo-inventory.v1.0.0.pdf",
+        "sha256": "8663444c0bcfa037134ae94ca0a5bd3cda4bfa4d8a6c03dc7c9f90f29eec2c90",
+        "library_file_id": "libfile_552b9f59baec81919fd1ccf1a306cf02",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 8,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 29,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  },
+  {
+    "id": "DD32-mapreduce-aggregation",
+    "version": "1.0.1",
+    "content_sha256": "5ef56bb47c2854bd2ca03710ca71902f94f429d63c3f2d607d1eea06173ed87f",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "DD32-mapreduce-aggregation.v1.0.1.html",
+        "sha256": "7a4a8e8c62c2ef9d4411475951924ba3ffbc31d6792c41adc2d316ce5ddf595a"
+      },
+      "pdf": {
+        "filename": "DD32-mapreduce-aggregation.v1.0.1.pdf",
+        "sha256": "97ebe92ac1ac2daa0b6d8d5af1d91b5b50d9955788fef62f3cea0a7f8342ceda",
+        "library_file_id": "libfile_ed507e9ade0c8191a7bd16e928354a33",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 7,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 30,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-12",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  },
+  {
+    "id": "CA14-scarcity-opportunity-cost",
+    "version": "1.0.1",
+    "content_sha256": "77659b495af6d3552516d8ab6a4ada8c852a466f2a3035f1aa7bf5617a8f89fc",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "CA14-scarcity-opportunity-cost.v1.0.1.html",
+        "sha256": "d6ce14335b46a68d0408752255f79c670e5a94e4588c2581d9180a3f7f7ea011"
+      },
+      "pdf": {
+        "filename": "CA14-scarcity-opportunity-cost.v1.0.1.pdf",
+        "sha256": "fd2373280a42c3908028a96488f59fc27803b01dc9151c91b781b68e554dde4b",
+        "library_file_id": "libfile_42d275bbd51081918aefb189d0b08aa1",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 7,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 28,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-13",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  },
+  {
+    "id": "CA14-demand-supply-elasticity",
+    "version": "1.0.0",
+    "content_sha256": "295e4d88188c3636c7ca3ee9f6a2eafeee0297c2f69b7f7d377dd527c4533c98",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "CA14-demand-supply-elasticity.v1.0.0.html",
+        "sha256": "f96205bad5fcf07b10180d234f3d8e0c4d6fdbc759b4084456e5daf765b93462"
+      },
+      "pdf": {
+        "filename": "CA14-demand-supply-elasticity.v1.0.0.pdf",
+        "sha256": "ef31976374915e2bf2116f63d10f62682ceb2e16d754964fb447aa47268d3fd5",
+        "library_file_id": "libfile_5751cce88d248191b39692f4817dee90",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 8,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 28,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-14",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
+  }
+]

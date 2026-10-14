@@ -1,0 +1,444 @@
+{
+  "id": "CA14-scarcity-opportunity-cost",
+  "paper_code": "CA14",
+  "qualification": "Certified Public Accountants",
+  "title": "Economic choice: scarcity, opportunity cost and production possibilities",
+  "version": "1.0.1",
+  "publication_date": "2026-10-13",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 180,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/cpa",
+    "version": null,
+    "reference": null,
+    "reason": "CA14 Economics paper identity verified 13 October 2026. Current full topic syllabus not obtained; historical June 2024 PDF URL returned 404."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false
+  },
+  "wordpress_mapping": {
+    "course_id": 2100,
+    "existing_lesson_ids": [
+      2102
+    ],
+    "topic_id": 2101,
+    "mapping_status": "draft_internal_topic_not_official_syllabus_verified"
+  },
+  "outcomes": [
+    "Distinguish scarcity, shortage and choice.",
+    "Identify the next-best alternative and relevant economic costs.",
+    "Calculate and interpret marginal opportunity cost.",
+    "Explain efficient, inefficient and unattainable production combinations.",
+    "Separate positive claims, normative judgements and model assumptions."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Economic choice and the learning route",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Economics examines choices made when resources have competing uses. A household allocates income, a business allocates labour and capital, and a public institution allocates staff time and budget. Every choice has consequences for alternatives. Economic reasoning makes those alternatives explicit rather than treating the chosen activity as though its resources were free."
+        },
+        {
+          "type": "paragraph",
+          "text": "This original DatalytIQs topic builds the foundations of economic analysis using fictional Kenyan organisations. It is provisionally associated with CPA Economics, CA14, whose identity is verified on the current official CPA page. The precise topic hierarchy, syllabus edition and official learning outcomes remain unverified. The Academy outcomes and three-hour study estimate are internal teaching choices."
+        },
+        {
+          "type": "paragraph",
+          "text": "Work through the definitions, calculations and interpretation in order. Prerequisites are arithmetic, ratios and reading a two-variable table. The optional Python example reproduces the arithmetic; it is not a claim about required examination software. All quantities and institutions in the examples are synthetic, and no current Kenyan prices, budget figures or performance estimates are asserted."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Scarcity, alternatives and analytical distinctions",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Scarcity means available resources cannot satisfy every desired use simultaneously. It is relative to wants and alternatives, rather than a claim that every resource is physically rare. Time can be scarce even when an organisation has money: a specialist cannot attend two meetings at the same time. A resource can have an economic cost without a market payment if it has a valuable alternative use."
+        },
+        {
+          "type": "paragraph",
+          "text": "A shortage is different. In a market context, shortage means quantity demanded exceeds quantity supplied at a particular price and time. Scarcity persists even when a market clears and there is no shortage. Confusing the concepts makes it difficult to explain how prices and allocation relate to resource constraints."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choice requires specifying the feasible alternatives. A school deciding how to use one room may consider a laboratory, library or staff office. An infeasible option should not be treated as the next-best alternative unless the additional resources needed to make it feasible are included. The comparison also needs a common time horizon and a clear decision-maker."
+        },
+        {
+          "type": "paragraph",
+          "text": "Opportunity cost is the value of the next-best feasible alternative forgone by a choice. It is not automatically the sum of every rejected alternative. If a room could provide a library benefit valued at KES 80,000 or an office benefit valued at KES 50,000 over a stated period, choosing a laboratory forgoes the better alternative, the library, under those valuations. The values are assumptions that need evidence in a real decision."
+        },
+        {
+          "type": "paragraph",
+          "text": "Explicit costs involve monetary payments, such as rent or wages. Implicit costs reflect forgone opportunities without an actual payment, such as an owner using their own building instead of renting it out. Economic profit subtracts both explicit and relevant implicit costs from revenue. Accounting profit often excludes such imputed alternative-use costs. State the definitions used rather than treating the two profit measures as interchangeable."
+        },
+        {
+          "type": "paragraph",
+          "text": "A sunk cost has already been incurred and cannot be recovered through the current choice. It should not determine which future alternative has the larger net benefit. A recoverable resale value is different: choosing to retain an asset forgoes that value. Distinguish an irrelevant historical purchase price from a relevant disposal opportunity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Marginal analysis compares the additional benefit and additional cost of a change. The total value of a programme does not necessarily justify one more unit of activity. A service may be valuable overall while the next hour allocated to it produces less benefit than an hour allocated elsewhere. Define what changes and what stays fixed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Microeconomics examines decisions and interactions at the level of households, firms and particular markets. Macroeconomics examines aggregates such as total output, inflation and employment. A fictional shop price is a microeconomic observation; a national inflation claim needs representative aggregate measurement. A change in one price is not by itself evidence of the inflation rate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Positive analysis concerns claims about what happens or would happen under stated conditions, which can in principle be assessed using evidence. Normative analysis involves judgements about what ought to be done and the values used to rank outcomes. A recommendation can contain both. Identifying a value judgement does not make it meaningless; it clarifies where evidence ends and preferences begin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ceteris paribus means holding other relevant influences constant while examining a relationship. It is a modelling device, not a claim that real conditions never change. If several factors change together, the observed result cannot automatically be attributed to one factor. Write the maintained assumptions alongside a numerical conclusion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Factors of production are commonly classified as land or natural resources, labour, capital and entrepreneurship. In this context capital means produced productive assets, such as equipment, rather than simply money. Money can finance an asset purchase, but an account balance is not itself a machine performing production. Human skills influence productivity and can be discussed as human capital."
+        },
+        {
+          "type": "paragraph",
+          "text": "A production possibility frontier describes maximum feasible combinations of two outputs for a defined period, resources and technology. It simplifies a many-output reality into two outputs. Points on the frontier are productively efficient within that model; points inside can indicate unused resources or inefficient production. Points outside are unattainable under the assumptions."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Worked calculations and production possibilities",
+      "blocks": [
+        {
+          "type": "table",
+          "caption": "Fictional training-centre weekly frontier",
+          "rows": [
+            [
+              "Combination",
+              "Data-cleaning batches X",
+              "Training sessions Y"
+            ],
+            [
+              "A",
+              "0",
+              "20"
+            ],
+            [
+              "B",
+              "1",
+              "18"
+            ],
+            [
+              "C",
+              "2",
+              "15"
+            ],
+            [
+              "D",
+              "3",
+              "11"
+            ],
+            [
+              "E",
+              "4",
+              "6"
+            ],
+            [
+              "F",
+              "5",
+              "0"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fictional centre can use the same staff and equipment for cleaning batches or conducting training. Moving A to B gains one batch and forgoes two sessions. Moving B to C forgoes three sessions; C to D four; D to E five; E to F six. Marginal opportunity cost rises as more batches are produced. Resource suitability differs across activities: staff moved later may be relatively more productive in training."
+        },
+        {
+          "type": "paragraph",
+          "text": "The opportunity cost of moving B to D is 18 - 11 = seven sessions for two additional batches. Average cost across that move is 7/2 = 3.5 sessions per batch. This average does not replace the separate marginal costs of three and four. State the starting and ending combination whenever calculating an opportunity cost."
+        },
+        {
+          "type": "paragraph",
+          "text": "From C to D, one additional batch costs four sessions. In the reverse move from D to C, one additional session requires giving up one quarter of a batch along that segment if outputs are divisible and linear interpolation is permitted. If sessions or batches are indivisible, the table describes whole feasible combinations; fractional interpolation becomes a modelling extension, not an observed option."
+        },
+        {
+          "type": "paragraph",
+          "text": "At X = 3, Y = 8 is inside the tabulated frontier because the maximum Y there is 11. The point (3,13) lies outside this assumed frontier. The point (3,11) is productively efficient, but that does not establish that it is the best social allocation. Choosing among efficient combinations requires information about benefits, needs and values."
+        },
+        {
+          "type": "paragraph",
+          "text": "An outward shift can result from more productive resources or improved technology. If training technology improves while batch capacity is unchanged, the frontier can expand unevenly rather than shifting in parallel. Moving from an interior point to the existing frontier is improved use of current capacity; it is different from expanding the frontier."
+        },
+        {
+          "type": "code",
+          "text": "from fractions import Fraction\nx = [0, 1, 2, 3, 4, 5]\ny = [20, 18, 15, 11, 6, 0]\ncosts = [Fraction(y[i]-y[i+1], x[i+1]-x[i])\n         for i in range(len(x)-1)]\nassert costs == [2, 3, 4, 5, 6]\nassert Fraction(y[1]-y[3], x[3]-x[1]) == Fraction(7,2)\nprint(costs)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 2: owner-operated consultancy. Synthetic monthly revenue is KES 180,000 and explicit costs are KES 100,000. Accounting profit under this simple definition is KES 80,000. The owner forgoes an alternative salary of KES 60,000 and net rent of KES 15,000 from the building used. Economic profit is 180,000 - 100,000 - 60,000 - 15,000 = KES 5,000. The alternatives must be feasible over the same month and must not double-count a cost already included."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 3: an unrecoverable study fee of KES 12,000 has already been paid. The learner now chooses between two future revision arrangements. Option A has future benefit valued at 25,000 and future cost 8,000; option B benefit 20,000 and future cost 1,000. Net future benefits are 17,000 and 19,000, so B is preferable under these stated monetary valuations. The sunk 12,000 does not change the ranking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 4: one additional fictional outreach session generates an estimated benefit of KES 9,000 and uses staff time with a next-best benefit of KES 6,000, plus transport costing 2,000. Relevant additional cost is 8,000 and net additional benefit is 1,000. The recommendation depends on the benefit valuation and the availability of the next-best activity. No real outreach programme valuation is implied."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Kenyan synthetic decision case",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fictional Lakeside County Training Unit must decide between another data-cleaning batch and training sessions. The frontier says what combinations are feasible; it does not determine which residents should receive service or how benefits should be valued. The analyst should present the trade-off and record the decision criteria used by management."
+        },
+        {
+          "type": "paragraph",
+          "text": "Suppose the unit is at C, with two batches and fifteen sessions. Moving to D exchanges four sessions for one batch. Management values that batch at KES 30,000 and each forgone session at KES 6,000. The additional net benefit is 30,000 - 4 × 6,000 = KES 6,000. If the session value were 8,000, the net change would be -2,000. Sensitivity analysis makes the valuation dependence visible."
+        },
+        {
+          "type": "paragraph",
+          "text": "This comparison assumes the stated session value includes all relevant benefits and that no additional resource cost has been omitted. Distribution matters: aggregate net benefit can be positive while a particular group loses access. A responsible recommendation identifies affected groups and any relevant constraints instead of treating a single monetary total as a complete public-service decision."
+        },
+        {
+          "type": "paragraph",
+          "text": "The evidence package should contain the alternatives, resource horizon, capacity table, valuations, calculations, sensitivity comparison and limitations. Label the example synthetic. Future Analytics Lab evidence must be stored under authenticated learner and institution access controls; this topic does not claim that the evidence service or readiness workflow is already deployed."
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Exercises and assignment",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A. Using the frontier, calculate opportunity cost and average cost per batch for moving from C to E. State both marginal costs encountered. Explain why the average alone can conceal the trade-off for the next batch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B. Classify (2,10), (2,15) and (2,17) as inside, on or outside the assumed frontier. Explain what additional information is needed to say that an efficient point is socially preferred."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C. A synthetic business earns revenue 250,000, pays explicit costs 150,000 and forgoes an alternative wage 70,000 plus net rental income 20,000. Calculate accounting and economic profit. State two assumptions required for including the implicit costs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D. A past unrecoverable payment is 5,000. Future option A gives benefit 14,000 at cost 4,000; B gives benefit 12,000 at cost 1,000. Rank the options by net future benefit and explain the role of the past payment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assignment. Write a 300-word recommendation for the fictional unit choosing whether to move C to D. Use session values of 6,000 and 8,000 and batch value 30,000. Include a table of calculations, two maintained assumptions, one distributional consideration and one clearly labelled normative judgement."
+        },
+        {
+          "type": "paragraph",
+          "text": "Academy rubric, 20 internal marks: correct trade-off 4; calculations and units 4; sensitivity reasoning 4; assumptions and limitations 4; clear distinction between evidence and value judgement 4. These are teaching marks, not official KASNEB weights or pass marks."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original assessment bank",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use an optional thirty-minute Academy practice timer. No official examination duration or topic weighting is asserted. Attempt these original questions before viewing solutions. Objective calculations use rounding tolerances; written recommendations require a human reviewer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q1. Calculate the sessions forgone moving C to E. Q2. Calculate average opportunity cost per additional batch over C to E. Q3. Calculate economic profit in Exercise C. Q4. Calculate net future benefit of option B in Exercise D. Q5. Which item is an implicit cost: paid rent, purchased stationery, forgone salary, or paid electricity?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Q6. Explain scarcity versus shortage with an original example. Q7. Explain why an efficient frontier point need not be the preferred allocation. Q8. Recommend whether to move C to D under each valuation and explain what the sensitivity comparison shows."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Solutions and corrective feedback",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A: sessions forgone = 15 - 6 = nine. Extra batches = four minus two = two. Average opportunity cost = 9/2 = 4.5 sessions per batch. Marginal costs are four from C to D and five from D to E. A correct answer separates the total, average and each marginal change."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B: (2,10) is inside, (2,15) is on and (2,17) is outside. Productive efficiency concerns achieving maximum feasible output combinations under the model. Allocative preference requires benefits, priorities, distribution and constraints. Do not infer social optimality merely from location on the frontier."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C: accounting profit = 250,000 - 150,000 = KES 100,000. Economic profit = 100,000 - 70,000 - 20,000 = KES 10,000. The alternative wage and rent must be feasible, relevant to the same period and not already counted in explicit costs. A higher accounting profit does not disprove the implicit costs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D: option A net future benefit = 14,000 - 4,000 = 10,000. Option B = 12,000 - 1,000 = 11,000, so B ranks higher under the specified valuations. The past 5,000 is unrecoverable and common to the present alternatives. If money can be refunded or an asset sold, investigate the recoverable amount separately."
+        },
+        {
+          "type": "paragraph",
+          "text": "Question answers: Q1 nine; Q2 4.5; Q3 10,000; Q4 11,000; Q5 forgone salary. For Q6 award credit for resource constraints across competing uses versus excess demand at a particular price and time. For Q7 credit the distinction between productive efficiency and allocation preferences. Q8 gives net benefits +6,000 and -2,000 under the two session values, respectively."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assignment feedback should assess the trade-off, valuation sensitivity, affected groups and limitations. The fictional valuations are not observed county data. Human judgement is required."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remediation: if a learner adds all rejected alternatives, revisit the next-best alternative. If a learner includes sunk payments, separate past unrecoverable costs from future differences. If marginal and average costs are confused, calculate each frontier segment before averaging. Reattempt a fresh table after correction. Internal readiness measures remain separate from official examination marks."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I state the feasible alternatives and time horizon.",
+            "I identify the next-best alternative, not all rejected options.",
+            "I distinguish explicit, implicit, sunk and recoverable costs.",
+            "I retain units in opportunity-cost calculations.",
+            "I separate marginal, average and total changes.",
+            "I distinguish movement toward the frontier from an outward shift.",
+            "I do not equate productive efficiency with social preference.",
+            "I label synthetic valuations and normative judgements."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Connect each definition to a decision. State the alternatives, assumptions and evidence required."
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. Sources and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Official paper identity checked 13 October 2026: https://www.kasneb.or.ke/cpa . It lists CA14 Economics at CPA Foundation level. This does not verify the complete topic syllabus. The previously indexed June 2024 syllabus PDF link returns 404 and has not been used as an authoritative current topic source."
+        },
+        {
+          "type": "paragraph",
+          "text": "Original DatalytIQs text, synthetic cases and questions. Independent academic and originality reviews pending. No protected textbook, past paper or question bank reproduced; no KASNEB endorsement implied."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Draft 1.0.1. Free learning resource. Publication requires verified source alignment, independent review, accessibility conformance and authenticated learner acceptance. Tagged structure alone does not establish full PDF/UA compliance."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "CA14-choice-q1",
+      "type": "numeric",
+      "prompt": "Sessions forgone from C to E?",
+      "answer": 9,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "See the worked solution; retain units."
+    },
+    {
+      "id": "CA14-choice-q2",
+      "type": "numeric",
+      "prompt": "Average opportunity cost per batch from C to E?",
+      "answer": 4.5,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "See the worked solution; retain units."
+    },
+    {
+      "id": "CA14-choice-q3",
+      "type": "numeric",
+      "prompt": "Economic profit in Exercise C in KES?",
+      "answer": 10000,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "See the worked solution; retain units."
+    },
+    {
+      "id": "CA14-choice-q4",
+      "type": "numeric",
+      "prompt": "Option B net future benefit in Exercise D in KES?",
+      "answer": 11000,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "See the worked solution; retain units."
+    },
+    {
+      "id": "CA14-choice-q5",
+      "type": "single_choice",
+      "prompt": "Which is an implicit cost?",
+      "choices": {
+        "A": "Paid rent",
+        "B": "Purchased stationery",
+        "C": "Forgone salary",
+        "D": "Paid electricity"
+      },
+      "answer": "C",
+      "marks": 1,
+      "explanation": "A forgone alternative income can be a cost without a payment."
+    },
+    {
+      "id": "CA14-choice-q6",
+      "type": "rubric",
+      "prompt": "Distinguish scarcity from shortage.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Correct economic distinction or calculation",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant example or decision implication",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    },
+    {
+      "id": "CA14-choice-q7",
+      "type": "rubric",
+      "prompt": "Explain why productive efficiency does not establish the preferred allocation.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Correct economic distinction or calculation",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant example or decision implication",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    },
+    {
+      "id": "CA14-choice-q8",
+      "type": "rubric",
+      "prompt": "Interpret the valuation sensitivity of moving C to D.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Correct economic distinction or calculation",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant example or decision implication",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    }
+  ]
+}

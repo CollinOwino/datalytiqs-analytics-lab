@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-14",
+  "project_complete": false,
+  "tests_passed": 41,
+  "academic_review": "independent_review_pending",
+  "production_repairs": {
+    "ca35p_reparented_lesson_ids": [
+      1532,
+      1533,
+      1534,
+      1535,
+      1536,
+      1537,
+      1538,
+      1539,
+      1540,
+      1541,
+      1542,
+      1543,
+      1544,
+      1545
+    ],
+    "modules_1_to_7_published_lesson_counts": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "course_total_lessons_preserved": 18,
+    "free_courses": [
+      1522,
+      1835,
+      1848,
+      1861,
+      1874
+    ],
+    "corrected_topic_label_ids": [
+      1836,
+      1849,
+      1862,
+      1875,
+      1844,
+      1857,
+      1870,
+      1883
+    ],
+    "backup_options": [
+      "datalytiqs_kasneb_structure_snapshot_20261012",
+      "datalytiqs_kasneb_topic_labels_snapshot_20261012"
+    ]
+  },
+  "synthetic_practical": {
+    "raw_rows": 9,
+    "duplicate_rows": 1,
+    "quarantined_rows": 2,
+    "admitted_rows": 6,
+    "net_amount_kes": 7500,
+    "office_totals_kes": {
+      "A": 5200,
+      "B": 2300
+    },
+    "dataset_status": "synthetic_only"
+  },
+  "pdf_checks": {
+    "tagged_structure": true,
+    "language_metadata": "en-KE",
+    "bookmarks_and_links": true,
+    "full_pdf_ua_conformance": "not_independently_verified"
+  },
+  "tutor_rest_blocker": "Dedicated Tutor API authentication required; no credential or security changes made",
+  "syllabus_status": "current_full_topic_syllabuses_pending",
+  "learner_acceptance": "authenticated_end_to_end_test_pending",
+  "substantive_drafts": 7,
+  "draft_pdf_pages": 55,
+  "latest_original_topic": "CA14-demand-supply-elasticity",
+  "latest_operation": "Second original CA14 topic, exact market model, full draft lesson and native quiz",
+  "dd24_simulation": {
+    "replications": 10000,
+    "seed": 20261012,
+    "exact_expected_costs_kes": {
+      "30": 260,
+      "40": 210,
+      "50": 160
+    },
+    "synthetic_only": true,
+    "topic_syllabus_verified": false
+  },
+  "dd32_mapreduce": {
+    "raw_rows": 10,
+    "admitted_rows": 8,
+    "rejected_rows": 2,
+    "sum_days": 36,
+    "global_mean_days": 4.5,
+    "population_variance_days_squared": 14,
+    "execution_scope": "local_teaching_model",
+    "syllabus_verified": false
+  },
+  "ca14": {
+    "course_id": 2100,
+    "topic_id": 2101,
+    "lesson_id": 2102,
+    "quiz_id": 2103,
+    "native_quiz_questions": 3,
+    "course_status": "draft",
+    "price_type": "free",
+    "native_assignment": "ability_missing_in_installed_bridge",
+    "authenticated_acceptance": "pending",
+    "additional_topic": {
+      "topic_id": 2105,
+      "lesson_id": 2106,
+      "quiz_id": 2107,
+      "native_quiz_questions": 3,
+      "state": "draft"
+    }
+  }
+}

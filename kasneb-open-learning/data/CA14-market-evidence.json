@@ -1,0 +1,37 @@
+{
+  "dataset_status": "synthetic_only",
+  "equilibrium": {
+    "buyer_price": "20",
+    "seller_price": "20",
+    "quantity": "80",
+    "tax_revenue": "0"
+  },
+  "tax_5": {
+    "buyer_price": "23",
+    "seller_price": "18",
+    "quantity": "74",
+    "tax_revenue": "370"
+  },
+  "arc_elasticity": "-3/5",
+  "untaxed_welfare": {
+    "consumer_surplus": "1600",
+    "producer_surplus": "3200/3",
+    "tax_revenue": "0",
+    "total": "8000/3"
+  },
+  "taxed_welfare": {
+    "consumer_surplus": "1369",
+    "producer_surplus": "2738/3",
+    "tax_revenue": "370",
+    "total": "7955/3"
+  },
+  "deadweight_loss": "15",
+  "native_records": {
+    "course": 2100,
+    "topic": 2105,
+    "lesson": 2106,
+    "quiz": 2107
+  },
+  "official_topic_mapping": "unverified",
+  "learner_acceptance": "pending"
+}

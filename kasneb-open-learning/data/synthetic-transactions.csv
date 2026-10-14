@@ -1,0 +1,10 @@
+transaction_id,office_code,category,amount_kes
+T001,A,stationery,1200
+T002,A,equipment,2500
+T003,B,stationery,1800
+T004,B,training,900
+T004,B,training,900
+T005,A,stationery,
+T006,B,refund,-400
+T007,A,training,"1,500"
+T008,C,stationery,700

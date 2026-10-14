@@ -1,0 +1,476 @@
+{
+  "id": "DD31-data-quality-joins",
+  "paper_code": "DD31",
+  "qualification": "Diploma in Data Management and Analytics",
+  "title": "Python data preparation: validation, joins and reconciled summaries",
+  "version": "1.0.0",
+  "publication_date": "2026-10-12",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 210,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/ddma",
+    "version": null,
+    "reference": null,
+    "reason": "DD31 identity verified; current full topic-level syllabus edition pending."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false
+  },
+  "wordpress_mapping": {
+    "course_id": 1835,
+    "existing_lesson_ids": [
+      1890,
+      1891
+    ],
+    "mapping_status": "existing_lesson_match; official_topic_syllabus_pending"
+  },
+  "assets": [
+    "data/synthetic-transactions.csv",
+    "data/synthetic-offices.csv",
+    "scripts/practical_solution.py"
+  ],
+  "outcomes": [
+    "Import a CSV file without damaging quoted fields or identifiers.",
+    "Apply explicit rules for amount parsing, duplicates and missing values.",
+    "Distinguish exact duplicates from conflicting records.",
+    "Validate lookup-key uniqueness before a many-to-one join.",
+    "Reconcile row counts and monetary aggregates after processing.",
+    "Retain a transparent transformation log and explain exclusions."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Topic overview and prerequisites",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A useful analytical summary begins with a defensible dataset. Importing a table and drawing a chart are insufficient when records are duplicated, amounts are text, offices cannot be matched, or missing values are silently treated as zero. This original DatalytIQs draft teaches an auditable preparation workflow using synthetic institutional transactions."
+        },
+        {
+          "type": "paragraph",
+          "text": "DD31 is verified as a Python Data Visualisation paper in the official DDMA structure and August 2026 timetable. The current full topic-level syllabus and required software have not been retrieved; this is a draft supplementary resource. The chosen standard-library implementation makes the worked exercise reproducible without a paid package or proprietary dataset."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisites: Python variables, lists, dictionaries, loops, functions and simple conditionals. Allow about 210 minutes for the notes, practical, diagnostics and unseen variation. These are internal study estimates. Use the supplied fictional data only; no real institutional or citizen records are required."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Foundations of trustworthy data preparation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Define the table's grain: what does one row represent? In this exercise, one row should represent one transaction. The transaction identifier is intended to distinguish records; the office code connects a transaction to a lookup table. The amount is an exact decimal monetary value in Kenyan shillings. Categories distinguish ordinary positive transactions from negative refunds."
+        },
+        {
+          "type": "paragraph",
+          "text": "A schema states field names, permitted data types, missing-value rules, key rules and business meaning. A CSV file itself does not enforce these rules. A column named amount_kes can contain digits, commas, blanks or arbitrary text. Validation turns expectations into explicit checks before aggregation."
+        },
+        {
+          "type": "paragraph",
+          "text": "CSV parsing requires a CSV-aware reader. Splitting every line on commas corrupts a quoted value such as \"1,500\": the comma belongs inside one field. Python's csv module recognises quoted fields and newline conventions. Open files with newline='' and an explicit encoding. Identifiers should remain text when leading zeros or non-numeric characters are significant."
+        },
+        {
+          "type": "paragraph",
+          "text": "Amount parsing needs a stated locale convention. This exercise permits an optional minus sign, grouped thousands commas and up to two decimal places, with a full stop as decimal separator. Thus '1,500' becomes Decimal('1500'), while '1,5', 'KES 100' and 'NaN' are rejected. Blindly deleting every punctuation mark can transform an invalid input into a different value."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use Decimal for the exercise's exact monetary arithmetic. It preserves decimal values supplied as strings and avoids introducing binary floating-point representation into a reconciliation. Precision and rounding still require an explicit policy in a real system. This resource teaches data preparation, not statutory financial reporting."
+        },
+        {
+          "type": "paragraph",
+          "text": "A missing amount is unavailable, not an observed zero. An analyst can reject or quarantine the record until the amount is resolved, or apply a justified imputation in an appropriate model. This exercise quarantines it and reports the exclusion. Inventing a zero would understate the admitted amount while hiding a data-quality issue."
+        },
+        {
+          "type": "paragraph",
+          "text": "Duplicate handling has two layers. An exact repeated row may be removed under the exercise policy while its removal is counted. A repeated transaction identifier with different attributes is a conflict, not an exact duplicate. The latter stops processing because selecting one version silently would require a business decision that the code cannot justify."
+        },
+        {
+          "type": "paragraph",
+          "text": "A join combines records using a common key. Here, many transaction rows can refer to one office lookup row, so the relationship is many-to-one. The lookup key must be unique and non-empty. If Office A appears twice in the lookup, a conventional join can multiply transaction rows. A row-count increase can inflate totals without changing any original amount."
+        },
+        {
+          "type": "paragraph",
+          "text": "A left join preserves every left-side transaction, including those without a matching office. An inner join retains matched rows and can silently lose unmatched transactions. A right or full join may be useful for other questions but does not automatically satisfy this exercise's requirements. State the intended relationship and inspect unmatched keys."
+        },
+        {
+          "type": "paragraph",
+          "text": "This worked solution performs a dictionary lookup after explicitly validating office uniqueness. A transaction with an unknown office is quarantined. The output preserves its identifier and reason so it can be investigated. A lookup enrichment must not overwrite the original office code or transaction identifier."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aggregation groups admitted records and adds their amounts. Office totals answer a different question from category totals, but both should reconcile to the same grand total when the groups partition the same records. Count reconciliation and value reconciliation detect different errors: equal totals do not prove equal row coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "Transformation provenance records what changed, why, and which records were affected. Keep the raw file unchanged, identify the preparation version, and retain a rejection log. A successful script should not erase the evidence of rejected values. Re-running the same inputs under the same rules should reproduce both outputs and exclusions."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Synthetic inputs and worked example",
+      "blocks": [
+        {
+          "type": "table",
+          "caption": "Synthetic transaction input",
+          "rows": [
+            [
+              "ID",
+              "Office",
+              "Category",
+              "Amount text"
+            ],
+            [
+              "T001",
+              "A",
+              "stationery",
+              "1200"
+            ],
+            [
+              "T002",
+              "A",
+              "equipment",
+              "2500"
+            ],
+            [
+              "T003",
+              "B",
+              "stationery",
+              "1800"
+            ],
+            [
+              "T004",
+              "B",
+              "training",
+              "900"
+            ],
+            [
+              "T004",
+              "B",
+              "training",
+              "900"
+            ],
+            [
+              "T005",
+              "A",
+              "stationery",
+              "blank"
+            ],
+            [
+              "T006",
+              "B",
+              "refund",
+              "-400"
+            ],
+            [
+              "T007",
+              "A",
+              "training",
+              "1,500"
+            ],
+            [
+              "T008",
+              "C",
+              "stationery",
+              "700"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "caption": "Synthetic office lookup",
+          "rows": [
+            [
+              "Code",
+              "Office name"
+            ],
+            [
+              "A",
+              "Fictional Lakeside Office"
+            ],
+            [
+              "B",
+              "Fictional Highlands Office"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "There are nine raw transaction rows. T004 is repeated exactly, so one row is removed under the declared duplicate policy. T005 has no amount, and T008 refers to Office C, absent from the lookup. Both are quarantined. T006 is a negative refund and is admitted under the category-specific rule. T007 uses a thousands comma and is parsed as 1500."
+        },
+        {
+          "type": "paragraph",
+          "text": "The admitted dataset has six rows. Count reconciliation is 9 raw = 1 exact duplicate + 2 quarantined + 6 admitted. This relationship is a control for the exercise pipeline, not a universal identity for every data transformation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Admitted value total = 1200 + 2500 + 1800 + 900 - 400 + 1500 = KES 7,500. Office A total = 1200 + 2500 + 1500 = 5,200; Office B total = 1800 + 900 - 400 = 2,300. Their sum is 7,500. Category totals are stationery 3,000, equipment 2,500, training 2,400 and refunds -400, again summing to 7,500."
+        },
+        {
+          "type": "paragraph",
+          "text": "For a sensitivity control, the sum of all parsable raw amounts, excluding the unavailable T005 amount, is 9,100. Removing the repeated 900 gives 8,200; excluding the unknown-office 700 gives 7,500. These are clearly labelled parsing-stage totals, not certified financial totals: the missing transaction amount remains unknown."
+        },
+        {
+          "type": "code",
+          "text": "import csv\nfrom io import StringIO\n\nsample = 'id,amount\\nT007,\"1,500\"\\n'\nrows = list(csv.DictReader(StringIO(sample)))\nprint(rows[0]['id'], rows[0]['amount'])\n# Expected: T007 1,500 (two fields, not three)"
+        },
+        {
+          "type": "code",
+          "text": "from decimal import Decimal\n\namounts = [Decimal(x) for x in\n           ['1200', '2500', '1800', '900', '-400', '1500']]\nprint(sum(amounts, Decimal('0')))\n# Expected: 7500"
+        },
+        {
+          "type": "paragraph",
+          "text": "The reusable practical_solution.py file supplied with this draft performs amount-format validation, exact-duplicate removal, conflict detection, lookup uniqueness checking, quarantine logging and aggregate reconciliation. It reads the two synthetic CSV fixtures, returns an explicit result dictionary and checks the control identities. Run it from its project location without changing the input files."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expected script outputs: raw_rows 9; duplicate_rows 1; two rejected identifiers T005 and T008 with reasons missing_amount and unknown_office; office totals A 5200 and B 2300; category totals 3000, 2500, 2400 and -400; total 7500. A different output must be investigated rather than explained away as software variation."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Applied institutional case and interpretation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A fictional training-and-services organisation wants an office summary for an internal management meeting. A hasty analyst could report 9,100 as 'total expenditure' after converting numeric text, even though it includes a repeated transaction, an unknown office and an unavailable amount. Another analyst could use an inner join that drops the unknown office without explaining its loss. Both approaches obscure the preparation decisions."
+        },
+        {
+          "type": "paragraph",
+          "text": "A defensible report states: 'Six synthetic transactions were admitted under the documented preparation rules, with a net total of KES 7,500. One exact repeated row was removed; two unique records were quarantined for an unavailable amount and an unmatched office. The net total is provisional with respect to those unresolved records.' This communicates both the numerical result and its coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "A negative refund reduces the net amount but should remain separately visible. If management needs gross positive transactions, the total is 7,900 and refunds are -400, producing net 7,500. Treating the refund as an error solely because it is negative would inflate the net figure. The required measure must be defined before processing."
+        },
+        {
+          "type": "paragraph",
+          "text": "All office names and transaction values are invented for training. A real organisation may have additional controls for authorisation, dates, tax, currency, account classification and supporting documents. Those controls are not inferred or implemented merely because this exercise's arithmetic reconciles."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Retain the raw CSVs unchanged.",
+            "Document the schema, key rules and amount convention.",
+            "Keep rejection reasons and original identifiers.",
+            "Check lookup uniqueness before joining.",
+            "Reconcile record counts and group totals.",
+            "Report unresolved records and distinguish gross from net measures."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Guided exercises and unseen variations",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A - import evidence. Read both supplied CSV files with DictReader. Report their column names, raw transaction count and office count. Explain why the quoted T007 amount must be one field."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B - duplicate diagnostics. Identify exact repeated rows separately from repeated identifiers. Change one copy of T004 to amount 950 in a separate test copy. Explain why this is a conflict and why the solution should stop rather than choose one record."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C - lookup cardinality. Add a second Office A lookup row in a test copy. Predict the effect of an unconstrained tabular join. Confirm that the supplied solution rejects the duplicate key before calculating any enriched totals."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D - sensitivity scenarios. Give T005 a valid amount of 300 and leave all other inputs unchanged. Recalculate admitted count, total and office totals. In another separate scenario, add Office C to the lookup while leaving T005 missing. Recalculate the admitted values."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise E - malformed amount policy. Test inputs '', '1,500', '1,5', '-400', '12.34', '12.345', 'NaN' and 'KES 100'. Predict admission or rejection based on the documented parsing rule. Explain why a programme that removes every comma without checking format would wrongly admit '1,5' as 15."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise F - professional report. Write a 150-word preparation and result note containing row-count reconciliation, net total, excluded identifiers, reasons, limitations and a next action. An unseen analyst should be able to reproduce your result from the unchanged inputs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Evidence specification: two raw files, preparation script, software version, result output, test-copy changes, rejection log and interpretation. Keep altered test copies separate. This draft defines the practical exercise; authenticated submission and graded evidence persistence have not yet passed acceptance testing."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original examination-style questions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Q1 (4 marks): explain why line.split(',') is unreliable for the supplied CSV.",
+            "Q2 (5 marks): reconcile the nine raw rows to the final admitted records and identify each exclusion.",
+            "Q3 (5 marks): calculate net admitted total and office totals, with working.",
+            "Q4 (4 marks): explain exact duplicates versus conflicting identifiers and propose an appropriate response.",
+            "Q5 (4 marks): explain how a duplicate lookup key can inflate totals and how to prevent it.",
+            "Q6 (4 marks): distinguish an observed zero amount from an unavailable amount.",
+            "Q7 (4 marks): write a concise professional interpretation that discloses unresolved records."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Suggested internal practical rubric: valid import 3 marks; correct key and amount checks 5; duplicate and quarantine accounting 4; accurate reconciled summaries 4; evidence and interpretation 4. Total 20. Reviewer judgement is required for explanations. The figures are internal practice marks, not official KASNEB weighting or a pass threshold."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Solutions and marking guidance",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A: transaction columns are transaction_id, office_code, category and amount_kes; nine raw rows. The lookup columns are office_code and office_name; two offices. A CSV-aware reader respects quotation around 1,500, preserving it as one amount field."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B: the original repeated T004 rows are identical. Changing one amount to 950 produces different versions of the same identifier. The supplied code raises a conflict error. The correction requires evidence from the source system or an authorised reconciliation policy, not an arbitrary first-row rule."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C: a conventional many-to-many result could duplicate each Office A transaction for both lookup rows, inflating its aggregate. The supplied solution checks unique lookup codes and raises ValueError. A joined table must not be accepted merely because it has the expected column names."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D scenario 1: giving T005 amount 300 admits seven records; total 7,800; Office A 5,500 and B 2,300. Office C remains unmatched. Scenario 2: adding Office C admits seven records; total 8,200; Office A 5,200, B 2,300 and C 700. T005 remains quarantined. These scenarios change one condition at a time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise E: blank rejected; 1,500 accepted as 1500; 1,5 rejected; -400 accepted by the parser and admitted only if category refund; 12.34 accepted; 12.345 rejected; NaN and KES 100 rejected. Parsing permission and business-rule admission are separate decisions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q1: award credit for quoted delimiter handling, correct field count, a CSV-aware reader and appropriate file opening. Q2: credit nine raw, one duplicate, six admitted, two quarantined and correctly identified reasons. Q3: credit net 7,500, Office A 5,200, Office B 2,300 and accurate working. Q4 and Q5 assess diagnosis and control logic; Q6 requires distinguishing absent information from an observed value; Q7 requires both result and limitations."
+        },
+        {
+          "type": "paragraph",
+          "text": "The original gross positive admitted amount is 7,900; subtracting the 400 refund gives 7,500 net. None of the reconciliation checks resolves the missing amount or certifies that every required transaction was present in the raw extract."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist and common errors",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I define the row grain and key before import.",
+            "I preserve quoted CSV fields and text identifiers.",
+            "I state amount formatting and missing-value policy.",
+            "I distinguish exact duplicates from conflicting IDs.",
+            "I validate lookup uniqueness and expected cardinality.",
+            "I retain unmatched records with reasons.",
+            "I reconcile both row counts and numerical totals.",
+            "I distinguish gross, refund and net amounts.",
+            "I retain an unchanged raw extract and transformation evidence.",
+            "I disclose unresolved records in the report."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Common errors include treating a successful import as validation, converting missing values to zero, dropping unmatched records without a log, removing every repeated identifier without checking conflicts, and assuming that equal totals prove complete coverage. A high-quality answer links each control to the error it detects."
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. References and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Official DDMA structure: https://www.kasneb.or.ke/ddma . Consulted 12 October 2026 for paper identity. The full current topic syllabus remains unavailable to this verification workflow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Python official CSV documentation: https://docs.python.org/3/library/csv.html . Decimal documentation: https://docs.python.org/3/library/decimal.html . These primary references support the import and exact-decimal implementation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Synthetic assets: data/synthetic-transactions.csv; data/synthetic-offices.csv; scripts/practical_solution.py. The office names, inputs, exercises, code and explanatory solutions are original DatalytIQs materials. Formal academic and originality review remain pending."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Draft version 1.0.0. Independent study resource. Verify source alignment, academic substance, accessibility, LMS association and authenticated free learner access before publication."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "DD31-join-q1",
+      "type": "numeric",
+      "prompt": "How many transaction rows are admitted in the original exercise?",
+      "answer": 6,
+      "tolerance": 0,
+      "marks": 2,
+      "explanation": "9 raw minus one exact duplicate and two quarantined unique records gives six."
+    },
+    {
+      "id": "DD31-join-q2",
+      "type": "numeric",
+      "prompt": "What is the net admitted total in KES?",
+      "answer": 7500,
+      "tolerance": 0.001,
+      "marks": 3,
+      "explanation": "A total 5200 plus B total 2300 equals 7500."
+    },
+    {
+      "id": "DD31-join-q3",
+      "type": "single_choice",
+      "prompt": "Which record requires quarantine due to unmatched office?",
+      "choices": {
+        "A": "T004",
+        "B": "T005",
+        "C": "T006",
+        "D": "T008"
+      },
+      "answer": "D",
+      "marks": 1,
+      "explanation": "T008 uses Office C, absent from the original lookup."
+    },
+    {
+      "id": "DD31-join-q4",
+      "type": "single_choice",
+      "prompt": "A repeated transaction ID with a different amount is:",
+      "choices": {
+        "A": "Always an exact duplicate",
+        "B": "A conflicting record requiring investigation",
+        "C": "A legitimate zero",
+        "D": "Evidence of correct joining"
+      },
+      "answer": "B",
+      "marks": 1,
+      "explanation": "The two versions disagree and cannot be silently deduplicated."
+    },
+    {
+      "id": "DD31-join-q5",
+      "type": "rubric",
+      "prompt": "Explain why a reconciled total does not establish complete financial coverage.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Recognises missing input/excluded unresolved records",
+          "marks": 2
+        },
+        {
+          "criterion": "Distinguishes internal arithmetic consistency from external completeness",
+          "marks": 2
+        }
+      ],
+      "explanation": "Groups can reconcile despite missing or excluded records; source completeness needs separate verification."
+    }
+  ]
+}

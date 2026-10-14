@@ -1,0 +1,33 @@
+{
+  "raw": 10,
+  "accepted": 8,
+  "rejected": 2,
+  "offices": {
+    "B": {
+      "count": 4,
+      "sum_days": 24,
+      "sum_squares": 218,
+      "mean": "6",
+      "population_variance": "37/2"
+    },
+    "A": {
+      "count": 3,
+      "sum_days": 12,
+      "sum_squares": 56,
+      "mean": "4",
+      "population_variance": "8/3"
+    },
+    "C": {
+      "count": 1,
+      "sum_days": 0,
+      "sum_squares": 0,
+      "mean": "0",
+      "population_variance": "0"
+    }
+  },
+  "dataset_status": "synthetic_only",
+  "environment": {
+    "python": "3.12.14"
+  },
+  "execution_scope": "local_teaching_model_not_hadoop_cluster"
+}

@@ -1,0 +1,456 @@
+{
+  "id": "DD24-monte-carlo-inventory",
+  "paper_code": "DD24",
+  "qualification": "Diploma in Data Management and Analytics",
+  "title": "Monte Carlo modelling: inventory risk, verification and decisions",
+  "version": "1.0.0",
+  "publication_date": "2026-10-12",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 210,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/ddma",
+    "version": null,
+    "reference": null,
+    "reason": "DD24 paper identity verified; current full topic syllabus and precise simulation outcomes not obtained."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false
+  },
+  "wordpress_mapping": {
+    "course_id": 1861,
+    "existing_lesson_ids": [
+      1945,
+      1948
+    ],
+    "mapping_status": "suggested_by_title_not_official_syllabus_verified"
+  },
+  "outcomes": [
+    "Formulate an uncertainty model with explicit units and assumptions.",
+    "Translate a discrete probability distribution into a sampling rule.",
+    "Calculate exact benchmark costs and reproduce a simulation.",
+    "Distinguish simulation error, model uncertainty and validation.",
+    "Compare policies fairly and write an evidence-based recommendation."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Purpose and learning route",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A simulation evaluates a model repeatedly under different inputs. Monte Carlo modelling samples uncertain inputs and aggregates the resulting outputs. It helps examine ranges of possible outcomes when an exact calculation is cumbersome, but it does not make unsupported assumptions true. This topic develops one transparent model from problem statement to reproducible decision evidence."
+        },
+        {
+          "type": "paragraph",
+          "text": "The official DDMA webpage identifies DD24 as Quantitative Modelling Skills. It does not supply the complete current topic syllabus. These are original supplementary draft notes: the learning outcomes, case, questions and study time are DatalytIQs authoring choices, not verified official syllabus outcomes or examination requirements. No KASNEB endorsement is implied."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisites are arithmetic, elementary probability, weighted means and basic loops. Work first with a calculator, then reproduce the model using the supplied Python code. Python is a teaching tool here; no claim is made about officially required examination software. Allow approximately three and a half hours for reading, calculations, exercises and evidence preparation. All organisations and quantities are synthetic."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Formulation, uncertainty and sampling",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Begin with a decision, an observational unit and a time horizon. Our decision is the number of packs available at the beginning of one fictional training day. The unit of simulation is one day, and the performance measure is the day's mismatch cost in Kenyan shillings. This is a single-period inventory model. It has no replenishment event, rolling stock balance, lead time or queue; adding those features requires a different state model."
+        },
+        {
+          "type": "paragraph",
+          "text": "A decision variable is controlled by the analyst: stock q. An uncertain input is daily demand D. A parameter is a fixed modelling assumption such as the cost per surplus pack. An output is calculated from these inputs. Keeping the categories separate prevents an analyst from presenting a sampled demand as a policy or treating a policy choice as an observed fact."
+        },
+        {
+          "type": "paragraph",
+          "text": "The synthetic demand distribution assigns probability 0.2 to 20 packs, 0.5 to 30 packs and 0.3 to 50 packs. The probabilities sum to one. They are deliberately invented for instruction and cannot justify a real institution's stock policy. In a real study, define the demand measurement process, time window, missing-data treatment, seasonality and source before estimating probabilities."
+        },
+        {
+          "type": "paragraph",
+          "text": "For stock q and demand D, surplus = max(q - D, 0) and unmet demand = max(D - q, 0). Mismatch cost C = 10 × surplus + 40 × unmet demand. Surplus incurs KES 10 per pack; unmet demand incurs a hypothetical KES 40 service penalty per pack. A penalty is a modelling valuation, not necessarily a cash payment. The model excludes procurement costs, revenue, salvage, capacity limits and all other effects."
+        },
+        {
+          "type": "paragraph",
+          "text": "An inverse cumulative rule translates a uniform draw u into demand: if 0 <= u < 0.2, choose 20; if 0.2 <= u < 0.7, choose 30; if 0.7 <= u < 1, choose 50. The half-open intervals neither overlap nor leave gaps. Their widths equal the probabilities. Because these probabilities are exact tenths, this practical instead draws a uniform integer slot from 0 through 9: slots 0-1 map to 20, 2-6 to 30, and 7-9 to 50."
+        },
+        {
+          "type": "paragraph",
+          "text": "Each replication samples one demand and computes a cost. Under the model, draws are independent and identically distributed across replications. This is an assumption about simulated days, not evidence that real demand has no serial dependence. A consecutive time-series model would need to represent changing conditions or dependence when those affect the decision."
+        },
+        {
+          "type": "paragraph",
+          "text": "A pseudo-random generator produces a deterministic sequence from its state. Recording the seed supports reproduction within a recorded software environment. It does not validate the demand distribution or remove sampling error. Use a local generator rather than changing shared global state. Record the interpreter version and sampling algorithm because changing the implementation can change realised draws."
+        },
+        {
+          "type": "paragraph",
+          "text": "Let C_1 through C_n be simulated costs. Their mean estimates the model's expected cost. Sample standard deviation s describes variability across simulated days; standard error s/sqrt(n) describes uncertainty in the estimated mean under independent replications. These quantities answer different questions. Increasing n narrows Monte Carlo error, while the daily cost distribution remains variable."
+        },
+        {
+          "type": "paragraph",
+          "text": "An approximate 95% interval for the expected model cost is mean ± 1.96 × standard error when a normal approximation is adequate. It is not an interval expected to contain 95% of daily costs, and it does not cover all uncertainty about the real system. Small or highly skewed samples can make the approximation poor. Examine the sampling design and output distribution before relying on it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Verification asks whether the implementation follows the written model. Validation asks whether that model is suitable for the real decision. Exact arithmetic, boundary tests and row accounting support verification. Genuine data, stakeholder review and comparison with withheld observations would support validation. Passing software tests alone cannot establish real-world validity."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Exact benchmarks and reproducible simulation",
+      "blocks": [
+        {
+          "type": "table",
+          "caption": "Synthetic one-day costs in KES",
+          "rows": [
+            [
+              "Demand",
+              "Probability",
+              "Stock 30",
+              "Stock 40",
+              "Stock 50"
+            ],
+            [
+              "20",
+              "0.2",
+              "100",
+              "200",
+              "300"
+            ],
+            [
+              "30",
+              "0.5",
+              "0",
+              "100",
+              "200"
+            ],
+            [
+              "50",
+              "0.3",
+              "800",
+              "400",
+              "0"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "For stock 30, expected cost is 0.2 × 100 + 0.5 × 0 + 0.3 × 800 = KES 260. For stock 40, it is 40 + 50 + 120 = KES 210. For stock 50, it is 60 + 100 = KES 160. Stock 50 has the lowest expected mismatch cost among these three tested policies under the stated model. That result is not an unrestricted procurement recommendation: the objective omits purchase costs and assumes the invented demand distribution."
+        },
+        {
+          "type": "paragraph",
+          "text": "For stock 30, E(C squared) = 0.2 × 100 squared + 0.5 × 0 squared + 0.3 × 800 squared = 194,000. Population variance = 194,000 - 260 squared = 126,400 KES squared. The corresponding standard deviation is approximately KES 355.53. An independent check sums weighted squared deviations from 260. Stock 40 variance is 16,900; stock 50 variance is 12,400."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stockout risk is P(D > q), whereas expected unmet quantity is E(max(D - q, 0)). For stock 30, stockout probability is 0.3 and expected unmet demand is 0.3 × 20 = 6 packs. For stock 40, the probability remains 0.3, but expected unmet demand falls to 3 packs. For stock 50, both are zero in this restricted demand model. Reporting just one metric conceals part of the decision."
+        },
+        {
+          "type": "code",
+          "text": "from random import Random\nfrom statistics import mean, stdev\nfrom math import sqrt\n\nrng = Random(20261012)\nn = 10000\ndemands = []\nfor _ in range(n):\n    slot = rng.randrange(10)\n    demands.append(20 if slot < 2 else 30 if slot < 7 else 50)\n\ndef mismatch(demand, stock):\n    return 10 * max(stock-demand, 0) + 40 * max(demand-stock, 0)\n\nfor stock in (30, 40, 50):\n    costs = [mismatch(d, stock) for d in demands]\n    average = mean(costs)\n    se = stdev(costs) / sqrt(n)\n    print(stock, round(average, 2), round(se, 2))\n# Compare means with exact benchmarks 260, 210 and 160.\n# Finite simulated means need not equal the benchmarks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the same demand list for every policy so each policy faces the same simulated conditions. This paired comparison is often called common random numbers. It makes differences easier to interpret, but variance reduction is not automatic for every model. Here the difference between stock 50 and stock 30 is 200 when demand is 20 or 30, and -800 when demand is 50. Its expected value is -100 KES and variance is 210,000 KES squared."
+        },
+        {
+          "type": "paragraph",
+          "text": "For a paired estimate, calculate a difference for every replication and use the standard deviation of those differences to calculate its standard error. Do not substitute the separate policy standard errors as though the two estimates were independent. Under this pairing they share the same random demand and are correlated."
+        },
+        {
+          "type": "code",
+          "text": "differences = [mismatch(d, 50)-mismatch(d, 30) for d in demands]\ndelta = mean(differences)\ndelta_se = stdev(differences)/sqrt(n)\nprint(round(delta, 2), round(delta_se, 2))\nassert len(differences) == n\nassert set(demands) <= {20, 30, 50}\nassert all(v in {200, -800} for v in differences)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A ten-state exact enumeration gives another benchmark: list demand 20 twice, demand 30 five times and demand 50 three times, then average the ten costs. This calculation uses the model probabilities exactly; it is not a random simulation run. Calling it Monte Carlo would hide the distinction between enumerating a distribution and sampling from it."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Kenyan synthetic case and evidence",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fictional Umoja Skills Centre provides packs for a one-day workshop. Management wants to reduce unmet demand while controlling surplus. The analyst must explain that KES 40 is a hypothetical service penalty chosen for this case, not an official charge or empirical valuation. A recommendation should include expected mismatch cost, stockout probability, expected unmet quantity and assumptions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prepare an evidence package containing the model statement, input table, code version, environment version, seed, replication count, demand frequencies, policy results, exact benchmarks and interpretation. Label the dataset synthetic. Use anonymous replication numbers rather than creating pretend genuine learner records. These notes do not claim that the existing Analytics Lab already stores this evidence securely."
+        },
+        {
+          "type": "paragraph",
+          "text": "For a future authenticated Lab exercise, attach the evidence only to the owning synthetic learner and authorised institution, with persistent storage and access checks. A shared public file or user-supplied learner identifier cannot establish isolation. Objective calculations can be scored automatically; the suitability of assumptions and quality of recommendations require a rubric and human judgement."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sensitivity analysis changes model assumptions deliberately. If shortage penalty falls from KES 40 to KES 10, expected costs become KES 80, 120 and 160 for stock 30, 40 and 50 respectively. The ranking reverses. More simulation replications would not resolve this valuation uncertainty. Show management how the decision depends on the penalty instead of reporting one number as inevitable."
+        },
+        {
+          "type": "paragraph",
+          "text": "The simplified model has no procurement constraint. An institution with an actual budget, uncertain attendance beyond 50 or salvage arrangements needs those features represented. Validate them with relevant evidence before operational use. A model is useful when its limitations are clear enough for decision-makers to judge its purpose."
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Exercises and practical assignment",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A. Calculate all three mismatch costs when demand is 20, 30 and 50 for stock 35. Calculate expected cost, stockout probability and expected unmet quantity. Show units and every weighted contribution."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B. Write the interval rule for probabilities 0.1, 0.6 and 0.3 assigned to demands 20, 30 and 50. Draw ten equally likely integer slots and map them to demand values. Identify the category for u = 0.1 and u = 0.7 using half-open intervals."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C. Use the original distribution and reduce the shortage penalty to 10. Recalculate expected costs without simulation. Explain which assumption caused the changed ranking and why a larger n cannot recover the original ranking when the new model is used."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D. Suppose a simulation gives mean KES 262, sample standard deviation KES 350 and n = 2,500. Calculate standard error and the approximate 95% interval for the expected model cost. Explain why this interval is not a daily-cost prediction interval."
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical. Execute the supplied code, preserving seed and environment version. Reconcile the demand counts to 10,000, verify the conditional cost for every possible demand, and compare simulated means with exact benchmarks. Repeat with a second seed and describe differences without selecting only the more favourable run. Submit code, output and a 200-word interpretation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Internal assignment rubric: formulation and units 4 marks; correct calculation and reconciliation 6; reproducible evidence 4; uncertainty interpretation 3; limitations and ethical handling 3. Total 20 internal marks. These are Academy practice marks, not official examination weights or pass thresholds. Feedback should identify the failing step and a focused correction task."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original question bank and timed practice",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The following ten questions are original Academy practice. Use an optional 35-minute self-study timer; this is not a KASNEB examination simulation or official timing. Numeric tolerances serve rounding only. Written explanations require human judgement. Learners should attempt questions before reading solutions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q1. State the observational unit and the decision variable. Q2. Calculate expected cost at stock 30. Q3. Calculate stockout probability at stock 40. Q4. Calculate expected unmet demand at stock 30. Q5. Calculate expected cost at stock 35."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q6. Calculate the standard error when s = 350 and n = 2,500. Q7. Calculate the exact expected paired cost difference, stock 50 minus stock 30. Q8. Which action reduces Monte Carlo sampling error: increasing independent replications, changing units, removing inconvenient draws, or claiming a fixed seed validates the model?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Q9. Explain two limitations of an approximate mean interval and distinguish it from daily variability. Q10. Recommend one of the tested policies under the original objective, then state one omitted feature that could change your recommendation. Use a transparent rubric rather than treating particular keywords as sufficient."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Worked solutions and feedback",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A. At stock 35, costs are KES 150, 50 and 600. Expected cost = 0.2 × 150 + 0.5 × 50 + 0.3 × 600 = KES 235. Stockout occurs only at demand 50, so probability is 0.3. Expected unmet demand = 0.3 × 15 = 4.5 packs. A non-integer expected quantity does not imply that a particular day has fractional demand."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B. Intervals are [0, 0.1), [0.1, 0.7) and [0.7, 1). Slot 0 maps to 20; slots 1-6 map to 30; slots 7-9 map to 50. At u = 0.1 demand is 30 and at u = 0.7 demand is 50. If boundary code uses overlapping comparisons, trace the conditional branches and replace them with one ordered rule."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C. Stock 30 costs are 100, 0 and 200, giving expectation 80. Stock 40 costs are 200, 100 and 100, giving 120. Stock 50 remains 300, 200 and 0, giving 160. The policy ranking changes because shortage is now cheaper relative to surplus. Simulation estimates these new expectations; it cannot make them equal the old model's results."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D. Standard error = 350/sqrt(2,500) = 7 KES. Margin = 1.96 × 7 = 13.72. Approximate interval = [248.28, 275.72] KES. It concerns uncertainty in an estimated expected cost under the simulation model, rather than a range for individual daily costs. If the learner divides by n rather than sqrt(n), revisit the variance of an average."
+        },
+        {
+          "type": "paragraph",
+          "text": "Question answers: Q1 one simulated day and beginning stock q; Q2 260 KES; Q3 0.3; Q4 6 packs; Q5 235 KES; Q6 7 KES; Q7 -100 KES; Q8 increasing independent replications. For Q9 award credit for correct distinction between mean uncertainty and daily variation, and for identifying approximation or model uncertainty. For Q10 credit stock 50 among the tested policies, the objective-specific justification, and a relevant limitation."
+        },
+        {
+          "type": "paragraph",
+          "text": "For the practical, a correct result must reconcile all demand counts to n and preserve identical demand scenarios across policies. Differences between seeds are expected. The tested solution includes exact enumeration, sampling-boundary checks, invalid-input rejection and reproducibility checks. These establish technical consistency of the synthetic model; they do not certify syllabus alignment or real-system validation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remediation: a probability error requires reconstructing the slot table; a cost error requires separating surplus from shortage; an interval error requires distinguishing s from s/sqrt(n); an unsupported recommendation requires a revised assumptions paragraph. Reattempt a fresh numerical case after correction. An internal readiness decision should use evidence of method selection and interpretation, separately from any official exam mark."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I state the decision, unit, horizon and objective.",
+            "I reconcile probabilities and sampling intervals.",
+            "I distinguish surplus, unmet demand and stockout probability.",
+            "I verify costs against an exact benchmark where feasible.",
+            "I record seed, software environment and replication count.",
+            "I use paired differences for shared scenarios.",
+            "I separate Monte Carlo error from model uncertainty.",
+            "I state what verification does and what validation still needs.",
+            "I label synthetic evidence and avoid claims of official examination compliance."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Common errors are treating probabilities as observed frequencies, failing to reconcile replications, confusing average cost with a percentile, changing the random scenarios between policies without noticing, and reporting more decimal places than the assumptions justify. Practise explaining the model in ordinary language before writing a final recommendation."
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. Sources, provenance and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Official paper identity: https://www.kasneb.or.ke/ddma . Consulted 12 October 2026. This verifies the DD24 identity, not the full topic outcomes. Current official syllabus edition, hierarchy and topic reference remain pending."
+        },
+        {
+          "type": "paragraph",
+          "text": "Technical sampling reference: https://docs.python.org/3.12/library/random.html . Consulted 12 October 2026. The examples use Python 3.12 and a local Random generator. This reference supports generator semantics; the model, explanations and numerical cases are original Academy authoring."
+        },
+        {
+          "type": "paragraph",
+          "text": "All case inputs, worked examples, exercises, questions and solutions were created specifically for DatalytIQs Academy. No protected past paper, textbook or proprietary question bank is reproduced. Independent academic and originality reviews remain pending; this statement is provenance, not independent approval."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Draft 1.0.0. Searchable tagged PDF generated from canonical content; structural checks do not establish complete PDF/UA conformance. Publication requires verified syllabus traceability, academic and originality review, independent accessibility review and authenticated learner acceptance."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "DD24-mc-q2",
+      "type": "numeric",
+      "prompt": "Expected mismatch cost at stock 30 in KES?",
+      "answer": 260,
+      "tolerance": 0.01,
+      "marks": 2,
+      "explanation": "See the corresponding worked solution and retain units."
+    },
+    {
+      "id": "DD24-mc-q3",
+      "type": "numeric",
+      "prompt": "Stockout probability at stock 40?",
+      "answer": 0.3,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "See the corresponding worked solution and retain units."
+    },
+    {
+      "id": "DD24-mc-q4",
+      "type": "numeric",
+      "prompt": "Expected unmet demand at stock 30 in packs?",
+      "answer": 6,
+      "tolerance": 1e-06,
+      "marks": 2,
+      "explanation": "See the corresponding worked solution and retain units."
+    },
+    {
+      "id": "DD24-mc-q5",
+      "type": "numeric",
+      "prompt": "Expected mismatch cost at stock 35 in KES?",
+      "answer": 235,
+      "tolerance": 0.01,
+      "marks": 3,
+      "explanation": "See the corresponding worked solution and retain units."
+    },
+    {
+      "id": "DD24-mc-q6",
+      "type": "numeric",
+      "prompt": "Standard error with s=350 KES and n=2500?",
+      "answer": 7,
+      "tolerance": 0.01,
+      "marks": 2,
+      "explanation": "See the corresponding worked solution and retain units."
+    },
+    {
+      "id": "DD24-mc-q7",
+      "type": "numeric",
+      "prompt": "Expected paired difference stock 50 minus stock 30 in KES?",
+      "answer": -100,
+      "tolerance": 0.01,
+      "marks": 2,
+      "explanation": "See the corresponding worked solution and retain units."
+    },
+    {
+      "id": "DD24-mc-q8",
+      "type": "single_choice",
+      "prompt": "Which reduces Monte Carlo sampling error under independent replications?",
+      "choices": {
+        "A": "Increase replication count",
+        "B": "Change the currency label",
+        "C": "Remove inconvenient draws",
+        "D": "Treat a seed as validation"
+      },
+      "answer": "A",
+      "marks": 1,
+      "explanation": "Standard error scales with the reciprocal square root of replication count."
+    },
+    {
+      "id": "DD24-mc-q1",
+      "type": "rubric",
+      "prompt": "State the observational unit and decision variable.",
+      "marks": 2,
+      "rubric": [
+        {
+          "criterion": "One simulated day",
+          "marks": 1
+        },
+        {
+          "criterion": "Beginning stock q",
+          "marks": 1
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    },
+    {
+      "id": "DD24-mc-q9",
+      "type": "rubric",
+      "prompt": "Explain limitations of a mean interval.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Distinguishes mean uncertainty from daily variation",
+          "marks": 2
+        },
+        {
+          "criterion": "Identifies approximation or model uncertainty",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    },
+    {
+      "id": "DD24-mc-q10",
+      "type": "rubric",
+      "prompt": "Recommend a policy with limitations.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Correct objective-specific policy and expected cost",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant omitted feature and implication",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    }
+  ]
+}
