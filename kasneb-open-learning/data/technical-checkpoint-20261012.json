@@ -1,7 +1,7 @@
 {
-  "date": "2026-10-13",
+  "date": "2026-10-14",
   "project_complete": false,
-  "tests_passed": 35,
+  "tests_passed": 41,
   "academic_review": "independent_review_pending",
   "production_repairs": {
     "ca35p_reparented_lesson_ids": [
@@ -73,10 +73,10 @@
   "tutor_rest_blocker": "Dedicated Tutor API authentication required; no credential or security changes made",
   "syllabus_status": "current_full_topic_syllabuses_pending",
   "learner_acceptance": "authenticated_end_to_end_test_pending",
-  "substantive_drafts": 6,
-  "draft_pdf_pages": 47,
-  "latest_original_topic": "CA14-scarcity-opportunity-cost",
-  "latest_operation": "CA14 draft course, original topic and native quiz",
+  "substantive_drafts": 7,
+  "draft_pdf_pages": 55,
+  "latest_original_topic": "CA14-demand-supply-elasticity",
+  "latest_operation": "Second original CA14 topic, exact market model, full draft lesson and native quiz",
   "dd24_simulation": {
     "replications": 10000,
     "seed": 20261012,
@@ -107,6 +107,13 @@
     "course_status": "draft",
     "price_type": "free",
     "native_assignment": "ability_missing_in_installed_bridge",
-    "authenticated_acceptance": "pending"
+    "authenticated_acceptance": "pending",
+    "additional_topic": {
+      "topic_id": 2105,
+      "lesson_id": 2106,
+      "quiz_id": 2107,
+      "native_quiz_questions": 3,
+      "state": "draft"
+    }
   }
 }
