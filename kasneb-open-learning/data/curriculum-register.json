@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "verified_on": "2026-10-12",
-  "version": "2026-10-13.1",
+  "version": "2026-10-14.1",
   "status": "partial_requirement_verification",
   "qualifications": [
     {
@@ -3966,7 +3966,7 @@
     "fully_verified_topic_denominator": null,
     "complete_courses_verified": 0,
     "full_programme_complete": false,
-    "existing_draft_lessons": 1
+    "existing_draft_lessons": 2
   },
   "source_status": "Qualification and paper identities only; topic outcomes, subtopics, durations and software requirements are not inferred from directory titles.",
   "inventory_completeness": "Partial requirement inventory; not a complete syllabus or completion denominator",
