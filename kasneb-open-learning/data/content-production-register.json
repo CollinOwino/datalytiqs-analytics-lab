@@ -265,5 +265,49 @@
       "status": "author_technical_layout_checked",
       "independent_academic_review": false
     }
+  },
+  {
+    "id": "CA14-demand-supply-elasticity",
+    "version": "1.0.0",
+    "content_sha256": "295e4d88188c3636c7ca3ee9f6a2eafeee0297c2f69b7f7d377dd527c4533c98",
+    "state": "draft_compiled",
+    "publication_ready": false,
+    "blocked_gates": [
+      "Full syllabus alignment is not verified",
+      "Independent academic approval missing",
+      "Academic approval does not bind current content",
+      "Originality review missing",
+      "PDF visual review not independently recorded",
+      "Full PDF/UA accessibility conformance not independently verified",
+      "LMS import and learner acceptance not verified"
+    ],
+    "assets": {
+      "html": {
+        "filename": "CA14-demand-supply-elasticity.v1.0.0.html",
+        "sha256": "f96205bad5fcf07b10180d234f3d8e0c4d6fdbc759b4084456e5daf765b93462"
+      },
+      "pdf": {
+        "filename": "CA14-demand-supply-elasticity.v1.0.0.pdf",
+        "sha256": "ef31976374915e2bf2116f63d10f62682ceb2e16d754964fb447aa47268d3fd5",
+        "library_file_id": "libfile_5751cce88d248191b39692f4817dee90",
+        "library_version": 0
+      }
+    },
+    "pdf_checks": {
+      "pages": 8,
+      "searchable_text": true,
+      "section_titles_present": true,
+      "tagged_structure_present": true,
+      "document_language": "en-KE",
+      "link_annotations": 28,
+      "bookmarks_present": true,
+      "pdf_ua_conformance_verified": false,
+      "visual_review_required": true
+    },
+    "visual_review": {
+      "date": "2026-10-14",
+      "status": "author_technical_layout_checked",
+      "independent_academic_review": false
+    }
   }
 ]
