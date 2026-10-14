@@ -1,0 +1,475 @@
+{
+  "id": "CA14-demand-supply-elasticity",
+  "paper_code": "CA14",
+  "qualification": "Certified Public Accountants",
+  "title": "Demand, supply, equilibrium and elasticity: analysing a market",
+  "version": "1.0.0",
+  "publication_date": "2026-10-14",
+  "author": "DatalytIQs Academy content authoring",
+  "status": "draft",
+  "estimated_study_minutes": 240,
+  "syllabus": {
+    "status": "unverified",
+    "url": "https://www.kasneb.or.ke/cpa",
+    "version": null,
+    "reference": null,
+    "reason": "CA14 identity checked 14 October 2026; current topic syllabus not obtained. Academy topic sequence is provisional."
+  },
+  "academic_review": {
+    "status": "pending"
+  },
+  "originality": {
+    "reviewed": false
+  },
+  "wordpress_mapping": {
+    "course_id": 2100,
+    "existing_lesson_ids": [
+      2106
+    ],
+    "mapping_status": "draft_internal_topic_not_official_syllabus_verified",
+    "topic_id": 2105
+  },
+  "outcomes": [
+    "Distinguish curve movements from shifts.",
+    "Solve linear equilibrium and comparative-static changes.",
+    "Calculate point and midpoint price elasticity.",
+    "Evaluate price controls and a per-unit tax within an explicit model.",
+    "Interpret results without mistaking synthetic assumptions for observed evidence."
+  ],
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "1. Market reasoning and learning route",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand and supply connect individual choices to a market outcome. They provide a disciplined way to ask what changes when income, production costs or policy changes. A useful answer identifies the relevant market, the period, the units and the assumptions before calculating a price. Equations alone are not a complete explanation."
+        },
+        {
+          "type": "paragraph",
+          "text": "These original DatalytIQs notes use a fictional Kenyan produce market, not observed prices or a forecast. They provisionally support CA14 Economics, whose paper identity is verified on the official CPA page. Current topic outcomes, syllabus edition and exam requirements remain unverified. The sequence and four-hour study estimate are Academy teaching choices."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prerequisites are scarcity, opportunity cost, percentages, straight-line equations and simple triangle areas. Complete hand calculations, then run the optional Python checks. No official software requirement is inferred. All cases and questions are original and synthetic."
+        }
+      ]
+    },
+    {
+      "kind": "foundations",
+      "title": "2. Curves, equilibrium and responsiveness",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand is the relationship between price and the quantity buyers are willing and able to purchase over a defined period, other relevant influences held constant. A desire without purchasing ability is not sufficient for market demand. Quantity demanded refers to one quantity at a particular price; demand describes the entire relationship."
+        },
+        {
+          "type": "paragraph",
+          "text": "The usual downward-sloping demand curve indicates that a higher own price is associated with a lower quantity demanded under the maintained assumptions. A change in own price produces a movement along the curve. A change in a non-price determinant, such as income, preferences, population or a related good's price, can shift the curve. Do not describe every increase in purchases as a shift."
+        },
+        {
+          "type": "paragraph",
+          "text": "For a normal good, higher income tends to increase demand, other things equal. For an inferior good, higher income tends to reduce demand. These are behavioural classifications rather than judgements about quality. Substitutes can replace one another in use; complements are used jointly. The strength and direction of a real relationship require evidence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supply is the relationship between price and the quantity sellers are willing and able to offer over the period, holding other influences constant. Higher own price generally increases quantity supplied within a conventional upward-sloping model. Input costs, technology, production conditions, entry and taxes can shift supply. A movement caused by own price is not itself a change in the supply curve."
+        },
+        {
+          "type": "paragraph",
+          "text": "Equilibrium occurs where quantity demanded equals quantity supplied. At a price below equilibrium, excess demand is a shortage; above equilibrium, excess supply is a surplus. A simple competitive adjustment story predicts pressure on price, but it does not specify how quickly adjustment occurs or guarantee it when regulations, contracts or other frictions intervene."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comparative statics compares equilibria before and after a specified change. Shift the relevant curve while keeping the other relationship fixed unless another change is explicitly stated. An increase in demand with supply unchanged raises equilibrium price and quantity in the conventional model. An increase in supply with demand unchanged lowers price and raises quantity."
+        },
+        {
+          "type": "paragraph",
+          "text": "When demand and supply shift together, one outcome can be indeterminate without knowing the magnitudes. If both increase, equilibrium quantity rises in the conventional model but price can rise, fall or remain unchanged. A graph or equation should reflect that ambiguity rather than force a single answer from insufficient information."
+        },
+        {
+          "type": "paragraph",
+          "text": "Price elasticity of demand measures the percentage change in quantity demanded relative to the percentage change in own price, with other determinants fixed. A demand elasticity is usually negative under the conventional law of demand. Classification often uses its absolute magnitude: above one elastic, below one inelastic, equal to one unit elastic. State whether you are reporting a signed value or a magnitude."
+        },
+        {
+          "type": "paragraph",
+          "text": "Point elasticity uses the local slope and price-quantity ratio: E = (dQ/dP) × P/Q. A constant slope does not imply constant elasticity, because P/Q changes along a linear curve. At zero quantity the formula is undefined. Do not confuse units-per-shilling slope with a dimensionless percentage-response measure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Midpoint or arc elasticity measures a finite movement: E = [(Q2-Q1)/((Q1+Q2)/2)] divided by [(P2-P1)/((P1+P2)/2)]. The midpoint denominator gives the same result when the direction of comparison is reversed. A base-period percentage method need not do so. Record the convention."
+        },
+        {
+          "type": "paragraph",
+          "text": "For an inelastic demand segment, a price increase tends to raise total revenue P × Q because the percentage quantity fall is smaller than the percentage price rise. For an elastic segment it tends to lower revenue. This is a revenue relationship, not a profit rule: costs and other effects still matter. Use the actual products to check a finite change."
+        },
+        {
+          "type": "paragraph",
+          "text": "Supply elasticity describes the percentage quantity-supplied response to price. Income elasticity relates quantity demanded to income, and cross-price elasticity relates it to another good's price. Positive cross-price elasticity is consistent with substitutes and negative with complements, under the relevant assumptions. Statistical association alone does not establish a causal demand response."
+        },
+        {
+          "type": "paragraph",
+          "text": "Consumer surplus in a simple model is willingness to pay above the transaction price, aggregated over purchased units. Producer surplus is price received above the supply-side reservation values, aggregated over supplied units. They are not identical to accounting profit or distributive fairness. Triangle calculations require linear curves and the stated market assumptions."
+        }
+      ]
+    },
+    {
+      "kind": "worked_examples",
+      "title": "3. Synthetic market calculations",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fictional Lakeside Produce Market trades standardised baskets per week. Price P is KES per basket and Q is baskets per week. Suppose Qd = 120 - 2P and Qs = 20 + 3P. These equations are invented for learning. Apply them only where price and quantity are economically meaningful; a linear extrapolation giving negative demand is outside the usable range."
+        },
+        {
+          "type": "table",
+          "caption": "Original weekly demand and supply schedule",
+          "rows": [
+            [
+              "Price KES",
+              "Quantity demanded",
+              "Quantity supplied",
+              "Position"
+            ],
+            [
+              "10",
+              "100",
+              "50",
+              "Shortage 50"
+            ],
+            [
+              "15",
+              "90",
+              "65",
+              "Shortage 25"
+            ],
+            [
+              "20",
+              "80",
+              "80",
+              "Equilibrium"
+            ],
+            [
+              "25",
+              "70",
+              "95",
+              "Surplus 25"
+            ],
+            [
+              "30",
+              "60",
+              "110",
+              "Surplus 50"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 1. Set 120 - 2P = 20 + 3P. Therefore 100 = 5P, P = KES 20 and Q = 80 baskets per week. Substitute the result into both equations: 120 - 40 = 80 and 20 + 60 = 80. This independent substitution checks the algebra and the equilibrium definition."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 2. An assumed demand increase changes the relationship to Qd = 140 - 2P, with supply unchanged. Then 140 - 2P = 20 + 3P, so P = 24 and Q = 92. This is a shift of demand and a movement along the unchanged supply curve. It is not a forecast about an actual Kenyan market."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 3. At the original equilibrium, point demand elasticity is -2 × 20/80 = -0.5, magnitude 0.5, so demand is locally inelastic. Between P = 20, Q = 80 and P = 25, Q = 70, midpoint elasticity is (-10/75)/(5/22.5) = -0.6. The two values differ because one is local and the other describes a finite arc."
+        },
+        {
+          "type": "paragraph",
+          "text": "Revenue rises from 20 × 80 = KES 1,600 to 25 × 70 = KES 1,750 over that demand segment. The gain is KES 150, consistent with inelastic demand on the arc. This movement is a demand-curve comparison, not two free-market equilibria under the unchanged supply equation."
+        },
+        {
+          "type": "code",
+          "text": "from fractions import Fraction as F\nprice = F(120-20, 2+3)\nquantity = 120-2*price\nassert (price,quantity) == (20,80)\npoint = -2*price/quantity\narc = F(70-80,70+80)/F(25-20,25+20)\nassert point == F(-1,2) and arc == F(-3,5)\nprint(price,quantity,point,arc)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 4. A binding maximum price of KES 15 gives Qd = 90 and Qs = 65, a shortage of 25. In this simplified model at most 65 baskets trade if supply is the binding limit and no stock release or other intervention occurs. The model alone does not specify who obtains those baskets or the cost of queuing."
+        },
+        {
+          "type": "paragraph",
+          "text": "A minimum price of KES 25 gives Qs = 95 and Qd = 70, a surplus of 25. Without government purchases or other outlets, potential sales are limited by demand to 70, not 95. A price control is binding only when it restricts the otherwise attainable equilibrium: a ceiling above 20 or a floor below 20 is non-binding in this model."
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 5. Introduce an invented per-unit tax t = KES 5, paid on each traded basket. Buyers pay Pc and sellers retain Ps, with Pc = Ps + 5. Equilibrium requires 120 - 2Pc = 20 + 3Ps. Substituting Ps = Pc - 5 gives 120 - 2Pc = 5 + 3Pc, so Pc = 23, Ps = 18 and Q = 74."
+        },
+        {
+          "type": "paragraph",
+          "text": "The buyer price rises by three and seller receipts fall by two relative to the untaxed equilibrium. Tax revenue is 5 × 74 = KES 370 per week. The economic burden is split despite a legal collection arrangement that could name one side. Incidence follows the model's responsiveness, not simply the statutory payer. This is a hypothetical tax, not a statement about Kenyan tax law."
+        },
+        {
+          "type": "code",
+          "text": "tax = 5\nbuyer_price = F(120-20+3*tax, 2+3)\nseller_price = buyer_price-tax\ntraded = 120-2*buyer_price\nassert 20+3*seller_price == traded\nassert (buyer_price,seller_price,traded) == (23,18,74)\nassert tax*traded == 370"
+        },
+        {
+          "type": "paragraph",
+          "text": "Example 6. Inverse demand is P = 60 - Q/2 and inverse supply P = Q/3 - 20/3. At Q = 80 and P = 20, consumer surplus is 0.5 × (60-20) × 80 = KES 1,600 per week. Producer surplus is 0.5 × (20+20/3) × 80 = KES 3,200/3, approximately 1,066.67."
+        },
+        {
+          "type": "paragraph",
+          "text": "The surplus arithmetic assumes the entire inverse supply line down to zero quantity, including negative reservation prices for its earliest units. That is a deliberately stylised mathematical assumption, not a measured production-cost schedule. If the schedule is truncated at zero price, producer-surplus areas must be redefined consistently; do not reuse this triangle mechanically."
+        },
+        {
+          "type": "paragraph",
+          "text": "With the five-shilling tax, consumer surplus is 0.5 × (60-23) × 74 = 1,369. Producer surplus is 0.5 × (18+20/3) × 74 = 2,738/3, approximately 912.67. Adding tax revenue 370 gives total model surplus 7,955/3. Before tax it is 8,000/3. The loss is 45/3 = 15, equal to 0.5 × 5 × (80-74). Tax revenue is a transfer in this calculation, not itself the deadweight loss."
+        }
+      ]
+    },
+    {
+      "kind": "professional_application",
+      "title": "4. Kenyan synthetic case and interpretation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fictional Umoja Training Cooperative uses the basket model to teach procurement decisions. A manager sees a higher market price and concludes that demand increased. That conclusion is not established by price alone: a supply contraction could also raise price. Examine quantities and independent information about the shock before selecting an explanation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Suppose the cooperative considers a maximum price to protect buyers. The synthetic model predicts a shortage when the cap is 15, but says nothing by itself about fair allocation, enforcement, quality changes or the cost of waiting. A responsible analysis states both the price effect and these omissions. It does not turn the model into a blanket recommendation for a real policy."
+        },
+        {
+          "type": "paragraph",
+          "text": "For an actual study, define the product, geographical market, quality, period and relevant buyers and sellers. Use documented data sources and a credible method to distinguish movement along a demand curve from a demand shift. A regression of observed price on quantity need not recover a demand curve because both are jointly determined."
+        },
+        {
+          "type": "paragraph",
+          "text": "Save an evidence bundle with assumptions, input equations, a schedule, algebra, software checks and a short limitations statement. Label every synthetic input and output. Future Lab submissions must persist under the authenticated learner and authorised institution. This local lesson does not certify that secure Lab evidence, readiness or enrolment acceptance is already implemented."
+        }
+      ]
+    },
+    {
+      "kind": "guided_practice",
+      "title": "5. Exercises and assignment",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A. Use Qd = 160 - 4P and Qs = 10 + 2P. Calculate equilibrium price and quantity. Verify both equations by substitution and state units. Calculate a shortage or surplus at P = 20."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B. Using the original market, let demand become 150 - 2P with supply unchanged. Find the new equilibrium. Identify the shifted curve and explain the movement along the other curve."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C. On a demand curve, price rises from 10 to 12 while quantity falls from 100 to 80. Calculate midpoint elasticity, its magnitude and revenue before and after. Explain why the result does not determine profit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D. In the original market, use a tax of two instead of five. Calculate buyer price, seller price, traded quantity and tax revenue. Calculate the deadweight loss under the linear-surplus assumptions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assignment. Prepare a 350-word briefing comparing the original equilibrium, a cap of 15 and a tax of five. Include a calculation table, one allocation concern, two model limitations and a clearly labelled distinction between a numerical prediction and a value judgement. Do not present the fictional tax as a current legal charge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Academy human rubric: equilibrium and control calculations 5 marks; tax/incidence calculations 5; elasticity or responsiveness explanation 3; assumptions and allocation limits 4; clear evidence and synthetic labelling 3. Total 20 internal marks, not official exam weights or pass criteria."
+        }
+      ]
+    },
+    {
+      "kind": "assessment",
+      "title": "6. Original question bank",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Optional practice time: forty minutes, an Academy study aid rather than official exam timing. Attempt the questions before reading the solutions. Numeric questions can be marked objectively within rounding tolerances; interpretation requires human judgement."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q1. State original equilibrium price. Q2. Calculate the shortage at a ceiling of 15. Q3. Calculate original point demand elasticity, retaining its sign. Q4. Calculate midpoint demand elasticity from (20,80) to (25,70). Q5. Calculate buyer price with a tax of five. Q6. Calculate that tax's weekly revenue. Q7. Calculate the corresponding deadweight loss."
+        },
+        {
+          "type": "paragraph",
+          "text": "Q8. Which event shifts demand rather than causing a movement along it: own-price change or a change in preferences, holding other influences fixed? Q9. Explain why a higher observed price alone does not identify a demand increase. Q10. Distinguish a transfer of tax revenue from a loss of total model surplus."
+        }
+      ]
+    },
+    {
+      "kind": "solutions",
+      "title": "7. Solutions and remediation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exercise A: 160 - 4P = 10 + 2P, so 150 = 6P and P = 25. Quantity is 60. At P = 20, demand is 80 and supply 50, so shortage is 30. A correct solution includes both equation checks, not just a price."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise B: 150 - 2P = 20 + 3P gives P = 26 and Q = 98. Demand shifts outward; the equilibrium moves along unchanged supply. Do not say that supply shifts merely because more is supplied at the new price."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise C: midpoint quantity change is -20/90, midpoint price change 2/11. Elasticity is -11/9, approximately -1.2222, magnitude above one. Revenue falls from 1,000 to 960. Costs are absent, so profit cannot be calculated."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exercise D: Pc = (100 + 3 × 2)/5 = 21.2; Ps = 19.2; Q = 77.6. Tax revenue = 2 × 77.6 = 155.2. Deadweight loss = 0.5 × 2 × (80-77.6) = 2.4. Fractional quantities are a feature of this divisible-good model; do not silently round before calculating."
+        },
+        {
+          "type": "paragraph",
+          "text": "Question answers: Q1 20; Q2 25; Q3 -0.5; Q4 -0.6; Q5 23; Q6 370; Q7 15; Q8 changed preferences. For Q9 credit at least one supply explanation and the need for identifying information. For Q10 credit revenue as a transfer within the stated accounting of surplus and lost mutually beneficial trades as the source of the model loss."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remediation should match the error. For a shift/movement confusion, redraw one unchanged curve and one shifted curve. For a tax error, write Pc - Ps = t before substitution. For elasticity, keep the midpoint denominators visible. For a surplus error, separate buyer surplus, seller surplus and government revenue before summing."
+        },
+        {
+          "type": "paragraph",
+          "text": "An internal readiness decision should require both correct calculations and an explanation of assumptions. A learner who computes 370 accurately but calls it deadweight loss needs further practice. Human judgement and official examination marks remain separate from automated arithmetic feedback."
+        }
+      ]
+    },
+    {
+      "kind": "revision",
+      "title": "8. Revision checklist",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "I define product, price, quantity and period.",
+            "I distinguish demand from quantity demanded.",
+            "I separate own-price movements from non-price shifts.",
+            "I solve and verify equilibrium by substitution.",
+            "I state elasticity sign, magnitude and method.",
+            "I distinguish revenue from profit.",
+            "I keep buyer and seller prices separate under a tax.",
+            "I identify which price controls bind.",
+            "I separate transfers from deadweight loss.",
+            "I label all synthetic inputs and avoid causal claims from price alone."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "references",
+      "title": "9. Sources and review status",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Official paper identity: https://www.kasneb.or.ke/cpa . Checked 14 October 2026. CA14 Economics is listed at Foundation level; complete current topic outcomes remain unverified. No exam timing, software or pass mark has been inferred."
+        },
+        {
+          "type": "paragraph",
+          "text": "All explanations, cases, inputs, questions and solutions are original DatalytIQs authoring. Independent academic and originality review remain pending. No protected past paper, proprietary textbook or question bank is reproduced; no KASNEB endorsement is implied."
+        },
+        {
+          "type": "paragraph",
+          "text": "© 2026 DatalytIQs Academy. Draft 1.0.0. Publication requires source alignment, independent review, accessibility conformance and authenticated acceptance. Tagged PDF structure is not proof of complete PDF/UA compliance."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "CA14-market-q1",
+      "type": "numeric",
+      "prompt": "Original equilibrium price in KES?",
+      "answer": 20,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q2",
+      "type": "numeric",
+      "prompt": "Shortage at a price ceiling of 15?",
+      "answer": 25,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q3",
+      "type": "numeric",
+      "prompt": "Signed point demand elasticity at original equilibrium?",
+      "answer": -0.5,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q4",
+      "type": "numeric",
+      "prompt": "Signed midpoint elasticity from (20,80) to (25,70)?",
+      "answer": -0.6,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q5",
+      "type": "numeric",
+      "prompt": "Buyer price with a five-shilling tax?",
+      "answer": 23,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q6",
+      "type": "numeric",
+      "prompt": "Tax revenue with t=5?",
+      "answer": 370,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q7",
+      "type": "numeric",
+      "prompt": "Deadweight loss with t=5?",
+      "answer": 15,
+      "tolerance": 1e-05,
+      "marks": 2,
+      "explanation": "See worked equations and retain the stated units."
+    },
+    {
+      "id": "CA14-market-q8",
+      "type": "single_choice",
+      "prompt": "Which shifts demand, other things equal?",
+      "choices": {
+        "A": "Change in own price",
+        "B": "Change in preferences"
+      },
+      "answer": "B",
+      "marks": 1,
+      "explanation": "Own-price change moves along demand; preferences are a non-price determinant."
+    },
+    {
+      "id": "CA14-market-q9",
+      "type": "rubric",
+      "prompt": "Explain why higher price alone does not identify a demand increase.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Accurate economic distinction",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant model implication or limitation",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    },
+    {
+      "id": "CA14-market-q10",
+      "type": "rubric",
+      "prompt": "Distinguish tax revenue from deadweight loss.",
+      "marks": 4,
+      "rubric": [
+        {
+          "criterion": "Accurate economic distinction",
+          "marks": 2
+        },
+        {
+          "criterion": "Relevant model implication or limitation",
+          "marks": 2
+        }
+      ],
+      "explanation": "Human judgement required; see solutions."
+    }
+  ]
+}
