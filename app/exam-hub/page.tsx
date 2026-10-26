@@ -51,7 +51,7 @@ export default async function ExamHubPage({searchParams}:{searchParams:Promise<{
   <a className="exam-skip" href="#catalogue">Skip to examination catalogue</a>
   <header className="exam-header">
    <a className="exam-brand" href="/"><span>D</span><b>DatalytIQs</b><small>Professional Exam Hub</small></a>
-   <nav aria-label="Exam Hub navigation"><a href="#catalogue">Catalogue</a><a href="#readiness">Readiness guide</a><a href="/exam-hub/ca35p">CA35P</a><a href="/">Analytics Lab</a><a href="https://datalytiqsacademy.com/academy/">Academy</a></nav>
+   <nav aria-label="Exam Hub navigation"><a href="/">Analytics Lab</a><a className="nav-cta" href="https://datalytiqsacademy.com/academy/">Academy</a></nav>
   </header>
 
   <section className="exam-hero" id="overview">
