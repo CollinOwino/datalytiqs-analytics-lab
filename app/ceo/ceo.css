@@ -937,3 +937,5 @@
     text-decoration: none !important;
   }
 }
+
+.ceo-advisory{border-top:4px solid #f4a261}.ceo-advisory .ceo-heading>span{display:block;max-width:760px;color:#667085;line-height:1.65}.ceo-advisory-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.ceo-advisory-actions a{display:inline-flex;align-items:center;min-height:44px;padding:11px 15px;border-radius:5px;background:#0b2c4d;color:#fff;text-decoration:none;font-size:12px;font-weight:800}.ceo-advisory-actions a+ a{background:#eef5fc;color:#1565c0}.ceo-advisory-actions a:focus-visible{outline:3px solid #f4a261;outline-offset:3px}@media(max-width:600px){.ceo-advisory-actions{display:grid}.ceo-advisory-actions a{justify-content:center;text-align:center}}
