@@ -1,7 +1,7 @@
 import {createClient} from '../lib/supabase/server'
 
 const navigation = [
-  ['Home','/'],['Learn','https://datalytiqsacademy.com/courses/'],['Practise','/python-editor'],['Exam Hub','/exam-hub'],['MERL','/merl/foundations'],['Executive','/ceo'],
+  ['Home','/'],['Learn','https://datalytiqsacademy.com/courses/'],['Practise','/python-editor'],['Exam Hub','/exam-hub'],['MERL','/merl/foundations'],['Executive','/executive'],
 ]
 const primaryActions = [
  {eyebrow:'APPLIED ANALYTICS',title:'Practise in the Lab',description:'Work with datasets, code, analytical cases and practical activities that produce reviewable competency evidence.',href:'/python-editor',cta:'Open practice workspace'},
@@ -14,7 +14,7 @@ const pathways = [
  ['Python for Kids','Safeguarded coding foundations and guided practical progression.','/python-for-kids'],
  ['Case 001','Secondary-school performance analytics and evidence-based management.','/cases/001'],
  ['Field Data','Questionnaire, collection, cleaning, analysis and reporting practicals.','/practicals/dtq-101'],
- ['Executive','Organisational KPIs, evidence, scenarios and decision intelligence.','/ceo'],
+ ['Executive','Organisational KPIs, evidence, scenarios and decision intelligence.','/executive'],
 ]
 export default async function Home() {
  const supabase=await createClient()
