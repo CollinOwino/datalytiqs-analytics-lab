@@ -1,7 +1,7 @@
 import {createClient} from '../lib/supabase/server'
 
 const navigation = [
-  ['Home','/'],['Learn','https://datalytiqsacademy.com/courses/'],['Practise','/python-editor'],['Exam Hub','/exam-hub'],['MERL','/merl/foundations'],['Executive','/executive'],
+  ['Home','/'],['Analytics Workspace','/python-editor'],['Exam Hub','/exam-hub'],['Applied Pathways','/#pathways'],['Executive','/executive'],
 ]
 const primaryActions = [
  {eyebrow:'APPLIED ANALYTICS',title:'Practise in the Lab',description:'Work with datasets, code, analytical cases and practical activities that produce reviewable competency evidence.',href:'/python-editor',cta:'Open practice workspace'},
@@ -28,7 +28,7 @@ export default async function Home() {
  }
  return <main className="app-shell">
   <a className="skip-link" href="#main-content">Skip to Analytics Lab</a>
-  <aside className="sidebar" aria-label="Analytics Lab navigation"><div className="brand"><div className="brand-mark" aria-hidden="true">D</div><div><strong>DatalytIQs</strong><span>Analytics Lab</span></div></div><nav aria-label="Primary navigation">{navigation.map(([label,href])=><a aria-current={href==='/'?'page':undefined} className={href==='/'?'active':''} href={href} key={label}>{label}</a>)}</nav><div className="sidebar-footer"><small>THE DATALYTIQS METHOD</small><p>Problem → Data → Analysis → Evidence → Decision</p><a href="https://community.datalytiqsacademy.com">Community ↗</a></div></aside>
+  <aside className="sidebar" aria-label="Analytics Lab navigation"><div className="brand"><div className="brand-mark" aria-hidden="true">D</div><div><strong>DatalytIQs</strong><span>Analytics Lab</span></div></div><nav aria-label="Primary navigation">{navigation.map(([label,href])=><a aria-current={href==='/'?'page':undefined} className={href==='/'?'active':''} href={href} key={label}>{label}</a>)}</nav><div className="sidebar-footer"><small>THE DATALYTIQS METHOD</small><p>Problem → Data → Analysis → Evidence → Decision</p><a href="https://datalytiqsacademy.com/academy/">Academy ↗</a><a href="https://community.datalytiqsacademy.com">Community ↗</a><a href="https://datalytiqsacademy.com/dashboard/">Learner Dashboard ↗</a></div></aside>
   <section className="content" id="main-content">
    <header className="topbar"><div><span className="eyebrow">DATALYTIQS ECOSYSTEM</span><h1>Analytics Lab</h1></div><div className="user" aria-label={workspace.aria}><span className="status" aria-hidden="true"/><div><strong>{workspace.label}</strong><small>{workspace.detail}</small></div><div className="avatar" aria-hidden="true">{workspace.initial}</div></div></header>
    <section className="hero lab-home-hero" aria-labelledby="hero-title"><div><span className="eyebrow gold">PRACTISE · APPLY · PROVE</span><h2 id="hero-title">Turn learning into<br/><em>demonstrable capability.</em></h2><p>The practical layer of DatalytIQs. Choose a workspace, complete applied analytical work and build evidence of what you can do.</p><div className="actions"><a className="button primary" href="#start">Choose a workspace</a><a className="button secondary" href="https://datalytiqsacademy.com/dashboard/">Return to learner dashboard</a></div></div><div className="hero-model" aria-label="DatalytIQs capability flow"><span>CAPABILITY FLOW</span><b>Learn</b><i aria-hidden="true">↓</i><b>Practise</b><i aria-hidden="true">↓</i><b>Apply</b><i aria-hidden="true">↓</i><b>Evidence</b><i aria-hidden="true">↓</i><b>Advance</b></div></section>
