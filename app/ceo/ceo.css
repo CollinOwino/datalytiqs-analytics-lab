@@ -71,6 +71,22 @@
 .ceo aside > div span {
   color: #9db1c2;
 }
+.ceo-academy-link {
+  display: inline-flex;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 11px 14px;
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--navy);
+  text-decoration: none;
+  font-weight: 800;
+}
+.ceo-academy-link:hover,
+.ceo-academy-link:focus-visible {
+  background: white;
+  color: var(--navy);
+}
 .ceo > section {
   min-width: 0;
   padding: 0 38px 70px;
