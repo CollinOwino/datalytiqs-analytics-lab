@@ -479,6 +479,88 @@
   gap: 7px;
 }
 .ceo-scenario-results b { color: var(--gold); font-size: 22px; }
+.ceo-today {
+  margin: 0 0 24px;
+  padding: 28px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff 0%, #eef5fb 100%);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--gold);
+}
+.ceo-today-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+.ceo-today-heading p {
+  margin: 0 0 6px;
+  color: #5d7890;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.35px;
+}
+.ceo-today-heading h2 {
+  margin: 0 0 8px;
+  font: 700 30px Georgia, serif;
+}
+.ceo-today-heading span {
+  color: #465f73;
+  line-height: 1.55;
+}
+.ceo-today-heading > a {
+  flex: 0 0 auto;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: var(--blue);
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+}
+.ceo-today-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.ceo-today-grid article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-top: 4px solid #70a88f;
+  border-radius: 8px;
+  background: white;
+}
+.ceo-today-grid article.needs-attention {
+  border-top-color: #d26a39;
+  background: #fffaf6;
+}
+.ceo-today-grid article > span {
+  display: block;
+  margin-bottom: 10px;
+  color: #5d7890;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+}
+.ceo-today-grid article > b {
+  display: block;
+  color: var(--ink);
+  font: 700 30px Georgia, serif;
+}
+.ceo-today-grid article > b.text-metric {
+  font-size: 18px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.ceo-today-grid article p,
+.ceo-today-grid article time {
+  display: block;
+  margin: 7px 0 0;
+  color: #637789;
+  font-size: 13px;
+  line-height: 1.4;
+}
 @media (max-width: 1000px) {
   .ceo {
     grid-template-columns: 1fr;
@@ -499,12 +581,17 @@
   .ceo aside > div:last-child {
     display: none;
   }
-  .ceo-metrics {
+  .ceo-metrics,
+  .ceo-today-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .ceo-today-heading {
+    align-items: flex-start;
   }
 }
 @media (max-width: 700px) {
   .ceo-inline-form,
+  .ceo-today-grid,
   .ceo-datasets article form,
   .ceo-scenario form,
   .ceo-analysis,
@@ -514,6 +601,16 @@
   }
   .ceo > section {
     padding: 0 14px 50px;
+  }
+  .ceo-today {
+    padding: 22px 17px;
+  }
+  .ceo-today-heading {
+    display: grid;
+  }
+  .ceo-today-heading > a {
+    width: 100%;
+    text-align: center;
   }
   .ceo > section > header {
     align-items: flex-start;
