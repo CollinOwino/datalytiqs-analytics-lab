@@ -1,3 +1,5 @@
+import {createClient} from '../lib/supabase/server'
+
 const navigation = [
   ['Home','/'],['Learn','https://datalytiqsacademy.com/courses/'],['Practise','/python-editor'],['Exam Hub','/exam-hub'],['MERL','/merl/foundations'],['Executive','/ceo'],
 ]
@@ -14,12 +16,21 @@ const pathways = [
  ['Field Data','Questionnaire, collection, cleaning, analysis and reporting practicals.','/practicals/dtq-101'],
  ['Executive','Organisational KPIs, evidence, scenarios and decision intelligence.','/ceo'],
 ]
-export default function Home() {
+export default async function Home() {
+ const supabase=await createClient()
+ const{data:{user}}=await supabase.auth.getUser()
+ let workspace={label:'Learner',detail:'Applied workspace',initial:'L',aria:'Learner workspace'}
+ if(user){
+  const{data:membership}=await supabase.from('ceo_memberships').select('role,ceo_organisations(premium_status,premium_expires_at)').eq('user_id',user.id).eq('active',true).maybeSingle()
+  const organisation=Array.isArray(membership?.ceo_organisations)?membership.ceo_organisations[0]:membership?.ceo_organisations
+  const entitlementValid=organisation&&['trial','active'].includes(organisation.premium_status)&&(!organisation.premium_expires_at||new Date(organisation.premium_expires_at).getTime()>=Date.now())
+  if(entitlementValid)workspace={label:'Executive',detail:'CEO Intelligence workspace',initial:'E',aria:'Executive workspace'}
+ }
  return <main className="app-shell">
   <a className="skip-link" href="#main-content">Skip to Analytics Lab</a>
   <aside className="sidebar" aria-label="Analytics Lab navigation"><div className="brand"><div className="brand-mark" aria-hidden="true">D</div><div><strong>DatalytIQs</strong><span>Analytics Lab</span></div></div><nav aria-label="Primary navigation">{navigation.map(([label,href])=><a aria-current={href==='/'?'page':undefined} className={href==='/'?'active':''} href={href} key={label}>{label}</a>)}</nav><div className="sidebar-footer"><small>THE DATALYTIQS METHOD</small><p>Problem → Data → Analysis → Evidence → Decision</p><a href="https://community.datalytiqsacademy.com">Community ↗</a></div></aside>
   <section className="content" id="main-content">
-   <header className="topbar"><div><span className="eyebrow">DATALYTIQS ECOSYSTEM</span><h1>Analytics Lab</h1></div><div className="user" aria-label="Learner workspace"><span className="status" aria-hidden="true"/><div><strong>Learner</strong><small>Applied workspace</small></div><div className="avatar" aria-hidden="true">L</div></div></header>
+   <header className="topbar"><div><span className="eyebrow">DATALYTIQS ECOSYSTEM</span><h1>Analytics Lab</h1></div><div className="user" aria-label={workspace.aria}><span className="status" aria-hidden="true"/><div><strong>{workspace.label}</strong><small>{workspace.detail}</small></div><div className="avatar" aria-hidden="true">{workspace.initial}</div></div></header>
    <section className="hero lab-home-hero" aria-labelledby="hero-title"><div><span className="eyebrow gold">PRACTISE · APPLY · PROVE</span><h2 id="hero-title">Turn learning into<br/><em>demonstrable capability.</em></h2><p>The practical layer of DatalytIQs. Choose a workspace, complete applied analytical work and build evidence of what you can do.</p><div className="actions"><a className="button primary" href="#start">Choose a workspace</a><a className="button secondary" href="https://datalytiqsacademy.com/dashboard/">Return to learner dashboard</a></div></div><div className="hero-model" aria-label="DatalytIQs capability flow"><span>CAPABILITY FLOW</span><b>Learn</b><i aria-hidden="true">↓</i><b>Practise</b><i aria-hidden="true">↓</i><b>Apply</b><i aria-hidden="true">↓</i><b>Evidence</b><i aria-hidden="true">↓</i><b>Advance</b></div></section>
    <section className="lab-start" id="start" aria-labelledby="start-title"><div className="section-title"><div><span className="eyebrow">START HERE</span><h3 id="start-title">What do you need to do?</h3></div><p>Go directly to the work that matters now.</p></div><div className="lab-primary-grid">{primaryActions.map(x=><article key={x.title}><span className="eyebrow">{x.eyebrow}</span><h3>{x.title}</h3><p>{x.description}</p><a className="button primary" href={x.href}>{x.cta} <span aria-hidden="true">→</span></a></article>)}</div></section>
    <section className="lab-pathways" id="pathways" aria-labelledby="pathways-title"><div className="section-title"><div><span className="eyebrow">PATHWAY DIRECTORY</span><h3 id="pathways-title">Continue where you left off</h3></div><p>Open a focused workspace. Full course theory and enrolment remain in DatalytIQs Academy.</p></div><div className="lab-pathway-grid">{pathways.map(([title,description,href])=><a href={href} key={title}><strong>{title}</strong><span>{description}</span><b aria-hidden="true">→</b></a>)}</div></section>
