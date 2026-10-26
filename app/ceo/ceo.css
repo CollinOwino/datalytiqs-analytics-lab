@@ -479,6 +479,49 @@
   gap: 7px;
 }
 .ceo-scenario-results b { color: var(--gold); font-size: 22px; }
+.ceo-utilities {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin: -4px 0 18px;
+}
+.ceo-utilities button,
+.ceo-utilities a,
+.ceo-signout {
+  min-height: 40px;
+  padding: 9px 13px;
+  border: 1px solid #b8c7d3;
+  border-radius: 6px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ceo-utilities button:hover,
+.ceo-utilities a:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.ceo-utilities button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+.ceo aside form {
+  margin: 0;
+}
+.ceo-signout {
+  width: 100%;
+  border-color: #ffffff38;
+  background: transparent;
+  color: #cbd9e4;
+}
+.ceo-signout:hover {
+  border-color: white;
+  color: white;
+}
 .ceo-today {
   margin: 0 0 24px;
   padding: 28px;
@@ -740,6 +783,15 @@
   .ceo > section {
     padding: 0 14px 50px;
   }
+  .ceo-utilities {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .ceo-utilities button,
+  .ceo-utilities a {
+    width: 100%;
+    text-align: center;
+  }
   .ceo-guide-brief {
     display: grid;
     padding: 22px 17px;
@@ -839,5 +891,49 @@
 @media (min-width: 1280px) {
   .ceo-quick-actions .ceo-analysis {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  .ceo {
+    display: block;
+    background: white;
+    color: #111;
+  }
+  .ceo > aside,
+  .ceo-utilities,
+  .ceo-guide-brief > button,
+  .ceo-guide-panel,
+  .ceo-inline-form,
+  .ceo-datasets form,
+  .ceo-scenario form,
+  .ceo-direction form,
+  .ceo-skip {
+    display: none !important;
+  }
+  .ceo > section {
+    padding: 0;
+  }
+  .ceo > section > header,
+  .ceo-today,
+  .ceo-guide,
+  .ceo-hero,
+  .ceo-panel,
+  .ceo-direction {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+  .ceo-hero {
+    background: white;
+    color: #111;
+    border: 1px solid #777;
+  }
+  .ceo-hero p,
+  .ceo-hero > div > span {
+    color: #333;
+  }
+  a {
+    color: #111 !important;
+    text-decoration: none !important;
   }
 }
