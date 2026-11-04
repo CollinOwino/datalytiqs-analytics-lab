@@ -1,14 +1,15 @@
 import {createClient} from '../lib/supabase/server'
 
 const navigation = [
-  ['Home','/'],['Analytics Workspace','/python-editor'],['Exam Hub','/exam-hub'],['Applied Pathways','/#pathways'],['Executive','/executive'],
+  ['Home','/'],['Evidence Lab','/evidence-lab'],['Analytics Workspace','/python-editor'],['Exam Hub','/exam-hub'],['Applied Pathways','/#pathways'],['Executive','/executive'],
 ]
 const primaryActions = [
- {eyebrow:'APPLIED ANALYTICS',title:'Practise in the Lab',description:'Work with datasets, code, analytical cases and practical activities that produce reviewable competency evidence.',href:'/python-editor',cta:'Open practice workspace'},
+ {eyebrow:'GUIDED PYTHON PROJECTS',title:'Enter the Evidence Lab',description:'Work through a Jupyter-style project with 16 guided activities, isolated Python execution and a reviewable evidence pack.',href:'/evidence-lab',cta:'Open Evidence Lab'},
  {eyebrow:'PROFESSIONAL EXAMS',title:'Prepare in Exam Hub',description:'Move from theory to quizzes, assignments, practicals, timed mocks, readiness evidence and targeted remediation.',href:'/exam-hub',cta:'Enter Exam Hub'},
  {eyebrow:'STRUCTURED PATHWAYS',title:'Continue a pathway',description:'Resume MERL, data science, Python foundations or another applied pathway without browsing the full catalogue.',href:'#pathways',cta:'View pathways'},
 ]
 const pathways = [
+ ['Evidence Lab','Jupyter-style guided projects with code, outputs and evidence.','/evidence-lab'],
  ['MERL','Monitoring, evaluation, research and learning with evidence gates.','/merl/foundations'],
  ['Data Science','Applied analytical practice from foundations to advanced work.','/data-science'],
  ['Python for Kids','Safeguarded coding foundations and guided practical progression.','/python-for-kids'],
