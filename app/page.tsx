@@ -1,7 +1,7 @@
 import {createClient} from '../lib/supabase/server'
 
 const navigation = [
-  ['Home','/'],['Evidence Lab','/evidence-lab'],['Analytics Workspace','/python-editor'],['Exam Hub','/exam-hub'],['Applied Pathways','/#pathways'],['Executive','/executive'],
+  ['Home','/'],['Evidence Lab','/evidence-lab'],['Playgrounds','/playgrounds'],['Analytics Workspace','/python-editor'],['Exam Hub','/exam-hub'],['Applied Pathways','/#pathways'],['Executive','/executive'],
 ]
 const primaryActions = [
  {eyebrow:'GUIDED PYTHON PROJECTS',title:'Enter the Evidence Lab',description:'Work through a Jupyter-style project with 16 guided activities, isolated Python execution and a reviewable evidence pack.',href:'/evidence-lab',cta:'Open Evidence Lab'},
@@ -10,6 +10,7 @@ const primaryActions = [
 ]
 const pathways = [
  ['Evidence Lab','Jupyter-style guided projects with code, outputs and evidence.','/evidence-lab'],
+ ['Playgrounds','Independent Python investigations with autosaved notebooks.','/playgrounds'],
  ['MERL','Monitoring, evaluation, research and learning with evidence gates.','/merl/foundations'],
  ['Data Science','Applied analytical practice from foundations to advanced work.','/data-science'],
  ['Python for Kids','Safeguarded coding foundations and guided practical progression.','/python-for-kids'],
