@@ -83,6 +83,11 @@ async function getCaseDatasets(caseId?: string): Promise<DatasetRef[]> {
       name = "kenya_concrete_strength_illustrative.csv";
       mimeType = "text/csv";
       break;
+    case "102":
+      datasetPath = path.join(process.cwd(), "data", "playgrounds", "kenya_crop_leaf_synthetic_manifest.csv");
+      name = "kenya_crop_leaf_synthetic_manifest.csv";
+      mimeType = "text/csv";
+      break;
     default:
       return [];
   }
@@ -145,6 +150,7 @@ export async function POST(req: NextRequest) {
       "pg-african-demographics",
       "pg-kenya-housing",
       "101",
+      "102",
     ]);
     if (body.caseId !== undefined && !allowedCases.has(body.caseId)) {
       return NextResponse.json(
@@ -175,7 +181,7 @@ export async function POST(req: NextRequest) {
     body.requestId = crypto.randomUUID();
     body.learnerId = identity.userId;
     body.packages = [];
-    body.runtime = body.caseId === "101" ? "python-pytorch-cpu" : "python-analytics";
+    body.runtime = ["101", "102"].includes(body.caseId || "") ? "python-pytorch-cpu" : "python-analytics";
 
     body.limits = {
       timeoutMs: Math.max(

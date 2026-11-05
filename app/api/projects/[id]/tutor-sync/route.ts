@@ -13,7 +13,7 @@ export async function POST(_request: NextRequest, { params }: Context) {
   const { id } = await params;
   const project = await getAccountProject(identity.supabase, identity.userId, id);
   if (!project) return NextResponse.json({ error: { code: "PROJECT_NOT_FOUND" } }, { status: 404, headers: privateHeaders });
-  if (project.caseId !== "101" || project.stages.slice(0, 5).some((stage) => stage.status !== "completed")) {
+  if (!new Set(["101", "102"]).has(project.caseId) || project.stages.slice(0, 5).some((stage) => stage.status !== "completed")) {
     return NextResponse.json({ error: { code: "PATHWAY_NOT_COMPLETE" } }, { status: 409, headers: privateHeaders });
   }
 
@@ -26,7 +26,7 @@ export async function POST(_request: NextRequest, { params }: Context) {
     lab_user_id: identity.userId,
     project_id: project.id,
     case_id: project.caseId,
-    tutor_course_id: process.env.DATALYTIQS_DEEP_LEARNING_TUTOR_COURSE_ID || null,
+    tutor_course_id: (project.caseId === "102" ? process.env.DATALYTIQS_COMPUTER_VISION_TUTOR_COURSE_ID : process.env.DATALYTIQS_DEEP_LEARNING_TUTOR_COURSE_ID) || null,
   };
   const admin = createAdminClient();
   const { error: outboxError } = await admin.from("lab_tutor_sync_outbox").upsert({
