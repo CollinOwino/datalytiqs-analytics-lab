@@ -45,11 +45,16 @@ export async function POST(_request: NextRequest, { params }: Context) {
   if (!endpoint || !secret) return NextResponse.json({ status: "queued", delivery: "configuration_pending" }, { status: 202, headers: privateHeaders });
 
   const body = JSON.stringify(payload);
-  const signature = createHmac("sha256", secret).update(body).digest("hex");
+  const timestamp = Math.floor(Date.now() / 1000).toString();
+  const signature = createHmac("sha256", secret).update(`${timestamp}.${body}`).digest("hex");
   try {
     const response = await fetch(endpoint, {
       method: "POST",
-      headers: { "content-type": "application/json", "x-datalytiqs-signature": `sha256=${signature}` },
+      headers: {
+        "content-type": "application/json",
+        "x-datalytiqs-timestamp": timestamp,
+        "x-datalytiqs-signature": `sha256=${signature}`,
+      },
       body,
       signal: AbortSignal.timeout(8_000),
     });
