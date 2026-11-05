@@ -1,0 +1,31 @@
+property_id,county,municipality,property_type,bedrooms,floor_area_sqm,distance_cbd_km,age_years,has_parking,monthly_rent_kes,asking_price_kes
+H001,Nairobi,Westlands,Apartment,2,82,4.2,6,1,68000,11200000
+H002,Nairobi,Kasarani,Apartment,2,68,13.5,9,1,34000,6200000
+H003,Nairobi,Embakasi,Apartment,1,46,11.8,5,0,24000,4300000
+H004,Nairobi,Kilimani,Apartment,3,126,3.7,4,1,112000,18400000
+H005,Nairobi,Ruaka,Apartment,2,74,10.2,3,1,42000,7400000
+H006,Kiambu,Thika,Maisonette,3,138,42.0,8,1,38000,7900000
+H007,Kiambu,Ruiru,Apartment,2,71,25.5,4,1,30000,5600000
+H008,Kiambu,Limuru,Bungalow,3,144,36.0,14,1,35000,7200000
+H009,Kisumu,Milimani,Apartment,3,118,2.8,7,1,52000,8800000
+H010,Kisumu,Mamboleo,Maisonette,3,132,6.9,5,1,42000,7400000
+H011,Kisumu,Kondele,Apartment,2,63,3.9,11,0,23000,3900000
+H012,Kisumu,Nyamasaria,Bungalow,3,128,8.4,10,1,31000,6100000
+H013,Mombasa,Nyali,Apartment,3,121,5.4,6,1,76000,12800000
+H014,Mombasa,Bamburi,Apartment,2,69,10.7,8,1,33000,5700000
+H015,Mombasa,Likoni,Bungalow,3,119,8.9,12,0,29000,4800000
+H016,Nakuru,Milimani,Apartment,3,114,3.1,5,1,48000,8100000
+H017,Nakuru,Lanet,Maisonette,3,136,7.6,7,1,37000,6900000
+H018,Nakuru,Naivasha,Bungalow,3,131,38.0,9,1,36000,6600000
+H019,Uasin Gishu,Elgon View,Maisonette,4,178,4.7,8,1,56000,9800000
+H020,Uasin Gishu,Pioneer,Apartment,2,72,3.5,6,1,31000,5300000
+H021,Uasin Gishu,Kapsoya,Bungalow,3,129,5.8,13,1,34000,6200000
+H022,Machakos,Syokimau,Apartment,2,76,19.6,4,1,39000,6800000
+H023,Machakos,Athi River,Apartment,2,70,28.0,7,1,30000,5200000
+H024,Machakos,Kitengela,Maisonette,3,141,32.0,5,1,39000,7100000
+H025,Kajiado,Ngong,Maisonette,3,145,24.0,6,1,43000,7600000
+H026,Kajiado,Ongata Rongai,Apartment,2,73,20.0,8,1,35000,5900000
+H027,Kisii,Kisii Town,Apartment,2,66,2.4,10,0,26000,4500000
+H028,Meru,Meru Town,Bungalow,3,134,3.6,11,1,33000,6100000
+H029,Homa Bay,Homa Bay Town,Bungalow,3,127,2.9,9,1,28000,5200000
+H030,Kilifi,Kilifi Town,Apartment,2,70,3.8,6,1,32000,5500000
