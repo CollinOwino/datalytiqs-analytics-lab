@@ -8,7 +8,7 @@ type Row = { id:string;user_id:string;case_id:string;title:string;code:string;ac
 export async function account() {
   const supabase = await createClient()
   const { data: { user }, error } = await supabase.auth.getUser()
-  return !error && user ? { supabase, userId: user.id } : null
+  return !error && user ? { supabase, userId: user.id, userEmail: user.email || null } : null
 }
 
 const map = (row: Row): LearnerProject => ({
