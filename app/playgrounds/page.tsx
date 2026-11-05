@@ -90,6 +90,13 @@ const datasetCatalog = {
     domain: "Deep learning",
     question: "Can a compact neural network estimate concrete strength while preserving reproducibility and engineering safeguards?",
   },
+  cropvision: {
+    caseId: "102",
+    title: "Kenya Crop Disease · Computer Vision",
+    file: "kenya_crop_leaf_synthetic_manifest.csv",
+    domain: "Computer vision",
+    question: "Can a compact image classifier distinguish healthy, rust-like and spot-like synthetic leaf patterns while reporting uncertainty and limitations?",
+  },
 } as const;
 type DatasetKey = keyof typeof datasetCatalog;
 
@@ -406,6 +413,20 @@ export default function Playgrounds() {
           </div>
         </section>
         <section className="ds-grid">
+          <article className="available">
+            <div className="ds-card-head"><span>COMPUTER VISION</span><b>NEW PATHWAY</b></div>
+            <h2>Kenya Crop Disease Classification</h2>
+            <p>A privacy-safe visual-learning pathway using original synthetic leaf images for convolutional networks, class diagnostics and responsible agricultural interpretation.</p>
+            <dl>
+              <div><dt>Runtime</dt><dd>PyTorch · bounded CPU</dd></div>
+              <div><dt>Image source</dt><dd>Generated from original teaching manifests</dd></div>
+              <div><dt>Level</dt><dd>Intermediate–advanced</dd></div>
+              <div><dt>Operational use</dt><dd>Prohibited without field validation</dd></div>
+            </dl>
+            <div className="ds-skills"><span>CNNs</span><span>Image tensors</span><span>Responsible AI</span></div>
+            <button onClick={() => (location.href = "/playgrounds/pathway?dataset=cropvision")}>Start structured pathway</button>
+            <button onClick={() => openWorkspace("cropvision")}>Open in Python Playground</button>
+          </article>
           <article className="available">
             <div className="ds-card-head"><span>DEEP LEARNING</span><b>CONTROLLED PYTORCH</b></div>
             <h2>Kenya Concrete Strength Modelling</h2>
