@@ -117,6 +117,32 @@ const pathways:Record<string,Pathway>={
    {q:'What should happen when the denominator is zero?',options:['Report zero percent automatically','Return missing/undefined and explain','Divide by one','Delete the month silently'],answer:1,explanation:'A rate is undefined when its denominator is zero; transparent missingness is preferable to fabrication.'}
   ],
   portfolio:{title:'Community Health Operations Dashboard',scenario:'Build a privacy-conscious monthly monitoring product that helps managers identify verification and service follow-up priorities.',deliverables:['Validated indicator notebook','Data-quality register','Operational dashboard','One-page action brief'],rubric:['Indicator calculation — 30%','Data-quality reasoning — 25%','Operational interpretation — 20%','Visual clarity — 15%','Privacy and qualification — 10%']}
+ },
+ demographics:{
+  key:'demographics',caseId:'pg-african-demographics',domain:'Demography',title:'African Demographic & Livelihood Analyzer',file:'african_demographic_livelihood_illustrative.csv',level:'Intermediate',duration:'8–10 hours',question:'Which demographic and livelihood gaps merit careful, equity-conscious investigation?',
+  outcomes:['Distinguish aggregated indicators from individual records','Calculate weighted estimates using explicit denominators','Compare livelihood indicators without stereotyping groups','Apply minimum-sample disclosure rules','Prepare an ethical evidence brief with limitations'],
+  lesson:{title:'Responsible demographic analysis for African decisions',concepts:[
+   {heading:'Aggregates are not individuals',body:'Each row summarises a population group. Group averages do not describe every person and must never be used to infer an individual’s ability, behaviour or entitlement.'},
+   {heading:'Denominators and weights',body:'Percentages from groups of different sizes should not be averaged directly. Use sample or population weights when estimating combined values and state which denominator was used.'},
+   {heading:'Equity without stereotyping',body:'A difference by sex, residence or geography is an observed disparity. It may reflect access, institutions, history, measurement or sampling—not an inherent group characteristic.'},
+   {heading:'Disclosure and uncertainty',body:'Suppress or qualify estimates based on small groups. Illustrative teaching data support method practice, not claims about actual communities.'}
+  ]},
+  guided:{title:'Validate, weight, compare and qualify',steps:[
+   {title:'Inspect aggregated structure',instruction:'Confirm uniqueness and examine the denominators supporting each estimate.',code:'print(df.shape)\nprint(df.dtypes)\ndf[["geography","sex","residence","sample_n"]].head()'},
+   {title:'Calculate a weighted estimate',instruction:'Estimate overall employment using sample_n as the teaching weight.',code:'weighted_employment=(df["employed_pct"]*df["sample_n"]).sum()/df["sample_n"].sum()\nround(weighted_employment,1)'},
+   {title:'Compare residence carefully',instruction:'Create weighted employment and internet-access summaries by residence.',code:'def wavg(g,col): return (g[col]*g["sample_n"]).sum()/g["sample_n"].sum()\ndf.groupby("residence").apply(lambda g: wavg(g,"employed_pct"),include_groups=False).round(1)'},
+   {title:'Apply a disclosure flag',instruction:'Flag any analytical group with fewer than 250 teaching observations.',code:'df["disclosure_flag"]=df["sample_n"]<250\ndf.loc[df["disclosure_flag"],["geography","sex","residence","sample_n"]]'},
+   {title:'Visualise a disparity',instruction:'Plot employment by geography and sex; describe rather than causalise the difference.',code:'import matplotlib.pyplot as plt\np=df.pivot_table(index="geography",columns="sex",values="employed_pct",aggfunc="mean")\np.plot.bar(figsize=(9,5));plt.ylabel("Employment (%)");plt.title("Illustrative employment indicators");plt.tight_layout();plt.show()'}
+  ]},
+  lab:{brief:'Prepare an equity-conscious livelihood analysis using aggregated teaching data.',requirements:['Document every field, unit and denominator','Calculate at least two weighted indicators','Compare residence and sex with group sizes visible','Apply a minimum-sample disclosure flag','Write a 250-word interpretation separating evidence from explanation'],evidence:['Reproducible notebook','Indicator and denominator register','Two accessible charts','Disclosure table','Professional brief with illustrative-data disclaimer']},
+  quiz:[
+   {q:'Why should group percentages not be averaged directly?',options:['Percentages are never useful','Groups may have different denominators','Python cannot average them','Charts require counts only'],answer:1,explanation:'An unweighted mean gives a small group the same influence as a large group.'},
+   {q:'A lower group employment rate proves lower motivation.',options:['True','False'],answer:1,explanation:'The aggregate difference does not establish cause and must not be converted into a stereotype.'},
+   {q:'What is the purpose of a minimum-sample disclosure rule?',options:['Improve colours','Reduce unstable or potentially disclosive reporting','Guarantee causality','Remove all rural groups'],answer:1,explanation:'Small groups can produce unstable estimates and, in detailed data, elevate disclosure risk.'},
+   {q:'Which statement is most defensible?',options:['The dataset describes current official conditions','The illustrative data show an employment gap that warrants contextual investigation','Every person in the group has the group average','Income causes internet access'],answer:1,explanation:'It reports the observed pattern, preserves dataset status and avoids causal overclaim.'},
+   {q:'What should accompany a demographic percentage?',options:['Its denominator and definition','Only a rank','A personal identifier','A prediction'],answer:0,explanation:'The denominator and operational definition determine what the percentage means.'}
+  ],
+  portfolio:{title:'African Demographic & Livelihood Evidence Brief',scenario:'Prepare a reproducible, privacy-conscious analytical product for a public-policy or development audience.',deliverables:['Validated notebook','Weighted indicator table','Two accessible equity charts','Disclosure and ethics appendix','Two-page professional evidence brief'],rubric:['Statistical validity — 25%','Weighting and denominators — 20%','Equity interpretation — 25%','Visual communication — 15%','Disclosure, ethics and reproducibility — 15%']}
  }
 }
 
