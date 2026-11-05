@@ -12,16 +12,35 @@ import type {
 const MAX_CODE = 100_000
 
 async function getCaseDatasets(caseId?: string): Promise<DatasetRef[]> {
-  const datasets: Record<string,{path:string;name:string;mimeType:string}> = {
-    '001': { path:'data/cases/001/Case_001_Dataset.xlsx', name:'Case_001_Dataset.xlsx', mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
-    'pg-kenya-macro': { path:'data/playgrounds/kenya_macro_illustrative.csv', name:'kenya_macro_illustrative.csv', mimeType:'text/csv' },
-    'pg-county-services': { path:'data/playgrounds/county_services_illustrative.csv', name:'county_services_illustrative.csv', mimeType:'text/csv' },
-    'pg-community-health': { path:'data/playgrounds/community_health_illustrative.csv', name:'community_health_illustrative.csv', mimeType:'text/csv' },
+  let datasetPath:string
+  let name:string
+  let mimeType:string
+  switch(caseId){
+    case '001':
+      datasetPath=path.join(process.cwd(),'data','cases','001','Case_001_Dataset.xlsx')
+      name='Case_001_Dataset.xlsx'
+      mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      break
+    case 'pg-kenya-macro':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','kenya_macro_illustrative.csv')
+      name='kenya_macro_illustrative.csv'
+      mimeType='text/csv'
+      break
+    case 'pg-county-services':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','county_services_illustrative.csv')
+      name='county_services_illustrative.csv'
+      mimeType='text/csv'
+      break
+    case 'pg-community-health':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','community_health_illustrative.csv')
+      name='community_health_illustrative.csv'
+      mimeType='text/csv'
+      break
+    default:
+      return []
   }
-  const selected=caseId?datasets[caseId]:undefined
-  if(!selected)return []
-  const dataset=await readFile(path.join(process.cwd(),selected.path))
-  return [{datasetId:`dataset-${caseId}`,name:selected.name,contentBase64:dataset.toString('base64'),mimeType:selected.mimeType}]
+  const dataset=await readFile(datasetPath)
+  return [{datasetId:`dataset-${caseId}`,name,contentBase64:dataset.toString('base64'),mimeType}]
 }
 
 export async function POST(req: NextRequest) {
