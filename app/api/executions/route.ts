@@ -12,29 +12,35 @@ import type {
 const MAX_CODE = 100_000
 
 async function getCaseDatasets(caseId?: string): Promise<DatasetRef[]> {
-  if (caseId !== '001') {
-    return []
+  let datasetPath:string
+  let name:string
+  let mimeType:string
+  switch(caseId){
+    case '001':
+      datasetPath=path.join(process.cwd(),'data','cases','001','Case_001_Dataset.xlsx')
+      name='Case_001_Dataset.xlsx'
+      mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      break
+    case 'pg-kenya-macro':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','kenya_macro_illustrative.csv')
+      name='kenya_macro_illustrative.csv'
+      mimeType='text/csv'
+      break
+    case 'pg-county-services':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','county_services_illustrative.csv')
+      name='county_services_illustrative.csv'
+      mimeType='text/csv'
+      break
+    case 'pg-community-health':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','community_health_illustrative.csv')
+      name='community_health_illustrative.csv'
+      mimeType='text/csv'
+      break
+    default:
+      return []
   }
-
-  const datasetPath = path.join(
-    process.cwd(),
-    'data',
-    'cases',
-    '001',
-    'Case_001_Dataset.xlsx'
-  )
-
-  const dataset = await readFile(datasetPath)
-
-  return [
-    {
-      datasetId: 'case-001-primary',
-      name: 'Case_001_Dataset.xlsx',
-      contentBase64: dataset.toString('base64'),
-      mimeType:
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    },
-  ]
+  const dataset=await readFile(datasetPath)
+  return [{datasetId:`dataset-${caseId}`,name,contentBase64:dataset.toString('base64'),mimeType}]
 }
 
 export async function POST(req: NextRequest) {
@@ -73,7 +79,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (body.caseId !== undefined && body.caseId !== '001') {
+    const allowedCases=new Set(['001','pg-kenya-macro','pg-county-services','pg-community-health'])
+    if (body.caseId !== undefined && !allowedCases.has(body.caseId)) {
       return NextResponse.json({ error: { code: 'INVALID_CASE' } }, { status: 400 })
     }
     const projectId = body.metadata?.projectId
@@ -82,7 +89,8 @@ export async function POST(req: NextRequest) {
         .eq('id', projectId).eq('user_id', identity.userId).maybeSingle()
       if (!project) return NextResponse.json({ error: { code: 'PROJECT_NOT_FOUND' } }, { status: 404 })
     }
-    body.metadata = projectId ? { projectId, stage: '03' } : { stage: '03' }
+    const requestedStage=body.metadata?.stage==='playground'?'playground':'03'
+    body.metadata = projectId ? { projectId, stage: requestedStage } : { stage: requestedStage }
 
     body.requestId = crypto.randomUUID()
     body.learnerId = identity.userId
