@@ -19,7 +19,9 @@ runner_image = (
         "statsmodels",
         "matplotlib",
         "openpyxl",
-        "fastapi"
+        "fastapi",
+        "scikit-learn",
+        "torch==2.5.1"
     )
 )
 
@@ -69,6 +71,11 @@ def execute_job(execution_id: str, request: dict[str, Any]) -> None:
     results[execution_id] = result
 
     code = request.get("code", "")
+    runtime = request.get("runtime") or "python-analytics"
+    if runtime not in {"python-analytics", "python-pytorch-cpu"}:
+        result.update(status="failed", error={"code": "INVALID_RUNTIME", "message": "Unsupported execution runtime.", "retryable": False})
+        results[execution_id] = result
+        return
     if not isinstance(code, str) or not code.strip() or len(code) > MAX_CODE_CHARS:
         result.update(status="failed", error={"code": "INVALID_CODE", "message": "Invalid Python source.", "retryable": False})
         results[execution_id] = result
@@ -86,6 +93,7 @@ def execute_job(execution_id: str, request: dict[str, Any]) -> None:
         dataset = datasets[0]
         content_b64 = dataset.get("contentBase64") or ""
         dataset_name = dataset.get("name") or "dataset.xlsx"
+        dataset_mime = dataset.get("mimeType") or ""
 
         if content_b64:
             try:
@@ -111,7 +119,14 @@ import io as _io
 import pandas as pd
 
 _dataset_bytes = _base64.b64decode({encoded!r})
-df = pd.read_excel(_io.BytesIO(_dataset_bytes))
+_dataset_name = {dataset_name!r}.lower()
+_dataset_mime = {dataset_mime!r}.lower()
+if _dataset_name.endswith(".csv") or _dataset_mime == "text/csv":
+    df = pd.read_csv(_io.BytesIO(_dataset_bytes))
+elif _dataset_name.endswith((".xlsx", ".xls")):
+    df = pd.read_excel(_io.BytesIO(_dataset_bytes))
+else:
+    raise ValueError("Only CSV and Excel datasets are supported")
 """
 
             except Exception as exc:
@@ -483,7 +498,7 @@ _datalytiqs_capture_figures()
 @api.get("/v1/health")
 def health(authorization: str | None = Header(default=None)):
     _auth(authorization)
-    return {"ok": True, "provider": "modal", "details": {"network": "disabled", "isolation": "disposable-sandbox"}}
+    return {"ok": True, "provider": "modal", "details": {"network": "disabled", "isolation": "disposable-sandbox", "runtimes": ["python-analytics", "python-pytorch-cpu"]}}
 
 
 @api.post("/v1/executions", status_code=202)
