@@ -9,6 +9,12 @@ type QuizItem = {
   answer: number;
   explanation: string;
 };
+type SavedProject = {
+  id: string;
+  caseId: string;
+  version: number;
+  stages: { stageId: string; status: string }[];
+};
 type Pathway = {
   key: string;
   caseId: string;
@@ -215,6 +221,62 @@ const pathways: Record<string, Pathway> = {
         "Diagnostic evidence — 15%",
         "Responsible-use communication — 15%",
       ],
+    },
+  },
+  concrete: {
+    key: "concrete",
+    caseId: "101",
+    domain: "Deep learning · materials engineering",
+    title: "Kenya Concrete Strength Modelling with PyTorch",
+    file: "kenya_concrete_strength_illustrative.csv",
+    level: "Intermediate–advanced",
+    duration: "10–12 hours",
+    question: "Can a small neural network estimate concrete compressive strength while remaining reproducible, interpretable and appropriately qualified?",
+    outcomes: [
+      "Prepare engineering data without leaking test information",
+      "Construct and train a CPU-safe PyTorch regression network",
+      "Compare neural-network performance with a transparent baseline",
+      "Diagnose generalisation using MAE, RMSE and residual evidence",
+      "Produce a model card that limits unsafe engineering use",
+    ],
+    lesson: {
+      title: "From concrete mix proportions to controlled predictive evidence",
+      concepts: [
+        { heading: "Strength is a multivariable outcome", body: "Compressive strength depends jointly on binder composition, water, aggregates, admixture, curing age and conditions. A predictive association is not a certified structural-design result." },
+        { heading: "Scaling supports stable optimisation", body: "Features measured in kilograms, days and ratios have different ranges. Fit the scaler on training data only, then apply the learned transformation to validation and test observations." },
+        { heading: "A network is a sequence of transformations", body: "Linear layers learn weighted combinations; nonlinear activations allow curved relationships. Model capacity must remain proportionate to the sample and be judged on unseen data." },
+        { heading: "Loss guides learning; metrics explain performance", body: "Mean-squared error can train the network, while MAE and RMSE express held-out error in megapascals. Always compare them with a simple baseline." },
+        { heading: "Engineering use requires governance", body: "The dataset is original illustrative teaching data. Laboratory validation, applicable standards, qualified engineering review and representative production evidence are mandatory before operational use." },
+      ],
+    },
+    guided: {
+      title: "Train and evaluate a bounded CPU PyTorch regressor",
+      steps: [
+        { title: "Audit the mixture records", instruction: "Confirm dimensions, units, missingness, duplicates and plausible ranges.", code: 'print(df.shape)\nprint(df.dtypes)\nprint(df.isna().sum())\nprint("Duplicates:",df.duplicated().sum())\ndf.describe().T.round(2)' },
+        { title: "Create one held-out test set", instruction: "Separate predictors and target before fitting any transformation.", code: 'from sklearn.model_selection import train_test_split\nfeatures=[c for c in df.columns if c!="strength_mpa"]\nX_train,X_test,y_train,y_test=train_test_split(df[features],df["strength_mpa"],test_size=.2,random_state=42)' },
+        { title: "Scale without leakage", instruction: "Learn feature location and scale from training observations only.", code: 'from sklearn.preprocessing import StandardScaler\nscaler=StandardScaler().fit(X_train)\nXtr=scaler.transform(X_train)\nXte=scaler.transform(X_test)' },
+        { title: "Build a compact network", instruction: "Use a deterministic seed and a deliberately small architecture.", code: 'import torch\nfrom torch import nn\ntorch.manual_seed(42)\nXt=torch.tensor(Xtr,dtype=torch.float32)\nyt=torch.tensor(y_train.to_numpy(),dtype=torch.float32).reshape(-1,1)\nmodel=nn.Sequential(nn.Linear(Xt.shape[1],16),nn.ReLU(),nn.Linear(16,8),nn.ReLU(),nn.Linear(8,1))\nloss_fn=nn.MSELoss(); opt=torch.optim.Adam(model.parameters(),lr=.01)' },
+        { title: "Train within the compute budget", instruction: "Record the loss curve; do not increase complexity merely to reduce training loss.", code: 'history=[]\nfor epoch in range(250):\n opt.zero_grad(); pred=model(Xt); loss=loss_fn(pred,yt); loss.backward(); opt.step(); history.append(loss.item())\nprint("Final training MSE:",round(history[-1],3))' },
+        { title: "Evaluate and qualify", instruction: "Compare held-out MAE and RMSE with a training-mean baseline, then inspect residuals.", code: 'import numpy as np\nfrom sklearn.metrics import mean_absolute_error,mean_squared_error\nwith torch.no_grad(): pred=model(torch.tensor(Xte,dtype=torch.float32)).numpy().ravel()\nbase=np.repeat(y_train.mean(),len(y_test))\nfor name,prediction in [("Baseline",base),("PyTorch MLP",pred)]: print(name,"MAE",round(mean_absolute_error(y_test,prediction),2),"RMSE",round(mean_squared_error(y_test,prediction)**.5,2))' },
+      ],
+    },
+    lab: {
+      brief: "Act as a data scientist preparing a concrete-strength prototype for technical review, not structural certification.",
+      requirements: ["Reproduce the split and training run with fixed seeds", "Compare a mean baseline, linear model and compact MLP", "Plot training loss and held-out residuals", "Test sensitivity to one justified architecture change", "Write a 250-word risk-qualified recommendation"],
+      evidence: ["Executable notebook and environment record", "Data-quality and split summary", "Model-comparison table with MAE and RMSE", "Two labelled diagnostic charts", "Model card with intended use, exclusions and monitoring"],
+    },
+    quiz: [
+      { q: "Where should the feature scaler be fitted?", options: ["On all records", "On training records only", "On the target only", "After deployment"], answer: 1, explanation: "Training-only fitting prevents held-out information from influencing model development." },
+      { q: "Why compare the MLP with a training-mean baseline?", options: ["To prove causation", "To test whether complexity adds predictive value", "To remove the test set", "To certify a concrete mix"], answer: 1, explanation: "A complex model is useful only when it improves on a transparent reference under the same evaluation." },
+      { q: "What does a held-out MAE of 4 MPa mean?", options: ["Every estimate is wrong by 4 MPa", "Average absolute test error is 4 MPa", "Accuracy is 96%", "The model is certified"], answer: 1, explanation: "MAE averages absolute prediction errors and retains the target unit." },
+      { q: "Training loss falls while test error worsens. The most likely concern is:", options: ["Under-reporting", "Overfitting", "Perfect calibration", "Causal identification"], answer: 1, explanation: "The network is learning sample-specific patterns that do not generalise." },
+      { q: "Which use statement is defensible?", options: ["Use predictions for structural approval", "Use this illustrative model to learn the workflow; operational decisions require laboratory and engineering validation", "The MLP replaces material testing", "Low loss guarantees safety"], answer: 1, explanation: "The statement preserves the teaching status and engineering governance boundary." },
+    ],
+    portfolio: {
+      title: "Concrete Strength Model Evidence Pack",
+      scenario: "Develop a reproducible prototype and model card for internal review using original illustrative Kenyan construction-materials data.",
+      deliverables: ["Quality-assured PyTorch notebook", "Baseline and candidate-model comparison", "Training and residual diagnostics", "Two-page technical interpretation", "Model card and deployment exclusion statement"],
+      rubric: ["Reproducibility and data controls — 25%", "Model construction — 20%", "Held-out evaluation — 25%", "Technical interpretation — 15%", "Responsible-use governance — 15%"],
     },
   },
   case001: {
@@ -1067,6 +1129,8 @@ export default function DatasetPathway() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [done, setDone] = useState<number[]>([]);
+  const [project, setProject] = useState<SavedProject | null>(null);
+  const [checkpoint, setCheckpoint] = useState("Local progress enabled");
   useEffect(() => {
     const q = new URLSearchParams(location.search).get("dataset");
     const selected = q && pathways[q] ? q : "case001";
@@ -1078,6 +1142,37 @@ export default function DatasetPathway() {
       setDone(saved.done || []);
       setStage(saved.stage || 0);
     } catch {}
+    const pathway = pathways[selected];
+    if (!/^\d{3}$/.test(pathway.caseId)) return;
+    void (async () => {
+      try {
+        const response = await fetch("/api/projects", { cache: "no-store" });
+        if (response.status === 401) {
+          setCheckpoint("Sign in to save checkpoints across devices");
+          return;
+        }
+        if (!response.ok) throw new Error();
+        const projects = (await response.json()) as SavedProject[];
+        let saved = projects.find((item) => item.caseId === pathway.caseId) || null;
+        if (!saved) {
+          const created = await fetch("/api/projects", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ caseId: pathway.caseId, title: pathway.title, activeDataset: pathway.file }),
+          });
+          if (!created.ok) throw new Error();
+          saved = (await created.json()) as SavedProject;
+        }
+        setProject(saved);
+        const serverDone = saved.stages
+          .filter((item) => item.status === "completed" && Number(item.stageId) <= 5)
+          .map((item) => Number(item.stageId) - 1);
+        if (serverDone.length) setDone(serverDone);
+        setCheckpoint("Secure server checkpoint active");
+      } catch {
+        setCheckpoint("Server checkpoint unavailable · progress remains on this device");
+      }
+    })();
   }, []);
   const p = pathways[key];
   const score = useMemo(
@@ -1085,7 +1180,7 @@ export default function DatasetPathway() {
     [answers, p],
   );
   const passed = score / p.quiz.length >= 0.8;
-  function markComplete(index = stage) {
+  async function markComplete(index = stage) {
     const next = Array.from(new Set([...done, index])).sort();
     setDone(next);
     localStorage.setItem(
@@ -1093,12 +1188,35 @@ export default function DatasetPathway() {
       JSON.stringify({ done: next, stage: Math.min(4, index + 1) }),
     );
     if (index < 4) setStage(index + 1);
+    if (project) {
+      try {
+        const response = await fetch(`/api/projects/${project.id}`, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            expectedVersion: project.version,
+            patch: { stage: { stageId: String(index + 1).padStart(2, "0"), status: "completed", completedTasks: ["stage-completed"] } },
+          }),
+        });
+        if (!response.ok) throw new Error();
+        const saved = (await response.json()) as SavedProject;
+        setProject(saved);
+        setCheckpoint(`Checkpoint saved · ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`);
+        if (index === 4) {
+          const sync = await fetch(`/api/projects/${saved.id}/tutor-sync`, { method: "POST" });
+          setCheckpoint(sync.ok ? "Completion saved · Tutor LMS sync queued" : "Completion saved · Tutor LMS sync pending");
+        }
+      } catch {
+        setCheckpoint("Saved locally · server retry required");
+      }
+    }
   }
   function chooseDataset(next: string) {
     setKey(next);
     setStage(0);
     setAnswers({});
     setSubmitted(false);
+    setProject(null);
     try {
       const saved = JSON.parse(
         localStorage.getItem("dtq-pathway-" + next) || "{}",
@@ -1130,6 +1248,7 @@ export default function DatasetPathway() {
             <b>{p.level}</b>
             <b>{p.duration}</b>
             <b>{done.length}/5 stages complete</b>
+            <b>{checkpoint}</b>
           </div>
         </div>
         <label>
@@ -1222,7 +1341,7 @@ export default function DatasetPathway() {
                 ))}
               </ol>
               <div className="pw-action split">
-                <a href={`/playgrounds?dataset=${key}`}>
+                <a href={`/playgrounds?dataset=${key}${project ? `&projectId=${project.id}` : ""}`}>
                   Open dataset in Python Playground →
                 </a>
                 <button onClick={() => markComplete()}>
@@ -1263,7 +1382,7 @@ export default function DatasetPathway() {
                 </p>
               </div>
               <div className="pw-action split">
-                <a href={`/playgrounds?dataset=${key}`}>
+                <a href={`/playgrounds?dataset=${key}${project ? `&projectId=${project.id}` : ""}`}>
                   Begin independent lab →
                 </a>
                 <button onClick={() => markComplete()}>
@@ -1386,7 +1505,7 @@ export default function DatasetPathway() {
                 </p>
               </div>
               <div className="pw-action split">
-                <a href={`/playgrounds?dataset=${key}`}>
+                <a href={`/playgrounds?dataset=${key}${project ? `&projectId=${project.id}` : ""}`}>
                   Build portfolio analysis →
                 </a>
                 <button onClick={() => markComplete(4)}>

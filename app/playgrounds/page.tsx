@@ -83,6 +83,13 @@ const datasetCatalog = {
     question:
       "Which property attributes explain variation in asking prices, and how reliably can they support valuation?",
   },
+  concrete: {
+    caseId: "101",
+    title: "Kenya Concrete Strength · PyTorch",
+    file: "kenya_concrete_strength_illustrative.csv",
+    domain: "Deep learning",
+    question: "Can a compact neural network estimate concrete strength while preserving reproducibility and engineering safeguards?",
+  },
 } as const;
 type DatasetKey = keyof typeof datasetCatalog;
 
@@ -128,6 +135,8 @@ export default function Playgrounds() {
   const [loaded, setLoaded] = useState(false);
   const [mode, setMode] = useState<"workspace" | "datasets">("workspace");
   const [dataset, setDataset] = useState<DatasetKey>("case001");
+  const [projectId, setProjectId] = useState("");
+  const [projectVersion, setProjectVersion] = useState(0);
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get("tab") === "datasets")
       setMode("datasets");
@@ -137,6 +146,17 @@ export default function Playgrounds() {
       const requested = new URLSearchParams(window.location.search).get(
         "dataset",
       ) as DatasetKey | null;
+      const requestedProject = new URLSearchParams(window.location.search).get("projectId") || "";
+      setProjectId(requestedProject);
+      if (requestedProject) {
+        void fetch(`/api/projects/${encodeURIComponent(requestedProject)}`, { cache: "no-store" })
+          .then(async (response) => {
+            if (!response.ok) return;
+            const saved = await response.json();
+            setProjectVersion(Number(saved.version) || 0);
+          })
+          .catch(() => undefined);
+      }
       const key =
         requested && requested in datasetCatalog ? requested : "case001";
       setDataset(key);
@@ -243,6 +263,17 @@ export default function Playgrounds() {
     setOutputs([]);
     setStatus("Submitting");
     try {
+      if (projectId && projectVersion) {
+        const saved = await fetch(`/api/projects/${encodeURIComponent(projectId)}`, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ expectedVersion: projectVersion, patch: { code: combined, activeDataset: datasetCatalog[dataset].file } }),
+        });
+        if (saved.ok) {
+          const updated = await saved.json();
+          setProjectVersion(Number(updated.version) || projectVersion);
+        }
+      }
       const submit = await fetch("/api/executions", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -251,7 +282,7 @@ export default function Playgrounds() {
           caseId: datasetCatalog[dataset].caseId,
           language: "python",
           code: combined,
-          metadata: { stage: "playground" },
+          metadata: projectId ? { stage: "playground", projectId } : { stage: "playground" },
           limits: {
             timeoutMs: 30000,
             memoryMb: 512,
@@ -375,6 +406,20 @@ export default function Playgrounds() {
           </div>
         </section>
         <section className="ds-grid">
+          <article className="available">
+            <div className="ds-card-head"><span>DEEP LEARNING</span><b>CONTROLLED PYTORCH</b></div>
+            <h2>Kenya Concrete Strength Modelling</h2>
+            <p>Original illustrative mixture records for a compact neural-network regression project with bounded remote CPU execution, held-out evaluation and engineering safeguards.</p>
+            <dl>
+              <div><dt>Runtime</dt><dd>PyTorch · remote CPU</dd></div>
+              <div><dt>Network</dt><dd>Disabled</dd></div>
+              <div><dt>Level</dt><dd>Intermediate–advanced</dd></div>
+              <div><dt>Provenance</dt><dd>DatalytIQs original illustrative data</dd></div>
+            </dl>
+            <div className="ds-skills"><span>PyTorch</span><span>Regression</span><span>Model cards</span></div>
+            <button onClick={() => (location.href = "/playgrounds/pathway?dataset=concrete")}>Start structured pathway</button>
+            <button onClick={() => openWorkspace("concrete")}>Open in Python Playground</button>
+          </article>
           <article className="available">
             <div className="ds-card-head">
               <span>HOUSING ECONOMICS</span>
