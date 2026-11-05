@@ -36,6 +36,11 @@ async function getCaseDatasets(caseId?: string): Promise<DatasetRef[]> {
       name='community_health_illustrative.csv'
       mimeType='text/csv'
       break
+    case 'pg-african-demographics':
+      datasetPath=path.join(process.cwd(),'data','playgrounds','african_demographic_livelihood_illustrative.csv')
+      name='african_demographic_livelihood_illustrative.csv'
+      mimeType='text/csv'
+      break
     default:
       return []
   }
@@ -79,7 +84,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const allowedCases=new Set(['001','pg-kenya-macro','pg-county-services','pg-community-health'])
+    const allowedCases=new Set(['001','pg-kenya-macro','pg-county-services','pg-community-health','pg-african-demographics'])
     if (body.caseId !== undefined && !allowedCases.has(body.caseId)) {
       return NextResponse.json({ error: { code: 'INVALID_CASE' } }, { status: 400 })
     }
