@@ -1,4 +1,4 @@
-import {createClient} from '../lib/supabase/server'
+
 
 const navigation = [
   ['Home','/'],['Evidence Lab','/evidence-lab'],['Playgrounds','/playgrounds'],['Analytics Workspace','/python-editor'],['Exam Hub','/exam-hub'],['Applied Pathways','/#pathways'],['Executive','/executive'],
@@ -19,14 +19,12 @@ const pathways = [
  ['Executive','Organisational KPIs, evidence, scenarios and decision intelligence.','/executive'],
 ]
 export default async function Home() {
- const supabase=await createClient()
- const{data:{user}}=await supabase.auth.getUser()
- let workspace={label:'Learner',detail:'Applied workspace',initial:'L',aria:'Learner workspace'}
- if(user){
-  const{data:membership}=await supabase.from('ceo_memberships').select('role,ceo_organisations(premium_status,premium_expires_at)').eq('user_id',user.id).eq('active',true).maybeSingle()
-  const organisation=Array.isArray(membership?.ceo_organisations)?membership.ceo_organisations[0]:membership?.ceo_organisations
-  const entitlementValid=organisation&&['trial','active'].includes(organisation.premium_status)&&(!organisation.premium_expires_at||new Date(organisation.premium_expires_at).getTime()>=Date.now())
-  if(entitlementValid)workspace={label:'Executive',detail:'CEO Intelligence workspace',initial:'E',aria:'Executive workspace'}
+
+ const workspace = {
+  label: 'Analytics Lab',
+  detail: 'Applied learning workspace',
+  initial: 'D',
+  aria: 'DatalytIQs Analytics Lab'
  }
  return <main className="app-shell">
   <a className="skip-link" href="#main-content">Skip to Analytics Lab</a>
